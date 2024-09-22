@@ -1,22 +1,20 @@
 package br.com.pucc.projetointegradorvi.models;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "users")
+//@Entity
+//@Table(name = "users")
 public class UserModel {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, unique = true)
+	//@Column(nullable = false, unique = true)
 	private String uid;
 
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private String email;
 
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	private boolean emailVerified;
 
 	private String displayName;
