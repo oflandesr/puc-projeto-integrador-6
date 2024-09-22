@@ -1,1 +1,52 @@
-/.metadata/
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Maven specific files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Gradle specific files
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/**/cache/
+.gradle/**/wrapper/dists/
+
+# Eclipse specific files
+.metadata/
+bin/
+.tmp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.bak2
+*.log
+
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+out/
