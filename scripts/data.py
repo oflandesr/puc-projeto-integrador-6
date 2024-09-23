@@ -3,7 +3,7 @@ TICKER_LIST = {
     'BBAS3': 'Banco do Brasil'
 }
 
-TAXES_LIST = {
+INDEX_LIST = {
     'SELIC': '1178',
     'CDI': '4389',
     'IPCA': '433'
