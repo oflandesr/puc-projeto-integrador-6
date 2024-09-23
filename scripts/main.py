@@ -110,6 +110,8 @@ def extract_price_data(tickers: dict) -> pd.DataFrame:
     return df
 
 def extract_taxes_data(serie_code:str, start_date:str, end_date:str) -> dict:
+  
+  data = {} # Criado para tratar erro de interpretacao do json
 
   format = 'json'
 
@@ -132,8 +134,6 @@ def extract_taxes_data(serie_code:str, start_date:str, end_date:str) -> dict:
       print(f"Request Error: {req_err}")
   except Exception as err:
       print(f"Unexpected Error: {err}")
-
-  data = response.json()
 
   return data   
 
