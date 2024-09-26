@@ -11,30 +11,43 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Usuario")
 public class UserModel {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "First_Name")
+	@Column(name = "first_name")
 	private String firstName;
 
-	@Column(name = "Last_Name")
+	@Column(name = "last_name")
 	private String lastName;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Login_Id", referencedColumnName = "Id")
-	private LoginModel login;
+	@JoinColumn(name = "login", referencedColumnName = "login", unique = true)
+	private LoginModel acesso;
 
+	public UserModel() {}
+	
+	public UserModel(String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
+	public UserModel(String firstName, String lastName, LoginModel login) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.acesso = login;
+	}
+	
     // Método para retornar um objeto StockModel mock
     public static UserModel getMockUser() {
     	UserModel userModel = new UserModel();
     	userModel.setId(000000);
     	userModel.setFirstName("Tester");
     	userModel.setLastName("Pucc");
-    	userModel.setLogin(null);
+    	userModel.setAcesso(null);
         return userModel;
     }
     
@@ -62,12 +75,12 @@ public class UserModel {
 		this.lastName = lastName;
 	}
 
-	public LoginModel getLogin() {
-		return login;
+	public LoginModel getAcesso() {
+		return acesso;
 	}
 
-	public void setLogin(LoginModel login) {
-		this.login = login;
+	public void setAcesso(LoginModel login) {
+		this.acesso = login;
 	}
 
 }

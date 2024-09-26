@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,8 +39,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
-                .anyRequest().authenticated()
-            )
+    		.requestMatchers("/api/auth/login").hasRole("USER")
+    		.requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
+    		.requestMatchers(HttpMethod.POST,"/api/user").hasRole("ADMIN")
+            .anyRequest().authenticated()
+            ).csrf(csrf -> csrf.disable())
             .httpBasic((httpBasic) -> {}); // Configurando httpBasic sem usar o método deprecatado
 
         return http.build();

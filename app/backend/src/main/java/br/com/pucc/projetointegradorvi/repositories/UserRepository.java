@@ -7,5 +7,4 @@ import br.com.pucc.projetointegradorvi.models.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Long> {
-	public UserModel findUserByLoginId(Integer userLoginId);
 }
