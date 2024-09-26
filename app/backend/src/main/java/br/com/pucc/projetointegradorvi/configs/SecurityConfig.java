@@ -1,47 +1,57 @@
 package br.com.pucc.projetointegradorvi.configs;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${app.security.user.name:admin}")
-	private String username;
+    @Autowired
+    private DataSource ds;
 
-	@Value("${app.security.user.password:admin}")
-	private String password;
+    @Value("${spring.queries.roles-query}")
+    private String rolesQuery;
 
-	@Value("${app.security.user.roles}")
-	private String roles;
+    @Value("${spring.queries.users-query}")
+    private String usersQuery;
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(
-				authorize -> authorize.anyRequest().authenticated())
-				.csrf(csrf -> csrf.disable()).httpBasic(customizer -> {
-				}); // Usa uma abordagem de configuração explícita
-		return http.build();
-	}
+    @Autowired
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().dataSource(ds)
+            .authoritiesByUsernameQuery(rolesQuery)
+            .usersByUsernameQuery(usersQuery);
+    }
 
-	@Bean
-	public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-		UserDetails user = User.withUsername(username).password(passwordEncoder.encode(password))
-				.roles(roles.split(",")).build();
-		return new InMemoryUserDetailsManager(user);
-	}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests((requests) -> requests
+                .anyRequest().authenticated()
+            )
+            .httpBasic((httpBasic) -> {}); // Configurando httpBasic sem usar o método deprecatado
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class).build();
+    }
 }

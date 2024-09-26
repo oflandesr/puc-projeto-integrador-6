@@ -1,99 +1,73 @@
 package br.com.pucc.projetointegradorvi.models;
 
-//@Entity
-//@Table(name = "users")
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "User")
 public class UserModel {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "Id")
+	private Integer id;
 
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "First_Name")
+	private String firstName;
 
-	//@Column(nullable = false, unique = true)
-	private String uid;
+	@Column(name = "Last_Name")
+	private String lastName;
 
-	//@Column(nullable = false)
-	private String email;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "Login_Id", referencedColumnName = "Id")
+	private LoginModel login;
 
-	//@Column(nullable = false)
-	private boolean emailVerified;
-
-	private String displayName;
-	private String photoUrl;
-
-	// Construtores
-	public UserModel() {
-	}
-
-	public UserModel(String uid, String email, boolean emailVerified, String displayName, String photoUrl) {
-		this.uid = uid;
-		this.email = email;
-		this.emailVerified = emailVerified;
-		this.displayName = displayName;
-		this.photoUrl = photoUrl;
-	}
-
-	// Getters e Setters
-	public Long getId() {
+    // Método para retornar um objeto StockModel mock
+    public static UserModel getMockUser() {
+    	UserModel userModel = new UserModel();
+    	userModel.setId(000000);
+    	userModel.setFirstName("Tester");
+    	userModel.setLastName("Pucc");
+    	userModel.setLogin(null);
+        return userModel;
+    }
+    
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getUid() {
-		return uid;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public boolean isEmailVerified() {
-		return emailVerified;
+	public LoginModel getLogin() {
+		return login;
 	}
 
-	public void setEmailVerified(boolean emailVerified) {
-		this.emailVerified = emailVerified;
+	public void setLogin(LoginModel login) {
+		this.login = login;
 	}
 
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
-
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
-	}
-
-	@Override
-	public String toString() {
-		return "UserModel{" + "id=" + id + ", uid='" + uid + '\'' + ", email='" + email + '\'' + ", emailVerified="
-				+ emailVerified + ", displayName='" + displayName + '\'' + ", photoUrl='" + photoUrl + '\'' + '}';
-	}
-
-	// Método estático para mock
-	public static UserModel getMockUser() {
-		return new UserModel("mockUid12345", // uid mock
-				"mockuser@example.com", // email mock
-				true, // email verificado
-				"Mock User", // nome mock
-				"https://example.com/mockphoto.jpg" // URL da foto mock
-		);
-	}
 }

@@ -1,16 +1,22 @@
 package br.com.pucc.projetointegradorvi.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
+import br.com.pucc.projetointegradorvi.models.UserModel;
 
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Transactional
-//    public UserModel saveUser(UserModel user) {
-//        return userRepository.save(user);
-//    }
+@Service
+public interface UserService {
+	// GET UserS
+	public List<UserModel> getAllUsers();
+	public UserModel getUserById(Integer userId);
+	public UserModel getUserByLoginId(Integer userLoginId);
+	// CREATE UserS
+	public UserModel createUser(UserModel user);
+	// UPDATE UserS
+	public UserModel updateUser(UserModel user);
+	// DELETE UserS
+	public void deleteUser(UserModel user);
 }
 
