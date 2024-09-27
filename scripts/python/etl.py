@@ -6,12 +6,16 @@ import numpy as np
 from dotenv import load_dotenv
 import os
 import mysql.connector
-from sqlalchemy import create_engine
-from data import INDEX_LIST, TICKER_LIST
+from sqlalchemy import create_engine, Table, MetaData, text
+from sqlalchemy.dialects.mysql import insert
+from lists import INDEX_LIST, TICKER_LIST
 
 
 # Getting envoironment variables and defining constants
-load_dotenv('keys.env')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(current_dir, '..', 'keys.env')
+load_dotenv(dotenv_path=env_path)
+
 BRAPI_TOKEN = os.getenv('BRAPI_TOKEN')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD= os.getenv('DB_PASSWORD')
@@ -105,11 +109,10 @@ def extract_price_data(tickers: dict) -> pd.DataFrame:
             data.append(entry)  # Adiciona cada histórico de preços na lista de dados
         
     df = pd.DataFrame(data)
-    print("------------------------EXTRACTED", df)
     
     return df
 
-def extract_taxes_data(serie_code:str, start_date:str, end_date:str) -> dict:
+def extract_indexes_data(serie_code:str, start_date:str, end_date:str) -> dict:
   
   data = {} # Criado para tratar erro de interpretacao do json
 
@@ -211,8 +214,6 @@ def transform_price_data(df: pd.DataFrame) -> pd.DataFrame:
         'volume': 'VOLUME'
     }
     
-    print("Colunas originais:", df.columns)
-    
     # Verificar quais colunas do mapeamento estão presentes no DataFrame
     existing_columns = [col for col in column_mapping.keys() if col in df.columns]
     
@@ -227,29 +228,59 @@ def transform_price_data(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
-def transform_taxes_data(data:dict, tax_name:str, start_date, end_date):
-  
-  df = pd.DataFrame(data)
-  start_datetime = pd.to_datetime(start_date, dayfirst=True)
-  end_datetime = pd.to_datetime(end_date, dayfirst=True)
-  
-  df.rename(columns={'valor':tax_name}, inplace=True)
-  
-  df['data'] = pd.to_datetime(df['data'], dayfirst=True)
-  all_dates = pd.date_range(start=start_datetime, end=end_datetime)
-  df = df.set_index('data').reindex(all_dates).ffill().reset_index()
-  df = df.rename(columns={'index': 'data'})
+def transform_indexes_data(data: dict, index_name: str, start_date: str, end_date: str) -> pd.DataFrame:
+    """
+    Transforma os dados de índice extraídos para um DataFrame com as colunas 'DATE' e o índice.
+    Repete os valores mensais para cada dia até o próximo valor disponível.
+    """
+    df = pd.DataFrame(data)
+    df['data'] = pd.to_datetime(df['data'], dayfirst=True)  # Convertendo para datetime
+    df['valor'] = pd.to_numeric(df['valor'], errors='coerce')  # Garantir que os valores sejam numéricos
 
-  return df 
+    # Gerar um intervalo de datas completo entre start_date e end_date
+    all_dates = pd.date_range(start=start_date, end=end_date, freq='D')
+    df = df.set_index('data').reindex(all_dates).ffill().reset_index()
+    df = df.rename(columns={'index': 'DATE', 'valor': index_name})
 
-def load_data(df:pd.DataFrame, table:str) -> None:
+    return df
 
-  connection = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_NAME}'
-  engine = create_engine(connection)
+def load_data(df: pd.DataFrame, table: str, key_columns: list) -> None:
+    """
+    Carrega os dados no banco de dados com upsert (inserção ou atualização).
+    key_columns: lista das colunas que formam a chave para a operação de upsert.
+    """
+    # Conectando ao banco de dados
+    connection = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_NAME}'
+    engine = create_engine(connection)
+    
+    # Usando a conexão do SQLAlchemy
+    with engine.connect() as conn:
+        trans = conn.begin()  # Inicia uma transação
+        try:
+            for index, row in df.iterrows():
+                # Criando uma lista de colunas e valores para o INSERT
+                columns = ', '.join(df.columns)
+                values = ', '.join([f"'{str(x)}'" if pd.notna(x) else 'NULL' for x in row])
 
-  df.to_sql(table, con=engine, schema=DB_NAME, if_exists='replace', index=False)
-  
-  return
+                # Criando o comando de atualização (ON DUPLICATE KEY UPDATE)
+                update_clause = ', '.join([f"{col}=VALUES({col})" for col in df.columns if col not in key_columns])
+
+                # Query de inserção com upsert
+                insert_query = f"""
+                INSERT INTO {table} ({columns})
+                VALUES ({values})
+                ON DUPLICATE KEY UPDATE {update_clause};
+                """
+                
+                # Usando text() para passar a string SQL
+                conn.execute(text(insert_query))
+            
+            trans.commit()  # Confirma a transação se tudo der certo
+        except Exception as e:
+            trans.rollback()  # Reverte a transação em caso de erro
+            print(f"Erro durante a inserção de dados na tabela {table}: {e}")
+    
+    return
 
 def get_companies() -> None:
     """
@@ -263,7 +294,8 @@ def get_companies() -> None:
     
     # Load ticker dataframe into database
     table = 'tickers'
-    load_data(df_transformed, table)
+    key_columns = ['ticker']
+    load_data(df_transformed, table, key_columns)
     
     return
 
@@ -275,34 +307,46 @@ def get_prices() -> None:
   # Transform ticker dataframe
   df_transformed = transform_price_data(df_extracted)
   
-  table = 'prices'   
-  load_data(df_transformed, table)
+  table = 'prices' 
+  key_columns = ['id']  
+  load_data(df_transformed, table, key_columns)
     
   return
 
-def get_taxes_data(taxes:dict) -> None:
-  
-  table = 'taxas'
-  
-  start_date = '01/01/2023'
-  end_date = '31/12/2023'
-  
-  df = pd.DataFrame(columns=['data'])
-  
-  for tax_name, serie_code in taxes.items():
-    data = extract_taxes_data(serie_code, start_date, end_date)
-    df1 = transform_taxes_data(data, tax_name, start_date, end_date)
-    df = pd.merge(df, df1, on='data', how='outer')
-    df = df.sort_values(by='data').reset_index(drop=True)
+def get_indexes() -> None:
+    """
+    Combina os dados de todos os índices em um único DataFrame, com a data como chave primária.
+    Cada índice é uma nova coluna com os valores preenchidos.
+    """
+    start_date = '01/01/2023'
+    end_date = '31/12/2023'
     
-  load_data(df, table)
-  
-  return
+    df_final = pd.DataFrame()  # DataFrame para combinar todos os índices
+
+    for index_name, serie_code in INDEX_LIST.items():
+        # Extrair e transformar os dados do índice
+        data = extract_indexes_data(serie_code, start_date, end_date)
+        df_index = transform_indexes_data(data, index_name, start_date, end_date)
+
+        if df_final.empty:
+            df_final = df_index  # Inicializa com o primeiro índice
+        else:
+            # Merge com base na coluna 'DATE', adicionando o novo índice como nova coluna
+            df_final = pd.merge(df_final, df_index, on='DATE', how='outer')
+    
+    df_final = df_final.sort_values(by='DATE').reset_index(drop=True)
+    
+    # Definir 'DATE' como a chave primária e carregar os dados no banco de dados
+    table = 'indexes'
+    key_columns = ['DATE']
+    load_data(df_final, table, key_columns)
+
+    return
   
 def main():
   get_companies()
   get_prices()
-  get_taxes_data(INDEX_LIST)
+  get_indexes()
 
 if __name__ == "__main__":
     main()
