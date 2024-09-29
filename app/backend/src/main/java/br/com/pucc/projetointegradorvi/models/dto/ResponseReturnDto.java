@@ -6,6 +6,14 @@ public class ResponseReturnDto {
 	private String id = "200_OK";
 	private String mensagem = "Executado com sucesso!";
 	
+	public ResponseReturnDto() {}
+	
+	public ResponseReturnDto(String status, String id, String mensagem) {
+		this.status = status;
+		this.id = id;
+		this.mensagem = mensagem;
+	}
+	
 	public String getStatus() {
 		return status;
 	}

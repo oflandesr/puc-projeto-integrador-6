@@ -1,6 +1,7 @@
 package br.com.pucc.projetointegradorvi.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,12 @@ public class UserServiceImp implements UserService{
 	@Override
 	public void deleteUser(UserModel user) {
 		this.userRepository.delete(user);
+	}
+
+	@Override
+	public Optional<UserModel> getUserByLogin(String login) {
+		
+		return this.userRepository.findByAcessoLogin(login);
 	}
 
 }
