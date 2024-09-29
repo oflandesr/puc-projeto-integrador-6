@@ -1,6 +1,7 @@
 package br.com.pucc.projetointegradorvi.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import br.com.pucc.projetointegradorvi.models.dto.UserCreationDtoRes;
 public interface UserService {
 	
 	public List<UserModel> getAllUsers();
+	
+	public Optional<UserModel> getUserByLogin(String login);
 
 	public UserCreationDtoRes createUser(UserCreationDtoReq user);
 
