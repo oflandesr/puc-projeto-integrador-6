@@ -26,7 +26,7 @@ public class UserModel {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "login", referencedColumnName = "login", unique = true)
-	private LoginModel acesso;
+	private LoginModel access;
 
 	public UserModel() {}
 	
@@ -38,7 +38,7 @@ public class UserModel {
 	public UserModel(String firstName, String lastName, LoginModel login) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.acesso = login;
+		this.access = login;
 	}
 	
     // Método para retornar um objeto StockModel mock
@@ -47,7 +47,7 @@ public class UserModel {
     	userModel.setId(000000);
     	userModel.setFirstName("Tester");
     	userModel.setLastName("Pucc");
-    	userModel.setAcesso(null);
+    	userModel.setAccess(null);
         return userModel;
     }
     
@@ -75,12 +75,12 @@ public class UserModel {
 		this.lastName = lastName;
 	}
 
-	public LoginModel getAcesso() {
-		return acesso;
+	public LoginModel getAccess() {
+		return access;
 	}
 
-	public void setAcesso(LoginModel login) {
-		this.acesso = login;
+	public void setAccess(LoginModel login) {
+		this.access = login;
 	}
 
 }
