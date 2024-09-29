@@ -2,35 +2,27 @@ package br.com.pucc.projetointegradorvi.models.dto;
 
 public class ResponseReturnDto {
 
-	private String status = "000";
-	private String id = "200_OK";
-	private String mensagem = "Executado com sucesso!";
+	private String id = "200";
+	private String message = "Executado com sucesso!";
 	
 	public ResponseReturnDto() {}
 	
-	public ResponseReturnDto(String status, String id, String mensagem) {
-		this.status = status;
+	public ResponseReturnDto(String id, String mensagem) {
 		this.id = id;
-		this.mensagem = mensagem;
+		this.message = mensagem;
 	}
 	
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getMensagem() {
-		return mensagem;
+	public String getMessage() {
+		return message;
 	}
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 }
