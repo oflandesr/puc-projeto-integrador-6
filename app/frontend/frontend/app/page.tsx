@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/components/CustomInput";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import useLazyGet from "@/hooks/useLazyGet";
 import CustomButton from "@/components/CustomButton";
 
@@ -18,8 +18,11 @@ export default function Home() {
 
     async function handleSubmit() {
         await fetchData();
-        console.log(data);
     }
+
+    useEffect(() => {
+        console.log("Data: ", data);
+    }, [data]);
 
     if (loading) {
         return <p>Loading...</p>;
