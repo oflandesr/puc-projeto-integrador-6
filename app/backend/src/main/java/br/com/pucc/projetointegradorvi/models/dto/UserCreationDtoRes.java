@@ -5,14 +5,14 @@ import br.com.pucc.projetointegradorvi.models.UserModel;
 public class UserCreationDtoRes {
 
 	private UserModel user;
-	private ResponseReturnDto retorno;
+	private ResponseReturnDto result;
 
 	public UserCreationDtoRes() {
-		this.retorno = new ResponseReturnDto();
+		this.result = new ResponseReturnDto();
 	}
 
 	public UserCreationDtoRes(String message) {
-		this.retorno.setMensagem(message);
+		this.result.setMessage(message);
 	}
 
 	public UserModel getUser() {
@@ -23,12 +23,12 @@ public class UserCreationDtoRes {
 		this.user = user;
 	}
 
-	public ResponseReturnDto getRetorno() {
-		return retorno;
+	public ResponseReturnDto getResult() {
+		return result;
 	}
 
-	public void setRetorno(ResponseReturnDto retorno) {
-		this.retorno = retorno;
+	public void setResult(ResponseReturnDto result) {
+		this.result = result;
 	}
 
 }

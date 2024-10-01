@@ -41,7 +41,7 @@ public class UserController {
 		if (user.isPresent()) {
 			return ResponseEntity.status(200).body(user.get());
 		} else {
-			return ResponseEntity.status(404).body(new ResponseReturnDto("404", "404_Not_Found", "Login não encontrado!"));
+			return ResponseEntity.status(404).body(new ResponseReturnDto("404", "Login não encontrado!"));
 		}
 
 	}
