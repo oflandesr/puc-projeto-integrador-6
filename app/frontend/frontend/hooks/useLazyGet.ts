@@ -11,7 +11,10 @@ const useLazyGet = <T>(url: string, params?: Record<string, any>) => {
     const fetchData = async () => {
         setLoading(true);
         setError(null); // Clear previous errors
+        setData(null); // Clear previous data
         console.log(url, params);
+        // Delay some time to show loading spinner
+        await new Promise(resolve => setTimeout(resolve, 1000));
         try {
             const response = await axiosInstance.get<T>(url, { params });
             if (response.status === 200) {
