@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import axiosInstance from "@/config/axiosInstance";
+import Error from "next/error";
 
 const useLazyGet = <T>(url: string, params?: Record<string, any>) => {
     const [data, setData] = useState<T | null>(null);
@@ -12,8 +13,6 @@ const useLazyGet = <T>(url: string, params?: Record<string, any>) => {
         setLoading(true);
         setError(null); // Clear previous errors
         setData(null); // Clear previous data
-        console.log(url, params);
-        // Delay some time to show loading spinner
         await new Promise(resolve => setTimeout(resolve, 1000));
         try {
             const response = await axiosInstance.get<T>(url, { params });
@@ -23,7 +22,7 @@ const useLazyGet = <T>(url: string, params?: Record<string, any>) => {
                 setError(`Unexpected status code: ${response.status}`);
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error occurred');
+            setError("Unknown error occurred");
         } finally {
             setLoading(false);
         }
