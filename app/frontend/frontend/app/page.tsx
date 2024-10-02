@@ -5,13 +5,11 @@ import React, {useEffect, useState} from "react";
 import useLazyGet from "@/hooks/useLazyGet";
 import CustomButton from "@/components/CustomButton";
 import { Bars } from 'react-loading-icons'
-import errorEntry from "next/dist/server/typescript/rules/error";
 
 export default function Home() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [uid, setUid] = useState<string>("");
     const [urlUser, setUrlUser] = useState<string>("");
 
     const {
@@ -31,7 +29,7 @@ export default function Home() {
     async function handleSubmit() {
         await fetchData();
         if (!error) {
-            setUid(email);
+            console.log("Login successful", data);
             setUrlUser(`/user/${email}`);
         } else {
             console.log("Oops, something went wrong", error);
@@ -40,21 +38,12 @@ export default function Home() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (uid) {
+            if (urlUser) {
                 await fetchUser();
             }
         };
-
         fetchData();
     }, [urlUser]);
-
-    useEffect(() => {
-        if (userData) {
-            console.log("User data", userData);
-        } else {
-            console.log("User data not set yet");
-        }
-    }, [userData]);
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
@@ -90,8 +79,9 @@ export default function Home() {
                                     Sign in
                                 </CustomButton>
                                 {(error || userError )&& (
-                                    <div className={"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-700 p-4 text-sm text-center rounded"}>
-                                        {error}{userError}
+                                    <div className={"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-700 p-2 text-sm text-center rounded"}>
+                                        <p>{error}</p>
+                                        <p>{userError}</p>
                                     </div>
                                 )}
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
