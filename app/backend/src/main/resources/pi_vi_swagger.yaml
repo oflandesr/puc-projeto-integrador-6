@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PUCC - Projeto Integrador VI
   description: API para gerenciamento de investimentos.
-  version: 1.0.0
+  version: 1.0.1
 servers:
   - url: http://localhost:8080/api
     description: Servidor Local
@@ -11,6 +11,8 @@ tags:
     description: Autenticação e Autorização de usuários
   - name: Usuários
     description: Operações referentes aos usuários
+  - name: Carteira
+    description: Operações referentes a carteira dos usuários
   - name: Em definição
     description: Recursos e campos em discussão
 security:
@@ -24,13 +26,11 @@ paths:
       description: Autenticar um usuário no sistema.
       responses:
         '200':
-          description: Login bem-sucedido
+          description: Usuário autenticado
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                description: User, Successfully logged in!
-                example: "User, Successfully logged in!"
+                $ref: '#/components/schemas/UserResponse'
         '401':
           description: Credenciais inválidas
   /user:
@@ -39,20 +39,28 @@ paths:
         - Usuários
       summary: Lista usuários
       description: Retorna os usuários cadastrados
+      parameters:
+        - name: login
+          in: query
+          description: Login do usuario
+          required: false
+          schema:
+            type: string
+        - name: id
+          in: query
+          description: Identificador do usuario
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-                      
-        '400':
-          description: Invalid ID supplied
+                $ref: '#/components/schemas/UsersReponse'
         '401':
-          description: Credenciais inválidasaa
+          description: Credenciais inválidas
     post:
       tags: 
         - Usuários
@@ -64,26 +72,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - firstName
-                - lastName
-                - login
-                - password
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                login:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '201':
           description: Usuário adicionado com sucesso
-        '400':
-          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
         '401':
           description: Credenciais inválidas
   /user/{login}:
@@ -92,6 +88,7 @@ paths:
         - Usuários
       summary: Lista dados do usuário
       description: Retorna as propriedades do usuario cadastradas
+      deprecated: true
       parameters:
         - name: login
           in: path
@@ -105,16 +102,92 @@ paths:
           content:
             application/json:
               schema:
+                type: object
                 properties:
-                  user:
-                    $ref: '#/components/schemas/User'
-                  return:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 10
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  access:
+                    type: object
+                    properties:
+                      login:
+                        type: string
+                      enabled:
+                        type: boolean
+                      roles:
+                        type: array
+                        items:
+                          properties:
+                            role:
+                              type: string
+                            description:
+                              type: string
+                  result:
                     $ref: '#/components/schemas/Result'
-                      
-        '400':
-          description: Invalid ID supplied
         '401':
-          description: Credenciais inválidasaa
+          description: Credenciais inválidas
+  /wallet:
+    get:
+      tags:
+        - Carteira
+      summary: Lista carteiras
+      description: Retorna as carteiras do usuário
+      parameters:
+        - name: userId
+          in: query
+          description: Identificador do usuario
+          required: false
+          schema:
+            type: string
+        - name: walletId
+          in: query
+          description: Identificador da carteira do usuario
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletsResponse'
+        '401':
+          description: Credenciais inválidas
+    post:
+      tags: 
+        - Carteira
+      summary: Cria carteira
+      description: Cria uma nova carteira para um usuário
+      requestBody:
+        description: Dados da carteira
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletRequest'
+      responses:
+        '201':
+          description: Carteira criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletResponse'
+        '400':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    $ref: '#/components/schemas/Result'
+        '401':
+          description: Credenciais inválidas
   /portfolio:
     get:
       tags: 
@@ -164,7 +237,7 @@ paths:
                           type: number
                         quantity:
                           type: number
-                  return:
+                  result:
                     $ref: '#/components/schemas/Result'
         '401':
           description: Não autorizado
@@ -318,32 +391,101 @@ paths:
           description: Ação não encontrada
 components:
   schemas:
-    User:
+    UserRequest:
       type: object
+      required:
+        - firstName
+        - lastName
+        - login
+        - password
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
         firstName:
           type: string
         lastName:
           type: string
-        access:
-          type: object
-          properties:
-            login:
-              type: string
-            enabled:
-              type: boolean
-            roles:
-              type: array
-              items:
-                properties:
-                  role:
-                    type: string
-                  description:
-                    type: string
+        login:
+          type: string
+        password:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        result:
+          $ref: '#/components/schemas/Result'
+    UsersReponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              firstName:
+                type: string
+              lastName:
+                type: string
+        result:
+          $ref: '#/components/schemas/Result'
+    WalletRequest:
+      properties:
+        user:
+          type: integer
+          description: "Identificador do usuário"
+        name:
+          type: string
+        objective:
+          type: string
+        intenFixIncPercent:
+          type: string
+        intenStockPercent:
+          type: string
+        intenFilPercent:
+          type: string
+    WalletResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        objective:
+          type: string
+        intenFixIncPercent:
+          type: string
+        intenStockPercent:
+          type: string
+        intenFilPercent:
+          type: string
+        result:
+          $ref: '#/components/schemas/Result'
+    WalletsResponse:
+      type: object
+      properties:
+        wallets:
+          type: array
+          items:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              objective:
+                type: string
+              intenFixIncPercent:
+                type: string
+              intenStockPercent:
+                type: string
+              intenFilPercent:
+                type: string
+        result:
+          $ref: '#/components/schemas/Result'
     Result:
       type: object
       properties:
