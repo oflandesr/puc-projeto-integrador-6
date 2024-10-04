@@ -1,4 +1,5 @@
-// axiosInstance.ts
+"use client";
+
 import axios from 'axios';
 
 // Encode the username and password in base64

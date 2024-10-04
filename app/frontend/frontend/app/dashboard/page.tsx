@@ -1,79 +1,87 @@
 "use client";
 
-import React from "react";
+import React, {useEffect} from "react";
 import {ApexOptions} from "apexcharts";
 import Chart from "react-apexcharts";
+import {useUser} from "@/userContext";
 
-const options: ApexOptions = {
-    chart: {
-        height: "100%",
-        width: "100%",
-        type: "area",
-        fontFamily: "Inter, sans-serif",
-        dropShadow: {
-            enabled: false,
-        },
-        toolbar: {
-            show: false,
-        },
-    },
-    tooltip: {
-        enabled: true,
-        x: {
-            show: false,
-        },
-    },
-    fill: {
-        type: "gradient",
-        gradient: {
-            opacityFrom: 0.55,
-            opacityTo: 0,
-            shade: "#1C64F2",
-            gradientToColors: ["#1C64F2"],
-        },
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    stroke: {
-        width: 6,
-    },
-    grid: {
-        show: false,
-        strokeDashArray: 4,
-        padding: {
-            left: 2,
-            right: 2,
-            top: 0
-        },
-    },
-    series: [
-        {
-            name: "Account Balance",
-            data: [6500, 6418, 6456, 6526, 6356, 6456],
-            color: "#1A56DB",
-        },
-    ],
-    xaxis: {
-        categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
-        labels: {
-            show: false,
-        },
-        axisBorder: {
-            show: false,
-        },
-        axisTicks: {
-            show: false,
-        },
-    },
-    yaxis: {
-        show: false,
-    },
-}
 
 export default function Home() {
+    const {getUserData, userId} = useUser();
+
+    const options: ApexOptions = {
+        chart: {
+            height: "100%",
+            width: "100%",
+            type: "area",
+            fontFamily: "Inter, sans-serif",
+            dropShadow: {
+                enabled: false,
+            },
+            toolbar: {
+                show: false,
+            },
+        },
+        tooltip: {
+            enabled: true,
+            x: {
+                show: false,
+            },
+        },
+        fill: {
+            type: "gradient",
+            gradient: {
+                opacityFrom: 0.55,
+                opacityTo: 0,
+                shade: "#1C64F2",
+                gradientToColors: ["#1C64F2"],
+            },
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        stroke: {
+            width: 6,
+        },
+        grid: {
+            show: false,
+            strokeDashArray: 4,
+            padding: {
+                left: 2,
+                right: 2,
+                top: 0,
+            },
+        },
+        series: [
+            {
+                name: "Account Balance",
+                data: [6500, 6418, 6456, 6526, 6356, 6456],
+                color: "#1A56DB",
+            },
+        ],
+        xaxis: {
+            categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
+            labels: {
+                show: false,
+            },
+            axisBorder: {
+                show: false,
+            },
+            axisTicks: {
+                show: false,
+            },
+        },
+        yaxis: {
+            show: false,
+        },
+    };
+
+    useEffect(() => {
+        console.log(getUserData());
+    }, [getUserData, userId]);
+
     return (
-        <div className="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+        <div className={`col-span-4 row-span-12 bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6`}>
             <div className="flex justify-between">
                 <div>
                     <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
@@ -92,8 +100,7 @@ export default function Home() {
             <div>
                 <Chart options={options} series={options.series} type="area" height="250" />
             </div>
-            <div
-                className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+            <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                 <div className="flex justify-between items-center pt-4">
                     <a
                         href="#"
@@ -106,7 +113,6 @@ export default function Home() {
                         </svg>
                     </a>
                 </div>
-
             </div>
         </div>
     );

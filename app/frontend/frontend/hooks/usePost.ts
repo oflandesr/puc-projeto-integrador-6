@@ -1,4 +1,4 @@
-// usePost.ts
+"use client";
 import { useState } from 'react';
 import axiosInstance from "@/config/axiosInstance";
 
