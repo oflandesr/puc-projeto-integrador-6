@@ -11,10 +11,10 @@
 	</parent>
 	<groupId>br.com.pucc</groupId>
 	<artifactId>
-	ProjetoIntegradorVI</artifactId>
+		ProjetoIntegradorVI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>
-	ProjetoIntegradorVI</name>
+		ProjetoIntegradorVI</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
 	<licenses>
@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+			<version>8.0.33</version>
 		</dependency>
 
 		<dependency>
@@ -60,20 +60,26 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.2.0</version>
 		</dependency>
 	</dependencies>
 
