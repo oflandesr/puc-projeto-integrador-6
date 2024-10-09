@@ -28,8 +28,8 @@ export default function Table<T>({ columns, data }: TableProps<T>) {
                 columns={columns}
                 data={filteredData} // Use filtered data
                 pagination // Enable pagination
-                paginationPerPage={5} // Limit to 5 rows per page
-                paginationRowsPerPageOptions={[5, 10, 15]} // Rows per page options
+                paginationPerPage={4} // Limit to 5 rows per page
+                paginationRowsPerPageOptions={[4, 8, 12]} // Rows per page options
                 defaultSortFieldId={1} // Optional: default sorting by Name
             />
         </div>

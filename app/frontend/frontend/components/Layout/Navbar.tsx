@@ -21,7 +21,7 @@ export default function Navbar() {
     ];
 
     return (
-        <div className="h-screen w-64 shadow-lg bg-white text-black p-6 flex flex-col justify-between">
+        <div className="h-auto w-64 shadow-lg bg-white text-black p-6 flex flex-col justify-between">
             <nav className="flex flex-col gap-4">
                 {menuItems.filter(item => !item.opposite).map((item) => (
                     <Link key={item.name} href={item.href} className={`p-3 flex items-center gap-3 transition-colors duration-200 rounded-lg 

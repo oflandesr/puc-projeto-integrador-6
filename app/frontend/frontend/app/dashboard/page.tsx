@@ -6,33 +6,35 @@ import Line from "@/components/Charts/Line";
 import Card from "@/components/Layout/Card";
 import Table from "@/components/Table";
 
-interface UserTableData {
+interface InterfaceUserTableData {
     id: number;
     name: string;
     age: number;
     email: string;
 }
 
-const userData: UserTableData[] = [
+const tableData: InterfaceUserTableData[] = [
     { id: 1, name: 'John Doe', age: 28, email: 'john@example.com' },
     { id: 2, name: 'Jane Smith', age: 34, email: 'jane@example.com' },
     { id: 3, name: 'Alice Johnson', age: 25, email: 'alice@example.com' },
+    { id: 4, name: 'Gabriel SIlva', age: 29, email: 'gabriel@example.com' },
+    { id: 5, name: 'Filipe', age: 29, email: 'filipe@example.com' },
 ];
 
-const userColumns = [
+const tableCols = [
     {
         name: 'Name',
-        selector: (row: UserTableData) => row.name,
+        selector: (row: InterfaceUserTableData) => row.name,
         sortable: true,
     },
     {
         name: 'Age',
-        selector: (row: UserTableData) => row.age,
+        selector: (row: InterfaceUserTableData) => row.age,
         sortable: true,
     },
     {
         name: 'Email',
-        selector: (row: UserTableData) => row.email,
+        selector: (row: InterfaceUserTableData) => row.email,
         sortable: true,
     },
 ];
@@ -59,7 +61,7 @@ export default function Home() {
                 />
             </Card>
             <Card colspan={12} rowspan={1}>
-                <Table columns={userColumns} data={userData} />;
+                <Table columns={tableCols} data={tableData} />
             </Card>
         </>
     );
