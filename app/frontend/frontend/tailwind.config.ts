@@ -8,6 +8,14 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/flowbite/**/*.js"
   ],
+  safelist: [
+    {
+      pattern: /col-span-(1|2|3|4|5|6|7|8|9|10|11|12)/,
+    },
+    {
+      pattern: /row-span-(1|2|3|4|5|6|7|8|9|10|11|12)/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
