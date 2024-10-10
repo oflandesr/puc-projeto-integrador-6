@@ -15,6 +15,12 @@ const tableData: InterfaceUserTableData[] = [
     { id: 3, name: "John Smith", objective: "Objective 3", intenFixIncPercent: "30", intenStockPercent: "40", intenFilPercent: "30" },
     { id: 4, name: "Jane Smith", objective: "Objective 4", intenFixIncPercent: "40", intenStockPercent: "50", intenFilPercent: "10" },
     { id: 5, name: "John Johnson", objective: "Objective 5", intenFixIncPercent: "50", intenStockPercent: "30", intenFilPercent: "20" },
+    { id: 6, name: "Jane Doe", objective: "Objective 6", intenFixIncPercent: "60", intenStockPercent: "20", intenFilPercent: "20" },
+    { id: 7, name: "John Doe", objective: "Objective 7", intenFixIncPercent: "70", intenStockPercent: "10", intenFilPercent: "20" },
+    { id: 8, name: "Jane Johnson", objective: "Objective 8", intenFixIncPercent: "80", intenStockPercent: "10", intenFilPercent: "10" },
+    { id: 9, name: "John Smith", objective: "Objective 9", intenFixIncPercent: "90", intenStockPercent: "10", intenFilPercent: "0" },
+    { id: 10, name: "Jane Smith", objective: "Objective 10", intenFixIncPercent: "100", intenStockPercent: "0", intenFilPercent: "0" },
+    {id: 11, name: "John Johnson", objective: "Objective 11", intenFixIncPercent: "0", intenStockPercent: "100", intenFilPercent: "0"}
 ];
 
 const tableCols = [

@@ -7,6 +7,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import Table from "@/components/Table";
 import {tableCols, tableData} from "@/mock/mock";
+import LoadingFullPage from "@/components/LoadingFullPage";
 
 interface InterfaceWalletData {
     user: number;
@@ -19,6 +20,7 @@ interface InterfaceWalletData {
 
 export default function Home() {
     const {getUserData, userId} = useUser();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [walletData, setWalletData] = useState<InterfaceWalletData>({
         user: 0,
@@ -63,6 +65,10 @@ export default function Home() {
     useEffect(() => {
         console.log(getUserData());
     }, [getUserData, userId]);
+
+    if (loading) {
+        return <LoadingFullPage />;
+    }
 
     return (
         <>

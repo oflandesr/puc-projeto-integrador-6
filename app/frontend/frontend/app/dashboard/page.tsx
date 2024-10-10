@@ -1,18 +1,24 @@
 "use client";
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useUser} from "@/userContext";
 import Line from "@/components/Charts/Line";
 import Card from "@/components/Layout/Card";
 import Table from "@/components/Table";
 import {tableCols, tableData} from "@/mock/mock";
+import LoadingFullPage from "@/components/LoadingFullPage";
 
 export default function Home() {
     const {getUserData, userId} = useUser();
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         console.log(getUserData());
     }, [getUserData, userId]);
+
+    if (loading) {
+        return <LoadingFullPage />;
+    }
 
     return (
         <>

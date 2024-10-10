@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import {useUser} from "@/userContext"
 import {useParams} from "next/navigation";
+import Card from "@/components/Layout/Card";
 
 export default function Home() {
     const {getUserData, userId} = useUser();
@@ -16,7 +17,9 @@ export default function Home() {
 
     return (
         <>
-            Wallet Info { walletId }
+            <Card colspan={12} rowspan={1}>
+                <h1>Wallet Id {walletId}</h1>
+            </Card>
         </>
     );
 }
