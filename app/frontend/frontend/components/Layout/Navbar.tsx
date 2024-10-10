@@ -14,9 +14,9 @@ export default function Navbar() {
     const pathname = usePathname(); // Get current path
 
     const menuItems: MenuItem[] = [
-        { name: "Home", icon: <FiHome />, href: "/dashboard/home" },
+        { name: "Home", icon: <FiHome />, href: "/dashboard" },
+        { name: "Add Wallet", icon: <FiBriefcase />, href: "/dashboard/wallet" },
         { name: "Profile", icon: <FiUser />, href: "/dashboard/profile"},
-        { name: "Wallet", icon: <FiBriefcase />, href: "/dashboard/wallet" },
         { name: "Settings", icon: <FiSettings />, href: "/dashboard/settings" , opposite: true },
     ];
 
