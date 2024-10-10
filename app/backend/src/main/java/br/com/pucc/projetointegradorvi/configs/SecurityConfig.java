@@ -1,7 +1,5 @@
 package br.com.pucc.projetointegradorvi.configs;
 
-import java.util.Arrays;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +39,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/api/auth/login").permitAll() // Permitir acesso ao login para todos
+                .requestMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll() // Permitir acesso ao Swagger UI
+                .requestMatchers(HttpMethod.GET, "/api-docs/**").permitAll() // Permitir acesso à documentação da API
+                .requestMatchers(HttpMethod.GET, "/pi_vi**").permitAll() // Permitir acesso à documentação da API
                 .requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -65,16 +63,4 @@ public class SecurityConfig {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 
-    // Configuração do filtro CORS
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Adicione seu frontend aqui
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
 }
