@@ -30,7 +30,7 @@ export default function Home() {
     // TODO - Implement the function to handle the form submit
     function handleDataSubmit() {
         if (isWalletDataValid()) {
-            console.log(walletData);
+            console.log('Will work');
         } else {
             console.error("Invalid data");
         }
@@ -38,9 +38,17 @@ export default function Home() {
 
     function isWalletDataValid(): boolean {
         try {
-            const sum: number = parseInt(walletData.intenFixIncPercent) + parseInt(walletData.intenStockPercent) + parseInt(walletData.intenFilPercent);
+            if (walletData.intenFixIncPercent.match(/[a-z]/i) || walletData.intenStockPercent.match(/[a-z]/i) || walletData.intenFilPercent.match(/[a-z]/i)) {
+                alert("The percentages must be numbers");
+                // Display all
+                console.log(walletData);
+                return false;
+            }
+            const sum: number = parseFloat(walletData.intenFixIncPercent) + parseFloat(walletData.intenStockPercent) + parseFloat(walletData.intenFilPercent);
             if (sum !== 100) {
                 alert("The sum of the percentages must be 100");
+                // Display all
+                console.log(walletData);
                 return false;
             }
             return walletData.name !== "" && walletData.objective !== "" && walletData.intenFixIncPercent !== "" && walletData.intenStockPercent !== "" && walletData.intenFilPercent !== "";
