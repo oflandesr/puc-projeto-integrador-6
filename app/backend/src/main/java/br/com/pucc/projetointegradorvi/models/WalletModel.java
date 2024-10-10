@@ -1,8 +1,7 @@
 package br.com.pucc.projetointegradorvi.models;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,40 +9,55 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "WALLET")
 public class WalletModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", nullable = false)
+	private Integer id;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(name = "NAME", nullable = false)
+	private String name;
 
-    private String objective;
+	@Column(name = "OBJECTIVE", nullable = false)
+	private String objective;
 
-    @Column(name = "intended_fixed_income_percent")
-    private Integer intendedFixedIncomePercent;
+	@Column(name = "INTENDED_FIXED_INCOME_PERCENT")
+	private Integer intendedFixedIncomePercent;
 
-    @Column(name = "intended_stock_percent")
-    private Integer intendedStockPercent;
+	@Column(name = "INTENDED_STOCK_PERCENT")
+	private Integer intendedStockPercent;
 
-    @Column(name = "intended_fii_percent")
-    private Integer intendedFiiPercent;
+	@Column(name = "INTENDED_FII_PERCENT")
+	private Integer intendedFiiPercent;
+	
+	@JsonIgnore
+	@ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private UserModel2 user;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserModel user;
+	public WalletModel() {
+	}
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private List<TransactionVariableIncomeModel> variableIncomeTransactions;
+	public WalletModel(String name, String objective, String intendedFixedIncomePercent, String intendedStockPercent,
+			String intendedFiiPercent, UserModel2 user) {
+		this.name = name;
+		this.objective = objective;
+		this.intendedFixedIncomePercent = Integer.valueOf(intendedFixedIncomePercent);
+		this.intendedStockPercent = Integer.valueOf(intendedStockPercent);
+		this.intendedFiiPercent = Integer.valueOf(intendedFiiPercent);
+		this.user = user;
+	}
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
+//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
+//    private List<TransactionVariableIncomeModel> variableIncomeTransactions;
+//
+//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
+//    private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
 
 	public Integer getId() {
 		return id;
@@ -93,28 +107,28 @@ public class WalletModel {
 		this.intendedFiiPercent = intendedFiiPercent;
 	}
 
-	public UserModel getUser() {
+	public UserModel2 getUser() {
 		return user;
 	}
 
-	public void setUser(UserModel user) {
+	public void setUser(UserModel2 user) {
 		this.user = user;
 	}
 
-	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
-		return variableIncomeTransactions;
-	}
-
-	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
-		this.variableIncomeTransactions = variableIncomeTransactions;
-	}
-
-	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
-		return fixedIncomeTransactions;
-	}
-
-	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
-		this.fixedIncomeTransactions = fixedIncomeTransactions;
-	}
+//	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
+//		return variableIncomeTransactions;
+//	}
+//
+//	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
+//		this.variableIncomeTransactions = variableIncomeTransactions;
+//	}
+//
+//	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
+//		return fixedIncomeTransactions;
+//	}
+//
+//	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
+//		this.fixedIncomeTransactions = fixedIncomeTransactions;
+//	}
 
 }
