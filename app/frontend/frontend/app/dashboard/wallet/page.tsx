@@ -5,6 +5,8 @@ import {useUser} from "@/userContext";
 import Card from "@/components/Layout/Card";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
+import Table from "@/components/Table";
+import {tableCols, tableData} from "@/mock/mock";
 
 interface InterfaceWalletData {
     user: number;
@@ -77,7 +79,7 @@ export default function Home() {
                                      type={'text'} name={'objective'} id={'objective'}/>
                     </div>
                     <div className={"col-span-4"}>
-                        <CustomInput placeholder={"Income %"} value={walletData.intenFixIncPercent}
+                        <CustomInput placeholder={"Fixed Income %"} value={walletData.intenFixIncPercent}
                                      onChange={(e) => setWalletData({
                                          ...walletData,
                                          intenFixIncPercent: e.target.value
@@ -100,6 +102,10 @@ export default function Home() {
                         </CustomButton>
                     </div>
                 </div>
+            </Card>
+            <Card colspan={12} rowspan={1}>
+                {/*Expect error below if using a button on one of the rows*/}
+                <Table columns={tableCols} data={tableData} />
             </Card>
         </>
     );
