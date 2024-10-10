@@ -1,46 +1,63 @@
 "use client";
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useUser} from "@/userContext";
-import Line from "@/components/Charts/Line";
 import Card from "@/components/Layout/Card";
-import Table from "@/components/Table";
+import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/components/CustomInput";
 
-interface InterfaceUserTableData {
-    id: number;
+/*
+    {
+      "user": 0, // User id by default
+      "name": "string", // wallet name
+      "objective": "string", // wallet objective
+      "intenFixIncPercent": "string", // this is a percentage
+      "intenStockPercent": "string", // this is a percentage
+      "intenFilPercent": "string" // this is a percentage
+    }
+*/
+
+interface InterfaceWalletData {
+    user: number;
     name: string;
-    age: number;
-    email: string;
+    objective: string;
+    intenFixIncPercent: string;
+    intenStockPercent: string;
+    intenFilPercent: string;
 }
-
-const tableData: InterfaceUserTableData[] = [
-    { id: 1, name: 'John Doe', age: 28, email: 'john@example.com' },
-    { id: 2, name: 'Jane Smith', age: 34, email: 'jane@example.com' },
-    { id: 3, name: 'Alice Johnson', age: 25, email: 'alice@example.com' },
-    { id: 4, name: 'Gabriel SIlva', age: 29, email: 'gabriel@example.com' },
-    { id: 5, name: 'Filipe', age: 29, email: 'filipe@example.com' },
-];
-
-const tableCols = [
-    {
-        name: 'Name',
-        selector: (row: InterfaceUserTableData) => row.name,
-        sortable: true,
-    },
-    {
-        name: 'Age',
-        selector: (row: InterfaceUserTableData) => row.age,
-        sortable: true,
-    },
-    {
-        name: 'Email',
-        selector: (row: InterfaceUserTableData) => row.email,
-        sortable: true,
-    },
-];
 
 export default function Home() {
     const {getUserData, userId} = useUser();
+
+    const [walletData, setWalletData] = useState<InterfaceWalletData>({
+        user: 0,
+        name: "",
+        objective: "",
+        intenFixIncPercent: "",
+        intenStockPercent: "",
+        intenFilPercent: ""
+    });
+
+    function handleDataSubmit() {
+        if (isWalletDataValid()) {
+            console.log(walletData);
+        } else {
+            console.error("Invalid data");
+        }
+    }
+
+    function isWalletDataValid() : boolean {
+        try {
+            const sum: number = parseInt(walletData.intenFixIncPercent) + parseInt(walletData.intenStockPercent) + parseInt(walletData.intenFilPercent);
+            if (sum !== 100) {
+                return false;
+            }
+            return walletData.name !== "" && walletData.objective !== "" && walletData.intenFixIncPercent !== "" && walletData.intenStockPercent !== "" && walletData.intenFilPercent !== "";
+        } catch (e) {
+            console.error(e);
+            return false;
+        }
+    }
 
     useEffect(() => {
         console.log(getUserData());
@@ -49,7 +66,25 @@ export default function Home() {
     return (
         <>
             <Card colspan={12} rowspan={1}>
-                Test
+                <div className={"grid grid-cols-12 gap-4"}>
+                    <div className={"col-span-6"}>
+                        <CustomInput placeholder={"Wallet Name"} value={walletData.name} onChange={(e) => setWalletData({...walletData, name: e.target.value})} type={'text'} name={'name'} id={'name'}/>
+                    </div>
+                    <CustomInput placeholder={"Wallet Objective"} value={walletData.objective} onChange={(e) => setWalletData({...walletData, objective: e.target.value})} type={'text'} name={'objective'} id={'objective'}/>
+                    <CustomInput placeholder={"Intentional Fixed Income Percentage"} value={walletData.intenFixIncPercent} onChange={(e) => setWalletData({...walletData, intenFixIncPercent: e.target.value})} type={'number'} name={'intenFixIncPercent'} id={'intenFixIncPercent'}/>
+                    <CustomInput placeholder={"Intentional Stock Percentage"} value={walletData.intenStockPercent} onChange={(e) => setWalletData({...walletData, intenStockPercent: e.target.value})} type={'number'} name={'intenStockPercent'} id={'intenStockPercent'} />
+                    <CustomInput
+                        placeholder={"Intentional Fixed Income Percentage"}
+                        value={walletData.intenFilPercent}
+                        onChange={(e) => setWalletData({...walletData, intenFilPercent: e.target.value})}
+                        type={'number'}
+                        name={'intenFilPercent'}
+                        id={'intenFilPercent'}
+                    />
+                    <CustomButton type={"button"} onClick={handleDataSubmit}>
+                        <span>Create Wallet</span>
+                    </CustomButton>
+                </div>
             </Card>
         </>
     );

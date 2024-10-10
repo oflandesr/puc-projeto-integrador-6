@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
 
             {/* Main Content with Grid Layout */}
             <div className="flex-1 p-4 min-h-screen">
-                <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-4">
                     {children}
                 </div>
             </div>
