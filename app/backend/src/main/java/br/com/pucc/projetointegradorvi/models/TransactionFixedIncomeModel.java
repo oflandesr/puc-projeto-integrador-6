@@ -2,6 +2,8 @@ package br.com.pucc.projetointegradorvi.models;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,11 +20,13 @@ import jakarta.persistence.TemporalType;
 public class TransactionFixedIncomeModel {
 
     @Id
+    @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "wallet_id", nullable = false)
+    @JoinColumn(name = "WALLET_ID", nullable = false)
     private WalletModel wallet;
 
     private String institution;
@@ -32,17 +36,17 @@ public class TransactionFixedIncomeModel {
     private Float value;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date")
+    @Column(name = "START_DATE")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "end_date")
+    @Column(name = "END_DATE")
     private Date endDate;
 
-    @Column(name = "index_name")
+    @Column(name = "INDEX_NAME")
     private String indexName;
 
-    @Column(name = "tax_value")
+    @Column(name = "TAX_VALUE")
     private Integer taxValue;
 
 	public Integer getId() {

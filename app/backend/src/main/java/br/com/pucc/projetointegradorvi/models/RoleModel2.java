@@ -8,9 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ROLE")
 public class RoleModel2 {
-
-	private Integer id;
-
+	
 	@Id
 	@Column(name = "ROLE", unique = true)
 	private String role;
@@ -23,14 +21,6 @@ public class RoleModel2 {
 
 	public RoleModel2(String role) {
 		this.role = role;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getRole() {

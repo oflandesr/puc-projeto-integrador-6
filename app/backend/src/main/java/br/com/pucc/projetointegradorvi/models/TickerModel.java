@@ -1,47 +1,117 @@
 package br.com.pucc.projetointegradorvi.models;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "TICKER")
 public class TickerModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String ticker;
+	@Id
+	@Column(name = "TICKER", nullable = false, unique = true)
+	private String ticker;
 
-    private String currency;
-    private String shortName;
-    private String longName;
-    private String address;
-    private String city;
-    private String state;
-    private String zip;
-    private String country;
-    private String phone;
-    private String website;
-    private String logoUrl;
-    private String industry;
-    private String sector;
-    private Integer numberOfEmployees;
-    private Float marketCap;
+	@Column(name = "CURRENCY")
+	private String currency;
 
-    // Outros atributos de mercado
-    private Float regularMarketOpen;
-    private Float regularMarketClose;
-    private Float regularMarketPrice;
-    private Float regularMarketVolume;
+	@Column(name = "SHORT_NAME")
+	private String shortName;
 
-    @OneToMany(mappedBy = "ticker", cascade = CascadeType.ALL)
-    private List<PriceModel> prices;
+	@Column(name = "LONG_NAME")
+	private String longName;
+
+	@Column(name = "ADDRESS_2")
+	private String address2;
+
+	@Column(name = "CITY")
+	private String city;
+
+	@Column(name = "STATE")
+	private String state;
+
+	@Column(name = "ZIP")
+	private String zip;
+
+	@Column(name = "COUNTRY")
+	private String country;
+
+	@Column(name = "PHONE")
+	private String phone;
+
+	@Column(name = "WEBSITE")
+	private String website;
+
+	@Column(name = "LOGO_URL")
+	private String logoUrl;
+
+	@Column(name = "INDUSTRY")
+	private String industry;
+
+	@Column(name = "SECTOR")
+	private String sector;
+
+	@Column(name = "BUSINESS_SUMMARY")
+	private String businessSummary;
+
+	@Column(name = "NUMBER_OF_EMPLOYEES")
+	private Integer numberOfEmployees;
+
+	@Column(name = "MARKET_CAP")
+	private Float marketCap;
+
+	@Column(name = "200_DAY_AVERAGE")
+	private Float twoHundredDayAverage;
+
+	@Column(name = "200_DAY_AVERAGE_CHANGE")
+	private Float twoHundredDayAverageChange;
+
+	@Column(name = "200_DAY_AVERAGE_CHANGE_PERCENT")
+	private Float twoHundredDayAverageChangePercent;
+
+	@Column(name = "REGULAR_MARKET_CHANGE")
+	private Float regularMarketChange;
+
+	@Column(name = "REGULAR_MARKET_PRICE")
+	private Float regularMarketPrice;
+
+	@Column(name = "REGULAR_MARKET_DAY_HIGH")
+	private Float regularMarketDayHigh;
+
+	@Column(name = "REGULAR_MARKET_DAY_LOW")
+	private Float regularMarketDayLow;
+
+	@Column(name = "REGULAR_MARKET_VOLUME")
+	private Integer regularMarketVolume;
+
+	@Column(name = "REGULAR_MARKET_OPEN")
+	private Float regularMarketOpen;
+
+	@Column(name = "AVERAGE_DAILY_VOLUME_10_DAYS")
+	private Integer averageDailyVolume10Days;
+
+	@Column(name = "52_WEEKS_HIGH_CHANGE")
+	private Float fiftyTwoWeeksHighChange;
+
+	@Column(name = "52_WEEKS_HIGH_CHANGE_PERCENT")
+	private Float fiftyTwoWeeksHighChangePercent;
+
+	@Column(name = "52_WEEKS_RANGE")
+	private String fiftyTwoWeeksRange;
+
+	@Column(name = "52_WEEKS_HIGH")
+	private Float fiftyTwoWeeksHigh;
+
+	@Column(name = "PRICE_EARNINGS")
+	private Float priceEarnings;
+
+	@Column(name = "EARNINGS_PER_SHARE")
+	private Float earningsPerShare;
+
+	// Construtor padrão
+	public TickerModel() {
+	}
 
 	public String getTicker() {
 		return ticker;
@@ -75,12 +145,12 @@ public class TickerModel {
 		this.longName = longName;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getAddress2() {
+		return address2;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAddress2(String address2) {
+		this.address2 = address2;
 	}
 
 	public String getCity() {
@@ -155,6 +225,14 @@ public class TickerModel {
 		this.sector = sector;
 	}
 
+	public String getBusinessSummary() {
+		return businessSummary;
+	}
+
+	public void setBusinessSummary(String businessSummary) {
+		this.businessSummary = businessSummary;
+	}
+
 	public Integer getNumberOfEmployees() {
 		return numberOfEmployees;
 	}
@@ -171,20 +249,36 @@ public class TickerModel {
 		this.marketCap = marketCap;
 	}
 
-	public Float getRegularMarketOpen() {
-		return regularMarketOpen;
+	public Float getTwoHundredDayAverage() {
+		return twoHundredDayAverage;
 	}
 
-	public void setRegularMarketOpen(Float regularMarketOpen) {
-		this.regularMarketOpen = regularMarketOpen;
+	public void setTwoHundredDayAverage(Float twoHundredDayAverage) {
+		this.twoHundredDayAverage = twoHundredDayAverage;
 	}
 
-	public Float getRegularMarketClose() {
-		return regularMarketClose;
+	public Float getTwoHundredDayAverageChange() {
+		return twoHundredDayAverageChange;
 	}
 
-	public void setRegularMarketClose(Float regularMarketClose) {
-		this.regularMarketClose = regularMarketClose;
+	public void setTwoHundredDayAverageChange(Float twoHundredDayAverageChange) {
+		this.twoHundredDayAverageChange = twoHundredDayAverageChange;
+	}
+
+	public Float getTwoHundredDayAverageChangePercent() {
+		return twoHundredDayAverageChangePercent;
+	}
+
+	public void setTwoHundredDayAverageChangePercent(Float twoHundredDayAverageChangePercent) {
+		this.twoHundredDayAverageChangePercent = twoHundredDayAverageChangePercent;
+	}
+
+	public Float getRegularMarketChange() {
+		return regularMarketChange;
+	}
+
+	public void setRegularMarketChange(Float regularMarketChange) {
+		this.regularMarketChange = regularMarketChange;
 	}
 
 	public Float getRegularMarketPrice() {
@@ -195,20 +289,92 @@ public class TickerModel {
 		this.regularMarketPrice = regularMarketPrice;
 	}
 
-	public Float getRegularMarketVolume() {
+	public Float getRegularMarketDayHigh() {
+		return regularMarketDayHigh;
+	}
+
+	public void setRegularMarketDayHigh(Float regularMarketDayHigh) {
+		this.regularMarketDayHigh = regularMarketDayHigh;
+	}
+
+	public Float getRegularMarketDayLow() {
+		return regularMarketDayLow;
+	}
+
+	public void setRegularMarketDayLow(Float regularMarketDayLow) {
+		this.regularMarketDayLow = regularMarketDayLow;
+	}
+
+	public Integer getRegularMarketVolume() {
 		return regularMarketVolume;
 	}
 
-	public void setRegularMarketVolume(Float regularMarketVolume) {
+	public void setRegularMarketVolume(Integer regularMarketVolume) {
 		this.regularMarketVolume = regularMarketVolume;
 	}
 
-	public List<PriceModel> getPrices() {
-		return prices;
+	public Float getRegularMarketOpen() {
+		return regularMarketOpen;
 	}
 
-	public void setPrices(List<PriceModel> prices) {
-		this.prices = prices;
+	public void setRegularMarketOpen(Float regularMarketOpen) {
+		this.regularMarketOpen = regularMarketOpen;
+	}
+
+	public Integer getAverageDailyVolume10Days() {
+		return averageDailyVolume10Days;
+	}
+
+	public void setAverageDailyVolume10Days(Integer averageDailyVolume10Days) {
+		this.averageDailyVolume10Days = averageDailyVolume10Days;
+	}
+
+	public Float getFiftyTwoWeeksHighChange() {
+		return fiftyTwoWeeksHighChange;
+	}
+
+	public void setFiftyTwoWeeksHighChange(Float fiftyTwoWeeksHighChange) {
+		this.fiftyTwoWeeksHighChange = fiftyTwoWeeksHighChange;
+	}
+
+	public Float getFiftyTwoWeeksHighChangePercent() {
+		return fiftyTwoWeeksHighChangePercent;
+	}
+
+	public void setFiftyTwoWeeksHighChangePercent(Float fiftyTwoWeeksHighChangePercent) {
+		this.fiftyTwoWeeksHighChangePercent = fiftyTwoWeeksHighChangePercent;
+	}
+
+	public String getFiftyTwoWeeksRange() {
+		return fiftyTwoWeeksRange;
+	}
+
+	public void setFiftyTwoWeeksRange(String fiftyTwoWeeksRange) {
+		this.fiftyTwoWeeksRange = fiftyTwoWeeksRange;
+	}
+
+	public Float getFiftyTwoWeeksHigh() {
+		return fiftyTwoWeeksHigh;
+	}
+
+	public void setFiftyTwoWeeksHigh(Float fiftyTwoWeeksHigh) {
+		this.fiftyTwoWeeksHigh = fiftyTwoWeeksHigh;
+	}
+
+	public Float getPriceEarnings() {
+		return priceEarnings;
+	}
+
+	public void setPriceEarnings(Float priceEarnings) {
+		this.priceEarnings = priceEarnings;
+	}
+
+	public Float getEarningsPerShare() {
+		return earningsPerShare;
+	}
+
+	public void setEarningsPerShare(Float earningsPerShare) {
+		this.earningsPerShare = earningsPerShare;
 	}
 
 }

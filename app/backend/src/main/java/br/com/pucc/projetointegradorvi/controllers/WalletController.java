@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pucc.projetointegradorvi.models.WalletModel;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationDtoReq;
+import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateDtoReq;
 import br.com.pucc.projetointegradorvi.services.WalletService;
 
 @RestController
@@ -30,17 +32,13 @@ public class WalletController {
 		List<WalletModel> walletsList = List.of();
 
 		if (walletId.isPresent() && userId.isPresent()) {
-			// String u = userId.get();
-			// String lString = login.get();
+			List<WalletModel> um = this.walletService.getWalletByUserIdAndWalletId(userId.get(), walletId.get());
+			walletsList = um;
 		} else if (userId.isPresent()) {
-			String u = userId.get();
-			Optional<WalletModel> um = this.walletService.getWalletByUserId(u);
-			if (um.isPresent()) {
-				walletsList = List.of(um.get());
-			}
+			List<WalletModel> um = this.walletService.getWalletByUserId(userId.get());
+			walletsList = um;
 		} else if (walletId.isPresent()) {
-			String w = walletId.get();
-			Optional<WalletModel> um = this.walletService.getWalletById(w);
+			Optional<WalletModel> um = this.walletService.getWalletById(walletId.get());
 			if (um.isPresent()) {
 				walletsList = List.of(um.get());
 			}
@@ -53,7 +51,14 @@ public class WalletController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<WalletModel> create(@RequestBody WalletCreationDtoReq wallet) {
+	public ResponseEntity<WalletModel> createWallet(@RequestBody WalletCreationDtoReq wallet) {
 		return ResponseEntity.status(200).body(walletService.createWallet(wallet));
 	}
+
+	@RequestMapping(value = "/{walletId}", method = RequestMethod.PATCH, produces = "application/json")
+	public ResponseEntity<WalletModel> updateWallet(@PathVariable("walletId") String walletId,
+			@RequestBody WalletUpdateDtoReq wallet) {
+		return ResponseEntity.status(200).body(walletService.updateWallet(walletId, wallet));
+	}
+
 }

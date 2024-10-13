@@ -6,48 +6,55 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pucc.projetointegradorvi.models.UserModel;
-import br.com.pucc.projetointegradorvi.models.dto.ResponseReturnDto;
 import br.com.pucc.projetointegradorvi.models.dto.UserCreationDtoReq;
 import br.com.pucc.projetointegradorvi.models.dto.UserCreationDtoRes;
 import br.com.pucc.projetointegradorvi.services.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v2/user")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<UserModel>> getUsers() {
+	public ResponseEntity<List<UserModel>> getUser(@RequestParam("userId") Optional<String> userId,
+			@RequestParam("login") Optional<String> login) {
 
-		List<UserModel> usersList = this.userService.getAllUsers();
+		List<UserModel> usersList = List.of();
 
-		return new ResponseEntity<List<UserModel>>(usersList, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/{login}", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<Object> getUserByLogin(@PathVariable("login") String login) {
-
-		Optional<UserModel> user = userService.getUserByLogin(login);
-
-		if (user.isPresent()) {
-			return ResponseEntity.status(200).body(user.get());
+		if (userId.isPresent() && login.isPresent()) {
+			// String u = userId.get();
+			// String lString = login.get();
+		} else if (userId.isPresent()) {
+			String u = userId.get();
+			Optional<UserModel> um = this.userService.getUserById2(u);
+			if (um.isPresent()) {
+				usersList = List.of(um.get());
+			}
+		} else if (login.isPresent()) {
+			String l = login.get();
+			Optional<UserModel> um = this.userService.getUserByLogin2(l);
+			if (um.isPresent()) {
+				usersList = List.of(um.get());
+			}
 		} else {
-			return ResponseEntity.status(404).body(new ResponseReturnDto("404", "Login não encontrado!"));
+
+			usersList = this.userService.getAllUsers2();
 		}
 
+		return new ResponseEntity<List<UserModel>>(usersList, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<UserCreationDtoRes> create(@RequestBody UserCreationDtoReq user) {
-		return ResponseEntity.status(200).body(userService.createUser(user));
+		return ResponseEntity.status(200).body(userService.createUser2(user));
 	}
 }

@@ -1,14 +1,19 @@
 package br.com.pucc.projetointegradorvi.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,30 +39,32 @@ public class WalletModel {
 
 	@Column(name = "INTENDED_FII_PERCENT")
 	private Integer intendedFiiPercent;
-	
+
 	@JsonIgnore
 	@ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private UserModel2 user;
+	@JoinColumn(name = "USER_ID", nullable = false)
+	private UserModel user;
+
+	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<TransactionVariableIncomeModel> variableIncomeTransactions;
+
+	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
 
 	public WalletModel() {
 	}
 
 	public WalletModel(String name, String objective, String intendedFixedIncomePercent, String intendedStockPercent,
-			String intendedFiiPercent, UserModel2 user) {
+			String intendedFiiPercent, UserModel user) {
 		this.name = name;
 		this.objective = objective;
 		this.intendedFixedIncomePercent = Integer.valueOf(intendedFixedIncomePercent);
 		this.intendedStockPercent = Integer.valueOf(intendedStockPercent);
 		this.intendedFiiPercent = Integer.valueOf(intendedFiiPercent);
 		this.user = user;
+		this.variableIncomeTransactions = List.of();
+		this.fixedIncomeTransactions = List.of();
 	}
-
-//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-//    private List<TransactionVariableIncomeModel> variableIncomeTransactions;
-//
-//    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-//    private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
 
 	public Integer getId() {
 		return id;
@@ -107,28 +114,28 @@ public class WalletModel {
 		this.intendedFiiPercent = intendedFiiPercent;
 	}
 
-	public UserModel2 getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
-	public void setUser(UserModel2 user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
 
-//	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
-//		return variableIncomeTransactions;
-//	}
-//
-//	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
-//		this.variableIncomeTransactions = variableIncomeTransactions;
-//	}
-//
-//	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
-//		return fixedIncomeTransactions;
-//	}
-//
-//	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
-//		this.fixedIncomeTransactions = fixedIncomeTransactions;
-//	}
+	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
+		return variableIncomeTransactions;
+	}
+
+	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
+		this.variableIncomeTransactions = variableIncomeTransactions;
+	}
+
+	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
+		return fixedIncomeTransactions;
+	}
+
+	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
+		this.fixedIncomeTransactions = fixedIncomeTransactions;
+	}
 
 }
