@@ -17,7 +17,7 @@ import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "TRANSACTION_FIXED_INCOME")
-public class TransactionFixedIncomeModel {
+public class FixedTransactionModel {
 
     @Id
     @Column(name = "ID", nullable = false)

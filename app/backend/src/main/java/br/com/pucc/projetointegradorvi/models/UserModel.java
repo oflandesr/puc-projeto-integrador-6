@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -16,14 +18,15 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "USER")
 public class UserModel {
-	
+
 	@Id
-	@Column(name = "ID", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Integer id;
 
 	@Column(name = "LOGIN", nullable = false)
 	private String login;
-	
+
 	@JsonIgnore
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
@@ -36,23 +39,22 @@ public class UserModel {
 
 	@Column(name = "ENABLED", nullable = false)
 	private Boolean enabled = true;
-	
-	//@JsonIgnore
+
+	// @JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "PERMISSION", joinColumns = @JoinColumn(name = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE"))
-	Set<RoleModel2> roles;
+	@JoinTable(name = "PERMISSION", joinColumns = @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE", referencedColumnName = "ROLE"))
+	Set<RoleModel> roles;
 
 	public UserModel() {
 	}
 
-	public UserModel(String login, String password, String firstName, String lastName, Set<RoleModel2> role) {
+	public UserModel(String login, String password, String firstName, String lastName, Set<RoleModel> roles) {
 		this.login = login;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.roles = roles;
 	}
-
-	// Getters and setters
 
 	public Integer getId() {
 		return id;
@@ -102,11 +104,11 @@ public class UserModel {
 		this.enabled = enabled;
 	}
 
-	public Set<RoleModel2> getRoles() {
+	public Set<RoleModel> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<RoleModel2> roles) {
+	public void setRoles(Set<RoleModel> roles) {
 		this.roles = roles;
 	}
 }

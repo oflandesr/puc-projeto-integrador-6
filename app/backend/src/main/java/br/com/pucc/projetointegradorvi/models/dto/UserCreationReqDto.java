@@ -1,6 +1,6 @@
 package br.com.pucc.projetointegradorvi.models.dto;
 
-public class UserCreationDtoReq {
+public class UserCreationReqDto {
 
 	private String login;
 	private String password;

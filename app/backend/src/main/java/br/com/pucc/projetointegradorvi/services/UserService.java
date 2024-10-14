@@ -6,18 +6,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.pucc.projetointegradorvi.models.UserModel;
-import br.com.pucc.projetointegradorvi.models.dto.UserCreationDtoReq;
-import br.com.pucc.projetointegradorvi.models.dto.UserCreationDtoRes;
+import br.com.pucc.projetointegradorvi.models.dto.UserCreationReqDto;
 
 @Service
 public interface UserService {
 
-	public List<UserModel> getAllUsers2();
+	public List<UserModel> getAllUsers();
 
-	public Optional<UserModel> getUserByLogin2(String login);
+	public Optional<UserModel> getUserByLogin(String login);
 
-	public UserCreationDtoRes createUser2(UserCreationDtoReq user);
+	public UserModel createUser(UserCreationReqDto user);
 
-	public Optional<UserModel> getUserById2(String userId);
+	public Optional<UserModel> getUserById(String userId);
 
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.com.pucc.projetointegradorvi.models.UserModel;
 
 @Repository
-public interface UserRepository2 extends JpaRepository<UserModel, Long> {
+public interface UserRepository extends JpaRepository<UserModel, Long> {
 	public Optional<UserModel> findByLogin(String login);
 	public Optional<UserModel> findById(Long id);
 }

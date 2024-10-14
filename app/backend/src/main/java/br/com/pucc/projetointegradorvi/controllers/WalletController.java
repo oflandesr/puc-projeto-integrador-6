@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.pucc.projetointegradorvi.models.WalletModel;
-import br.com.pucc.projetointegradorvi.models.dto.WalletCreationDtoReq;
-import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateDtoReq;
+import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 import br.com.pucc.projetointegradorvi.services.WalletService;
 
 @RestController
@@ -26,7 +28,7 @@ public class WalletController {
 	private WalletService walletService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<WalletModel>> getWallet(@RequestParam("walletId") Optional<String> walletId,
+	public ResponseEntity<List<WalletModel>> listWallet(@RequestParam("walletId") Optional<String> walletId,
 			@RequestParam("userId") Optional<String> userId) {
 
 		List<WalletModel> walletsList = List.of();
@@ -51,14 +53,36 @@ public class WalletController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<WalletModel> createWallet(@RequestBody WalletCreationDtoReq wallet) {
-		return ResponseEntity.status(200).body(walletService.createWallet(wallet));
+	public ResponseEntity<WalletCreationResDto> createWallet(@RequestBody WalletReqDto wallet) {
+		return new ResponseEntity<WalletCreationResDto>(walletService.createWallet(wallet), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{walletId}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<WalletModel> detailWallet(@PathVariable("walletId") String walletId) {
+
+		Optional<WalletModel> wm = this.walletService.getWalletById(walletId);
+		if (wm.isPresent()) {
+			return new ResponseEntity<WalletModel>(wm.get(), HttpStatus.OK);
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found");
+	}
+
+	@RequestMapping(value = "/{walletId}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<Void> removeWallet(@PathVariable("walletId") String walletId) {
+
+		Optional<WalletModel> wm = this.walletService.deleteWallet(walletId);
+		if (wm.isPresent()) {
+			return ResponseEntity.accepted().build();
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found");
 	}
 
 	@RequestMapping(value = "/{walletId}", method = RequestMethod.PATCH, produces = "application/json")
-	public ResponseEntity<WalletModel> updateWallet(@PathVariable("walletId") String walletId,
-			@RequestBody WalletUpdateDtoReq wallet) {
-		return ResponseEntity.status(200).body(walletService.updateWallet(walletId, wallet));
+	public ResponseEntity<WalletUpdateResDto> updateWallet(@PathVariable("walletId") String walletId,
+			@RequestBody WalletReqDto wallet) {
+		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
 	}
 
 }

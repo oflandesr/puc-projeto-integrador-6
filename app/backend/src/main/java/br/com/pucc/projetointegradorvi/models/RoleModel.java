@@ -7,19 +7,19 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ROLE")
-public class RoleModel2 {
+public class RoleModel {
 	
 	@Id
-	@Column(name = "ROLE", unique = true)
+	@Column(name = "ROLE")
 	private String role;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
-
-	public RoleModel2() {
+	
+	public RoleModel() {
 	}
 
-	public RoleModel2(String role) {
+	public RoleModel(String role) {
 		this.role = role;
 	}
 

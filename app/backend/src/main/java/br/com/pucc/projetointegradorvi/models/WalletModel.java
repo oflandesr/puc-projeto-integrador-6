@@ -22,8 +22,8 @@ public class WalletModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", nullable = false)
-	private Integer id;
+	@Column(name = "ID")
+	private Long id;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;
@@ -32,13 +32,13 @@ public class WalletModel {
 	private String objective;
 
 	@Column(name = "INTENDED_FIXED_INCOME_PERCENT")
-	private Integer intendedFixedIncomePercent;
+	private Integer intenFixIncPercent;
 
 	@Column(name = "INTENDED_STOCK_PERCENT")
-	private Integer intendedStockPercent;
+	private Integer intenStockPercent;
 
 	@Column(name = "INTENDED_FII_PERCENT")
-	private Integer intendedFiiPercent;
+	private Integer intenFilPercent;
 
 	@JsonIgnore
 	@ManyToOne
@@ -46,31 +46,31 @@ public class WalletModel {
 	private UserModel user;
 
 	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<TransactionVariableIncomeModel> variableIncomeTransactions;
+	private List<VariableTransactionModel> variableIncomeTransactions;
 
 	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
+	private List<FixedTransactionModel> fixedIncomeTransactions;
 
 	public WalletModel() {
 	}
 
-	public WalletModel(String name, String objective, String intendedFixedIncomePercent, String intendedStockPercent,
-			String intendedFiiPercent, UserModel user) {
+	public WalletModel(String name, String objective, String intenFixIncPercent, String intenStockPercent,
+			String intenFilPercent, UserModel user) {
 		this.name = name;
 		this.objective = objective;
-		this.intendedFixedIncomePercent = Integer.valueOf(intendedFixedIncomePercent);
-		this.intendedStockPercent = Integer.valueOf(intendedStockPercent);
-		this.intendedFiiPercent = Integer.valueOf(intendedFiiPercent);
+		this.intenFixIncPercent = Integer.valueOf(intenFixIncPercent);
+		this.intenStockPercent = Integer.valueOf(intenStockPercent);
+		this.intenFilPercent = Integer.valueOf(intenFilPercent);
 		this.user = user;
 		this.variableIncomeTransactions = List.of();
 		this.fixedIncomeTransactions = List.of();
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -90,28 +90,28 @@ public class WalletModel {
 		this.objective = objective;
 	}
 
-	public Integer getIntendedFixedIncomePercent() {
-		return intendedFixedIncomePercent;
+	public Integer getIntenFixIncPercent() {
+		return intenFixIncPercent;
 	}
 
-	public void setIntendedFixedIncomePercent(Integer intendedFixedIncomePercent) {
-		this.intendedFixedIncomePercent = intendedFixedIncomePercent;
+	public void setIntenFixIncPercent(Integer intenFixIncPercent) {
+		this.intenFixIncPercent = intenFixIncPercent;
 	}
 
-	public Integer getIntendedStockPercent() {
-		return intendedStockPercent;
+	public Integer getIntenStockPercent() {
+		return intenStockPercent;
 	}
 
-	public void setIntendedStockPercent(Integer intendedStockPercent) {
-		this.intendedStockPercent = intendedStockPercent;
+	public void setIntenStockPercent(Integer intenStockPercent) {
+		this.intenStockPercent = intenStockPercent;
 	}
 
-	public Integer getIntendedFiiPercent() {
-		return intendedFiiPercent;
+	public Integer getIntenFilPercent() {
+		return intenFilPercent;
 	}
 
-	public void setIntendedFiiPercent(Integer intendedFiiPercent) {
-		this.intendedFiiPercent = intendedFiiPercent;
+	public void setIntenFilPercent(Integer intenFilPercent) {
+		this.intenFilPercent = intenFilPercent;
 	}
 
 	public UserModel getUser() {
@@ -122,19 +122,19 @@ public class WalletModel {
 		this.user = user;
 	}
 
-	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
+	public List<VariableTransactionModel> getVariableIncomeTransactions() {
 		return variableIncomeTransactions;
 	}
 
-	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
+	public void setVariableIncomeTransactions(List<VariableTransactionModel> variableIncomeTransactions) {
 		this.variableIncomeTransactions = variableIncomeTransactions;
 	}
 
-	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
+	public List<FixedTransactionModel> getFixedIncomeTransactions() {
 		return fixedIncomeTransactions;
 	}
 
-	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
+	public void setFixedIncomeTransactions(List<FixedTransactionModel> fixedIncomeTransactions) {
 		this.fixedIncomeTransactions = fixedIncomeTransactions;
 	}
 

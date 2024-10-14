@@ -6,8 +6,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.pucc.projetointegradorvi.models.WalletModel;
-import br.com.pucc.projetointegradorvi.models.dto.WalletCreationDtoReq;
-import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateDtoReq;
+import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 
 @Service
 public interface WalletService {
@@ -20,9 +21,9 @@ public interface WalletService {
 	
 	public List<WalletModel> getWalletByUserIdAndWalletId(String userId, String walletId);
 	
-	public WalletModel createWallet(WalletCreationDtoReq wallet);
+	public WalletCreationResDto createWallet(WalletReqDto wallet);
 	
-	public WalletModel updateWallet(String walletId, WalletUpdateDtoReq wallet);
+	public WalletUpdateResDto updateWallet(String walletId, WalletReqDto wallet);
 	
-	
+	public Optional<WalletModel> deleteWallet(String walletId);
 }
