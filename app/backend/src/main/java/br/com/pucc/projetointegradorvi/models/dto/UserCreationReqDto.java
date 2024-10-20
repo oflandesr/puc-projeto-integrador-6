@@ -1,10 +1,27 @@
 package br.com.pucc.projetointegradorvi.models.dto;
 
-public class UserCreationDtoReq {
+public class UserCreationReqDto {
 
+	private String login;
+	private String password;
 	private String firstName;
 	private String lastName;
-	private AccessDto acesso;
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -22,11 +39,4 @@ public class UserCreationDtoReq {
 		this.lastName = lastName;
 	}
 
-	public AccessDto getAcesso() {
-		return acesso;
-	}
-
-	public void setAcesso(AccessDto acesso) {
-		this.acesso = acesso;
-	}
 }

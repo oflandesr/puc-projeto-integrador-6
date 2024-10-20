@@ -14,53 +14,65 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private DataSource ds;
+	@Autowired
+	private DataSource ds;
 
-    @Value("${spring.queries.roles-query}")
-    private String rolesQuery;
+	@Value("${spring.queries.roles-query}")
+	private String rolesQuery;
 
-    @Value("${spring.queries.users-query}")
-    private String usersQuery;
+	@Value("${spring.queries.users-query}")
+	private String usersQuery;
 
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(ds)
-            .authoritiesByUsernameQuery(rolesQuery)
-            .usersByUsernameQuery(usersQuery);
-    }
+	@Autowired
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(ds).authoritiesByUsernameQuery(rolesQuery)
+				.usersByUsernameQuery(usersQuery);
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll() // Permitir acesso ao Swagger UI
-                .requestMatchers(HttpMethod.GET, "/api-docs/**").permitAll() // Permitir acesso à documentação da API
-                .requestMatchers(HttpMethod.GET, "/pi_vi**").permitAll() // Permitir acesso à documentação da API
-                .requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .csrf(csrf -> csrf.disable())
-            .httpBasic((httpBasic) -> {}); // Configurando httpBasic sem usar o método deprecado
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests((requests) -> requests
+				// .requestMatchers(HttpMethod.GET, "/api/auth/login").permitAll()
+				.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll() // Permitir acesso ao Swagger UI
+				.requestMatchers(HttpMethod.GET, "/api-docs/**").permitAll() // Permitir acesso à documentação da API
+				.requestMatchers(HttpMethod.GET, "/pi_vi**").permitAll() // Permitir acesso à documentação da API
+				.requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN").anyRequest().authenticated())
+				.csrf(csrf -> csrf.disable()).httpBasic((httpBasic) -> {
+				}); // Configurando httpBasic sem usar o método deprecado
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedOrigin("http://localhost:8080");
+		configuration.addAllowedMethod("*");
+		configuration.addAllowedHeader("*");
+		configuration.setAllowCredentials(true);
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class).build();
-    }
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+		return http.getSharedObject(AuthenticationManagerBuilder.class).build();
+	}
 
 }

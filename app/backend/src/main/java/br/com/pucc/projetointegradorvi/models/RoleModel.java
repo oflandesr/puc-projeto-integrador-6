@@ -6,16 +6,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Role")
+@Table(name = "ROLE")
 public class RoleModel {
-
+	
 	@Id
-	@Column(name = "role", unique = true)
+	@Column(name = "ROLE")
 	private String role;
 
-	@Column(name = "description")
+	@Column(name = "DESCRIPTION")
 	private String description;
-
+	
 	public RoleModel() {
 	}
 

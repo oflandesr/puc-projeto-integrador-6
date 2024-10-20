@@ -18,7 +18,7 @@ public class PriceModel {
     private Integer timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "ticker", nullable = false)
+    @JoinColumn(name = "TICKER", nullable = false)
     private TickerModel ticker;
 
     private Float open;
@@ -26,7 +26,7 @@ public class PriceModel {
     private Float low;
     private Float close;
 
-    @Column(name = "adjusted_close")
+    @Column(name = "ADJUSTED_CLOSE")
     private Float adjustedClose;
 
     private Float volume;

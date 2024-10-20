@@ -2,9 +2,12 @@ package br.com.pucc.projetointegradorvi.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,39 +20,57 @@ import jakarta.persistence.Table;
 @Table(name = "WALLET")
 public class WalletModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long id;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(name = "NAME", nullable = false)
+	private String name;
 
-    private String objective;
+	@Column(name = "OBJECTIVE", nullable = false)
+	private String objective;
 
-    @Column(name = "intended_fixed_income_percent")
-    private Integer intendedFixedIncomePercent;
+	@Column(name = "INTENDED_FIXED_INCOME_PERCENT")
+	private Integer intenFixIncPercent;
 
-    @Column(name = "intended_stock_percent")
-    private Integer intendedStockPercent;
+	@Column(name = "INTENDED_STOCK_PERCENT")
+	private Integer intenStockPercent;
 
-    @Column(name = "intended_fii_percent")
-    private Integer intendedFiiPercent;
+	@Column(name = "INTENDED_FII_PERCENT")
+	private Integer intenFilPercent;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserModel user;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "USER_ID", nullable = false)
+	private UserModel user;
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private List<TransactionVariableIncomeModel> variableIncomeTransactions;
+	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<VariableTransactionModel> variableIncomeTransactions;
 
-    @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private List<TransactionFixedIncomeModel> fixedIncomeTransactions;
+	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<FixedTransactionModel> fixedIncomeTransactions;
 
-	public Integer getId() {
+	public WalletModel() {
+	}
+
+	public WalletModel(String name, String objective, String intenFixIncPercent, String intenStockPercent,
+			String intenFilPercent, UserModel user) {
+		this.name = name;
+		this.objective = objective;
+		this.intenFixIncPercent = Integer.valueOf(intenFixIncPercent);
+		this.intenStockPercent = Integer.valueOf(intenStockPercent);
+		this.intenFilPercent = Integer.valueOf(intenFilPercent);
+		this.user = user;
+		this.variableIncomeTransactions = List.of();
+		this.fixedIncomeTransactions = List.of();
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -69,28 +90,28 @@ public class WalletModel {
 		this.objective = objective;
 	}
 
-	public Integer getIntendedFixedIncomePercent() {
-		return intendedFixedIncomePercent;
+	public Integer getIntenFixIncPercent() {
+		return intenFixIncPercent;
 	}
 
-	public void setIntendedFixedIncomePercent(Integer intendedFixedIncomePercent) {
-		this.intendedFixedIncomePercent = intendedFixedIncomePercent;
+	public void setIntenFixIncPercent(Integer intenFixIncPercent) {
+		this.intenFixIncPercent = intenFixIncPercent;
 	}
 
-	public Integer getIntendedStockPercent() {
-		return intendedStockPercent;
+	public Integer getIntenStockPercent() {
+		return intenStockPercent;
 	}
 
-	public void setIntendedStockPercent(Integer intendedStockPercent) {
-		this.intendedStockPercent = intendedStockPercent;
+	public void setIntenStockPercent(Integer intenStockPercent) {
+		this.intenStockPercent = intenStockPercent;
 	}
 
-	public Integer getIntendedFiiPercent() {
-		return intendedFiiPercent;
+	public Integer getIntenFilPercent() {
+		return intenFilPercent;
 	}
 
-	public void setIntendedFiiPercent(Integer intendedFiiPercent) {
-		this.intendedFiiPercent = intendedFiiPercent;
+	public void setIntenFilPercent(Integer intenFilPercent) {
+		this.intenFilPercent = intenFilPercent;
 	}
 
 	public UserModel getUser() {
@@ -101,19 +122,19 @@ public class WalletModel {
 		this.user = user;
 	}
 
-	public List<TransactionVariableIncomeModel> getVariableIncomeTransactions() {
+	public List<VariableTransactionModel> getVariableIncomeTransactions() {
 		return variableIncomeTransactions;
 	}
 
-	public void setVariableIncomeTransactions(List<TransactionVariableIncomeModel> variableIncomeTransactions) {
+	public void setVariableIncomeTransactions(List<VariableTransactionModel> variableIncomeTransactions) {
 		this.variableIncomeTransactions = variableIncomeTransactions;
 	}
 
-	public List<TransactionFixedIncomeModel> getFixedIncomeTransactions() {
+	public List<FixedTransactionModel> getFixedIncomeTransactions() {
 		return fixedIncomeTransactions;
 	}
 
-	public void setFixedIncomeTransactions(List<TransactionFixedIncomeModel> fixedIncomeTransactions) {
+	public void setFixedIncomeTransactions(List<FixedTransactionModel> fixedIncomeTransactions) {
 		this.fixedIncomeTransactions = fixedIncomeTransactions;
 	}
 

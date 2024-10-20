@@ -2,6 +2,8 @@ package br.com.pucc.projetointegradorvi.models;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,21 +17,23 @@ import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "TRANSACTION_VARIABLE_INCOME")
-public class TransactionVariableIncomeModel {
+public class VariableTransactionModel {
 
     @Id
+    @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "wallet_id", nullable = false)
+    @JoinColumn(name = "WALLET_ID", nullable = false)
     private WalletModel wallet;
 
     @ManyToOne
-    @JoinColumn(name = "ticker_id", nullable = false)
+    @JoinColumn(name = "TICKER_ID", nullable = false)
     private TickerModel ticker;
 
-    @Column(name = "buy_or_sale", nullable = false)
+    @Column(name = "BUY_OR_SALE", nullable = false)
     private Integer buyOrSale;
 
     @Temporal(TemporalType.DATE)
