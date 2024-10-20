@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 import br.com.pucc.projetointegradorvi.services.WalletService;
 
@@ -27,29 +30,11 @@ public class WalletController {
 	@Autowired
 	private WalletService walletService;
 
+	// WALLET
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<WalletModel>> listWallet(@RequestParam("walletId") Optional<String> walletId,
+	public ResponseEntity<List<WalletDto>> listWallet(@RequestParam("walletId") Optional<String> walletId,
 			@RequestParam("userId") Optional<String> userId) {
-
-		List<WalletModel> walletsList = List.of();
-
-		if (walletId.isPresent() && userId.isPresent()) {
-			List<WalletModel> um = this.walletService.getWalletByUserIdAndWalletId(userId.get(), walletId.get());
-			walletsList = um;
-		} else if (userId.isPresent()) {
-			List<WalletModel> um = this.walletService.getWalletByUserId(userId.get());
-			walletsList = um;
-		} else if (walletId.isPresent()) {
-			Optional<WalletModel> um = this.walletService.getWalletById(walletId.get());
-			if (um.isPresent()) {
-				walletsList = List.of(um.get());
-			}
-		} else {
-
-			walletsList = this.walletService.getAllWallets();
-		}
-
-		return new ResponseEntity<List<WalletModel>>(walletsList, HttpStatus.OK);
+		return new ResponseEntity<List<WalletDto>>(walletService.getWallet(userId, walletId), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
@@ -85,4 +70,43 @@ public class WalletController {
 		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
 	}
 
+	// FIXED TRANSACTION
+	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<Void> createWalletFixedTransaction(@PathVariable("walletId") String walletId,
+			@RequestBody FixedTransactionDto wallet) {
+
+		FixedTransactionModel wm = this.walletService.createWalletFixedTransaction(walletId, wallet);
+		if (wm != null) {
+			return new ResponseEntity<Void>(HttpStatus.CREATED);
+		}
+
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found");
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/{tfId}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<Void> deleteWalletFixedTransaction(@PathVariable("walletId") String walletId, @PathVariable("tfId") String tfId) {
+		Optional<FixedTransactionModel> ft = this.walletService.deleteWalletFixedTransaction(walletId, tfId);
+		if (ft.isPresent()) {
+			return ResponseEntity.accepted().build();
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet fixed transaciont not found");
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<WalletUpdateResDto> createWalletVariableTransaction(@PathVariable("walletId") String walletId,
+			@RequestBody WalletReqDto wallet) {
+		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.PATCH, produces = "application/json")
+	public ResponseEntity<WalletUpdateResDto> updateWalletVariableTransaction(@PathVariable("walletId") String walletId,
+			@RequestBody WalletReqDto wallet) {
+		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<WalletUpdateResDto> deleteWalletVariableTransaction(@PathVariable("walletId") String walletId,
+			@RequestBody WalletReqDto wallet) {
+		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
+	}
 }

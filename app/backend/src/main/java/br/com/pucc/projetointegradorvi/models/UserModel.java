@@ -22,7 +22,7 @@ public class UserModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "LOGIN", nullable = false)
 	private String login;
@@ -56,11 +56,11 @@ public class UserModel {
 		this.roles = roles;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

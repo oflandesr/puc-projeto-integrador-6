@@ -19,41 +19,59 @@ import jakarta.persistence.TemporalType;
 @Table(name = "TRANSACTION_FIXED_INCOME")
 public class FixedTransactionModel {
 
-    @Id
-    @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "WALLET_ID", nullable = false)
-    private WalletModel wallet;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long id;
 
-    private String institution;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "WALLET_ID", nullable = false)
+	private WalletModel wallet;
 
-    private String type;
+	@Column(name = "INSTITUTION")
+	private String institution;
 
-    private Float value;
+	@Column(name = "TYPE")
+	private String type;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "START_DATE")
-    private Date startDate;
+	@Column(name = "VALUE")
+	private Double value;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "END_DATE")
-    private Date endDate;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "START_DATE")
+	private Date startDate;
 
-    @Column(name = "INDEX_NAME")
-    private String indexName;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "END_DATE")
+	private Date endDate;
 
-    @Column(name = "TAX_VALUE")
-    private Integer taxValue;
+	@Column(name = "INDEX_NAME")
+	private String indexName;
 
-	public Integer getId() {
+	@Column(name = "TAX_VALUE")
+	private Double taxValue;
+
+	public FixedTransactionModel() {
+	}
+
+	public FixedTransactionModel(WalletModel wallet, String institution, String type, String value, String startDate,
+			String endDate, String indexName, String taxValue) {
+		this.wallet = wallet;
+		this.institution = institution;
+		this.type = type;
+		this.value = Double.valueOf(value);
+		this.startDate = Date.valueOf(startDate);
+		this.endDate = Date.valueOf(endDate);
+		this.indexName = indexName;
+		this.taxValue = Double.valueOf(taxValue);
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -81,11 +99,11 @@ public class FixedTransactionModel {
 		this.type = type;
 	}
 
-	public Float getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(Float value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -113,12 +131,12 @@ public class FixedTransactionModel {
 		this.indexName = indexName;
 	}
 
-	public Integer getTaxValue() {
+	public Double getTaxValue() {
 		return taxValue;
 	}
 
-	public void setTaxValue(Integer taxValue) {
+	public void setTaxValue(Double taxValue) {
 		this.taxValue = taxValue;
 	}
-	
+
 }
