@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
+import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
-import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
+import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 import br.com.pucc.projetointegradorvi.services.WalletService;
 
@@ -72,41 +74,39 @@ public class WalletController {
 
 	// FIXED TRANSACTION
 	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<Void> createWalletFixedTransaction(@PathVariable("walletId") String walletId,
+	public ResponseEntity<FixedTransactionModel> createWalletFixedTransaction(@PathVariable("walletId") String walletId,
 			@RequestBody FixedTransactionDto wallet) {
 
-		FixedTransactionModel wm = this.walletService.createWalletFixedTransaction(walletId, wallet);
-		if (wm != null) {
-			return new ResponseEntity<Void>(HttpStatus.CREATED);
-		}
-
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found");
+		return new ResponseEntity<FixedTransactionModel>(
+				this.walletService.createWalletFixedTransaction(walletId, wallet), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/{tfId}", method = RequestMethod.DELETE, produces = "application/json")
-	public ResponseEntity<Void> deleteWalletFixedTransaction(@PathVariable("walletId") String walletId, @PathVariable("tfId") String tfId) {
+	public ResponseEntity<Void> deleteWalletFixedTransaction(@PathVariable("walletId") String walletId,
+			@PathVariable("tfId") String tfId) {
 		Optional<FixedTransactionModel> ft = this.walletService.deleteWalletFixedTransaction(walletId, tfId);
 		if (ft.isPresent()) {
 			return ResponseEntity.accepted().build();
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet fixed transaciont not found");
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet fixed transaction not found");
 	}
 
+	// VARIABLE TRANSACTION
 	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<WalletUpdateResDto> createWalletVariableTransaction(@PathVariable("walletId") String walletId,
-			@RequestBody WalletReqDto wallet) {
-		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
+	public ResponseEntity<VariableTransactionModel> createWalletVariableTransaction(
+			@PathVariable("walletId") String walletId, @RequestBody VariableTransactionDto wallet) {
+
+		return new ResponseEntity<VariableTransactionModel>(
+				this.walletService.createWalletVariableTransaction(walletId, wallet), HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.PATCH, produces = "application/json")
-	public ResponseEntity<WalletUpdateResDto> updateWalletVariableTransaction(@PathVariable("walletId") String walletId,
-			@RequestBody WalletReqDto wallet) {
-		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.DELETE, produces = "application/json")
-	public ResponseEntity<WalletUpdateResDto> deleteWalletVariableTransaction(@PathVariable("walletId") String walletId,
-			@RequestBody WalletReqDto wallet) {
-		return new ResponseEntity<WalletUpdateResDto>(this.walletService.updateWallet(walletId, wallet), HttpStatus.OK);
+	@RequestMapping(value = "/{walletId}/tvariable/{tvId}", method = RequestMethod.DELETE, produces = "application/json")
+	public ResponseEntity<Void> deleteWalletVariableTransaction(@PathVariable("walletId") String walletId,
+			@PathVariable("tvId") String tvId) {
+		Optional<VariableTransactionModel> vt = this.walletService.deleteWalletVariableTransaction(walletId, tvId);
+		if (vt.isPresent()) {
+			return ResponseEntity.accepted().build();
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet variable transaction not found");
 	}
 }

@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class UserModel {
 
 	@Id
@@ -42,7 +42,7 @@ public class UserModel {
 
 	// @JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "PERMISSION", joinColumns = @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE", referencedColumnName = "ROLE"))
+	@JoinTable(name = "PERMISSIONS", joinColumns = @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE", referencedColumnName = "ROLE"))
 	Set<RoleModel> roles;
 
 	public UserModel() {

@@ -6,11 +6,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "TICKER")
+@Table(name = "TICKERS")
 public class TickerModel {
 
 	@Id
-	@Column(name = "TICKER", nullable = false, unique = true)
+	@Column(name = "TICKER")
 	private String ticker;
 
 	@Column(name = "CURRENCY")
@@ -43,8 +43,8 @@ public class TickerModel {
 	@Column(name = "WEBSITE")
 	private String website;
 
-	@Column(name = "LOGO_URL")
-	private String logoUrl;
+//	@Column(name = "LOGO_URL")
+//	private String logoUrl;
 
 	@Column(name = "INDUSTRY")
 	private String industry;
@@ -52,23 +52,23 @@ public class TickerModel {
 	@Column(name = "SECTOR")
 	private String sector;
 
-	@Column(name = "BUSINESS_SUMMARY")
-	private String businessSummary;
+//	@Column(name = "BUSINESS_SUMMARY")
+//	private String businessSummary;
 
 	@Column(name = "NUMBER_OF_EMPLOYEES")
 	private Integer numberOfEmployees;
 
-	@Column(name = "MARKET_CAP")
-	private Float marketCap;
-
-	@Column(name = "200_DAY_AVERAGE")
-	private Float twoHundredDayAverage;
-
-	@Column(name = "200_DAY_AVERAGE_CHANGE")
-	private Float twoHundredDayAverageChange;
-
-	@Column(name = "200_DAY_AVERAGE_CHANGE_PERCENT")
-	private Float twoHundredDayAverageChangePercent;
+//	@Column(name = "MARKET_CAP")
+//	private Float marketCap;
+//
+//	@Column(name = "200_DAY_AVERAGE")
+//	private Float twoHundredDayAverage;
+//
+//	@Column(name = "200_DAY_AVERAGE_CHANGE")
+//	private Float twoHundredDayAverageChange;
+//
+//	@Column(name = "200_DAY_AVERAGE_CHANGE_PERCENT")
+//	private Float twoHundredDayAverageChangePercent;
 
 	@Column(name = "REGULAR_MARKET_CHANGE")
 	private Float regularMarketChange;
@@ -88,20 +88,20 @@ public class TickerModel {
 	@Column(name = "REGULAR_MARKET_OPEN")
 	private Float regularMarketOpen;
 
-	@Column(name = "AVERAGE_DAILY_VOLUME_10_DAYS")
-	private Integer averageDailyVolume10Days;
-
-	@Column(name = "52_WEEKS_HIGH_CHANGE")
-	private Float fiftyTwoWeeksHighChange;
-
-	@Column(name = "52_WEEKS_HIGH_CHANGE_PERCENT")
-	private Float fiftyTwoWeeksHighChangePercent;
-
-	@Column(name = "52_WEEKS_RANGE")
-	private String fiftyTwoWeeksRange;
-
-	@Column(name = "52_WEEKS_HIGH")
-	private Float fiftyTwoWeeksHigh;
+//	@Column(name = "AVERAGE_DAILY_VOLUME_10_DAYS")
+//	private Integer averageDailyVolume10Days;
+//
+//	@Column(name = "52_WEEKS_HIGH_CHANGE")
+//	private Float fiftyTwoWeeksHighChange;
+//
+//	@Column(name = "52_WEEKS_HIGH_CHANGE_PERCENT")
+//	private Float fiftyTwoWeeksHighChangePercent;
+//
+//	@Column(name = "52_WEEKS_RANGE")
+//	private String fiftyTwoWeeksRange;
+//
+//	@Column(name = "52_WEEKS_HIGH")
+//	private Float fiftyTwoWeeksHigh;
 
 	@Column(name = "PRICE_EARNINGS")
 	private Float priceEarnings;
@@ -201,13 +201,13 @@ public class TickerModel {
 		this.website = website;
 	}
 
-	public String getLogoUrl() {
-		return logoUrl;
-	}
-
-	public void setLogoUrl(String logoUrl) {
-		this.logoUrl = logoUrl;
-	}
+//	public String getLogoUrl() {
+//		return logoUrl;
+//	}
+//
+//	public void setLogoUrl(String logoUrl) {
+//		this.logoUrl = logoUrl;
+//	}
 
 	public String getIndustry() {
 		return industry;
@@ -225,13 +225,13 @@ public class TickerModel {
 		this.sector = sector;
 	}
 
-	public String getBusinessSummary() {
-		return businessSummary;
-	}
-
-	public void setBusinessSummary(String businessSummary) {
-		this.businessSummary = businessSummary;
-	}
+//	public String getBusinessSummary() {
+//		return businessSummary;
+//	}
+//
+//	public void setBusinessSummary(String businessSummary) {
+//		this.businessSummary = businessSummary;
+//	}
 
 	public Integer getNumberOfEmployees() {
 		return numberOfEmployees;
@@ -241,37 +241,37 @@ public class TickerModel {
 		this.numberOfEmployees = numberOfEmployees;
 	}
 
-	public Float getMarketCap() {
-		return marketCap;
-	}
-
-	public void setMarketCap(Float marketCap) {
-		this.marketCap = marketCap;
-	}
-
-	public Float getTwoHundredDayAverage() {
-		return twoHundredDayAverage;
-	}
-
-	public void setTwoHundredDayAverage(Float twoHundredDayAverage) {
-		this.twoHundredDayAverage = twoHundredDayAverage;
-	}
-
-	public Float getTwoHundredDayAverageChange() {
-		return twoHundredDayAverageChange;
-	}
-
-	public void setTwoHundredDayAverageChange(Float twoHundredDayAverageChange) {
-		this.twoHundredDayAverageChange = twoHundredDayAverageChange;
-	}
-
-	public Float getTwoHundredDayAverageChangePercent() {
-		return twoHundredDayAverageChangePercent;
-	}
-
-	public void setTwoHundredDayAverageChangePercent(Float twoHundredDayAverageChangePercent) {
-		this.twoHundredDayAverageChangePercent = twoHundredDayAverageChangePercent;
-	}
+//	public Float getMarketCap() {
+//		return marketCap;
+//	}
+//
+//	public void setMarketCap(Float marketCap) {
+//		this.marketCap = marketCap;
+//	}
+//
+//	public Float getTwoHundredDayAverage() {
+//		return twoHundredDayAverage;
+//	}
+//
+//	public void setTwoHundredDayAverage(Float twoHundredDayAverage) {
+//		this.twoHundredDayAverage = twoHundredDayAverage;
+//	}
+//
+//	public Float getTwoHundredDayAverageChange() {
+//		return twoHundredDayAverageChange;
+//	}
+//
+//	public void setTwoHundredDayAverageChange(Float twoHundredDayAverageChange) {
+//		this.twoHundredDayAverageChange = twoHundredDayAverageChange;
+//	}
+//
+//	public Float getTwoHundredDayAverageChangePercent() {
+//		return twoHundredDayAverageChangePercent;
+//	}
+//
+//	public void setTwoHundredDayAverageChangePercent(Float twoHundredDayAverageChangePercent) {
+//		this.twoHundredDayAverageChangePercent = twoHundredDayAverageChangePercent;
+//	}
 
 	public Float getRegularMarketChange() {
 		return regularMarketChange;
@@ -321,45 +321,45 @@ public class TickerModel {
 		this.regularMarketOpen = regularMarketOpen;
 	}
 
-	public Integer getAverageDailyVolume10Days() {
-		return averageDailyVolume10Days;
-	}
-
-	public void setAverageDailyVolume10Days(Integer averageDailyVolume10Days) {
-		this.averageDailyVolume10Days = averageDailyVolume10Days;
-	}
-
-	public Float getFiftyTwoWeeksHighChange() {
-		return fiftyTwoWeeksHighChange;
-	}
-
-	public void setFiftyTwoWeeksHighChange(Float fiftyTwoWeeksHighChange) {
-		this.fiftyTwoWeeksHighChange = fiftyTwoWeeksHighChange;
-	}
-
-	public Float getFiftyTwoWeeksHighChangePercent() {
-		return fiftyTwoWeeksHighChangePercent;
-	}
-
-	public void setFiftyTwoWeeksHighChangePercent(Float fiftyTwoWeeksHighChangePercent) {
-		this.fiftyTwoWeeksHighChangePercent = fiftyTwoWeeksHighChangePercent;
-	}
-
-	public String getFiftyTwoWeeksRange() {
-		return fiftyTwoWeeksRange;
-	}
-
-	public void setFiftyTwoWeeksRange(String fiftyTwoWeeksRange) {
-		this.fiftyTwoWeeksRange = fiftyTwoWeeksRange;
-	}
-
-	public Float getFiftyTwoWeeksHigh() {
-		return fiftyTwoWeeksHigh;
-	}
-
-	public void setFiftyTwoWeeksHigh(Float fiftyTwoWeeksHigh) {
-		this.fiftyTwoWeeksHigh = fiftyTwoWeeksHigh;
-	}
+//	public Integer getAverageDailyVolume10Days() {
+//		return averageDailyVolume10Days;
+//	}
+//
+//	public void setAverageDailyVolume10Days(Integer averageDailyVolume10Days) {
+//		this.averageDailyVolume10Days = averageDailyVolume10Days;
+//	}
+//
+//	public Float getFiftyTwoWeeksHighChange() {
+//		return fiftyTwoWeeksHighChange;
+//	}
+//
+//	public void setFiftyTwoWeeksHighChange(Float fiftyTwoWeeksHighChange) {
+//		this.fiftyTwoWeeksHighChange = fiftyTwoWeeksHighChange;
+//	}
+//
+//	public Float getFiftyTwoWeeksHighChangePercent() {
+//		return fiftyTwoWeeksHighChangePercent;
+//	}
+//
+//	public void setFiftyTwoWeeksHighChangePercent(Float fiftyTwoWeeksHighChangePercent) {
+//		this.fiftyTwoWeeksHighChangePercent = fiftyTwoWeeksHighChangePercent;
+//	}
+//
+//	public String getFiftyTwoWeeksRange() {
+//		return fiftyTwoWeeksRange;
+//	}
+//
+//	public void setFiftyTwoWeeksRange(String fiftyTwoWeeksRange) {
+//		this.fiftyTwoWeeksRange = fiftyTwoWeeksRange;
+//	}
+//
+//	public Float getFiftyTwoWeeksHigh() {
+//		return fiftyTwoWeeksHigh;
+//	}
+//
+//	public void setFiftyTwoWeeksHigh(Float fiftyTwoWeeksHigh) {
+//		this.fiftyTwoWeeksHigh = fiftyTwoWeeksHigh;
+//	}
 
 	public Float getPriceEarnings() {
 		return priceEarnings;

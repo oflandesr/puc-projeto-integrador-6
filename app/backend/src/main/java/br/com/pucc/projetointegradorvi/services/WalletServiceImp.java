@@ -10,14 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
+import br.com.pucc.projetointegradorvi.models.TickerModel;
 import br.com.pucc.projetointegradorvi.models.UserModel;
+import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 import br.com.pucc.projetointegradorvi.repositories.FixedTransactionRepository;
+import br.com.pucc.projetointegradorvi.repositories.TickerRepository;
+import br.com.pucc.projetointegradorvi.repositories.VariableTransactionRepository;
 import br.com.pucc.projetointegradorvi.repositories.WalletRepository;
 
 @Service
@@ -31,6 +36,12 @@ public class WalletServiceImp implements WalletService {
 
 	@Autowired
 	private FixedTransactionRepository ftRepository;
+
+	@Autowired
+	private VariableTransactionRepository vtRepository;
+
+	@Autowired
+	private TickerRepository tickerRepository;
 
 	@Override
 	public List<WalletDto> getWallet(Optional<String> userId, Optional<String> walletId) {
@@ -148,12 +159,45 @@ public class WalletServiceImp implements WalletService {
 			if (f.isPresent()) {
 				this.ftRepository.delete(f.get());
 				return f;
-			} else {
-				throw new RuntimeException("Fixed transaction not found with id: " + ftId);
 			}
-		} else {
-			throw new RuntimeException("Wallet not found with id: " + walletId);
+			throw new RuntimeException("Fixed transaction not found with id: " + ftId);
 		}
+		throw new RuntimeException("Wallet not found with id: " + walletId);
+	}
+
+	@Override
+	public VariableTransactionModel createWalletVariableTransaction(String walletId,
+			VariableTransactionDto vtransaction) {
+		Optional<WalletModel> w = walletRepository.findById(Long.valueOf(walletId));
+
+		if (w.isPresent()) {
+
+			Optional<TickerModel> t = this.tickerRepository.findById(vtransaction.getTicker());
+
+			if (t.isPresent()) {
+
+				VariableTransactionModel v = new VariableTransactionModel(w.get(), t.get(), vtransaction.getBuyOrSale(),
+						vtransaction.getDate(), vtransaction.getAmount(), vtransaction.getPrice());
+				return this.vtRepository.saveAndFlush(v);
+			}
+			throw new RuntimeException("Ticker not found with id: " + vtransaction.getTicker());
+		}
+
+		throw new RuntimeException("Wallet not found with id: " + walletId);
+	}
+
+	@Override
+	public Optional<VariableTransactionModel> deleteWalletVariableTransaction(String walletId, String vtId) {
+		Optional<WalletModel> w = walletRepository.findById(Long.valueOf(walletId));
+		if (w.isPresent()) {
+			Optional<VariableTransactionModel> v = this.vtRepository.findById(Long.valueOf(vtId));
+			if (v.isPresent()) {
+				this.vtRepository.delete(v.get());
+				return v;
+			}
+			throw new RuntimeException("Fixed transaction not found with id: " + vtId);
+		}
+		throw new RuntimeException("Wallet not found with id: " + walletId);
 	}
 
 }
