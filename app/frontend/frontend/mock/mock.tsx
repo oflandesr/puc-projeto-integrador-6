@@ -1,4 +1,6 @@
 import Link from "next/link";
+import {TableColumn} from "react-data-table-component";
+import {Wallet} from "@/config/interfaces";
 
 interface InterfaceUserTableData {
     id: number;
@@ -23,7 +25,7 @@ const tableData: InterfaceUserTableData[] = [
     {id: 11, name: "John Johnson", objective: "Objective 11", intenFixIncPercent: "0", intenStockPercent: "100", intenFilPercent: "0"}
 ];
 
-const tableCols = [
+const tableCols : TableColumn<Wallet>[] = [
     {
         name: 'Wallet Name',
         selector: (row: InterfaceUserTableData) => row.name,
@@ -52,7 +54,7 @@ const tableCols = [
     // Add a button to access the wallet
     {
         name: 'Access',
-        selector: (row: InterfaceUserTableData) => <Link href={`/dashboard/wallet/${row.id}`} className={"text-blue-500"}><span>Access Wallet</span></Link>,
+        cell: (row: InterfaceUserTableData) => <Link href={`/dashboard/wallet/${row.id}`} className={"text-blue-500"}><span>Access Wallet</span></Link>,
         sortable: false,
     }
 ];

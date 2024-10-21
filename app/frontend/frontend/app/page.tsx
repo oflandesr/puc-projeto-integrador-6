@@ -7,27 +7,22 @@ import CustomButton from "@/components/CustomButton";
 import {useUser} from "@/userContext";
 import {useRouter} from "next/navigation";
 import LoadingFullPage from "@/components/LoadingFullPage";
+import {UserData} from "@/config/interfaces";
 
 export default function Home() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     // Context
-    const {updateUserData, updateUserId, resetLocalStorage} = useUser();
+    const {updateUserData, updateUserId, resetLocalStorage, updateUserPassword} = useUser();
     const router = useRouter();
 
     const {
-        error : authError,
-        loading : authLoading,
-        fetchData : fetchAuth
-    } = useLazyGet();
-
-    const {
-        data: userData,
-        error: userError,
-        loading: userLoading,
-        fetchData: fetchUser
-    } = useLazyGet();
+        error : userError,
+        loading : userLoading,
+        fetchData : fetchUser,
+        data : userData
+    } = useLazyGet<UserData>();
 
     function resetForm() {
         setEmail("");
@@ -40,24 +35,18 @@ export default function Home() {
             return;
         }
 
-        const data = {email, password};
+
         try {
-            await fetchAuth("/auth/login", data);
-            if (!authError) {
-                await fetchUser(`/user/${email}`);
-                resetForm();
-                if (!userError) {
-                    console.log("User data fetched", userData);
-                } else {
-                    new Error("Error fetching user data");
-                }
+            await fetchUser("/auth/login", {username: email, password: password}, {});
+            if (!userError) {
+                console.log("User data fetched", userData);
             } else {
                 new Error("Error logging in");
             }
         } catch (err) {
             alert("Oops, something went wrong");
             console.error("Unexpected error:", err);
-            console.error("Error details:", data, userData, userError);
+            console.error("Error details:", userData, userError);
             resetForm();
         }
     }
@@ -68,6 +57,7 @@ export default function Home() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             updateUserId(userData.id);
+            updateUserPassword(password);
             console.log("User data fetched", userData);
             router.push("/dashboard");
         } else {
@@ -83,7 +73,7 @@ export default function Home() {
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                {(authLoading || userLoading) ? (
+                {(userLoading) ? (
                     <LoadingFullPage/>
                 ) : (
                     <div
@@ -112,10 +102,9 @@ export default function Home() {
                                 <CustomButton type={"button"} onClick={handleSubmit}>
                                     Sign in
                                 </CustomButton>
-                                {(authError || userError) && (
+                                {(userError) && (
                                     <div
                                         className={"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-700 p-2 text-sm text-center rounded"}>
-                                        <p>{authError}</p>
                                         <p>{userError}</p>
                                     </div>
                                 )}

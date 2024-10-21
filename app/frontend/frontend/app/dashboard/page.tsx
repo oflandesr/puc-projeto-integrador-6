@@ -1,24 +1,19 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect } from "react";
 import {useUser} from "@/userContext";
 import Line from "@/components/Charts/Line";
 import Card from "@/components/Layout/Card";
-import Table from "@/components/Table";
-import {tableCols, tableData} from "@/mock/mock";
-import LoadingFullPage from "@/components/LoadingFullPage";
+import WalletsTable from "@/components/Table/Wallet/WalletTable";
 
 export default function Home() {
-    const {getUserData, userId} = useUser();
-    const [loading, setLoading] = useState<boolean>(false);
+    const {getUserData, userId, getUserPassword} = useUser();
 
     useEffect(() => {
-        console.log(getUserData());
-    }, [getUserData, userId]);
-
-    if (loading) {
-        return <LoadingFullPage />;
-    }
+        console.log("User data", getUserData());
+        console.log("User id", userId);
+        console.log("User password", getUserPassword());
+    }, []);
 
     return (
         <>
@@ -35,8 +30,7 @@ export default function Home() {
                 />
             </Card>
             <Card colspan={12} rowspan={1}>
-                {/*Expect error below if using a button on one of the rows*/}
-                <Table columns={tableCols} data={tableData} />
+                <WalletsTable customColSpan={12} customRowSpan={1} />
             </Card>
         </>
     );

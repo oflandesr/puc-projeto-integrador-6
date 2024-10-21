@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CustomInputProps {
-    value: string;
+    value: string | number;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     type: string;

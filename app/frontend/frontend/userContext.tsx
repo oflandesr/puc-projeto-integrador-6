@@ -2,32 +2,15 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 import {Bars} from "react-loading-icons";
-
-interface UserData {
-    user?: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        access: {
-            login: string;
-            enabled: boolean;
-            roles: {
-                role: string;
-                description: string;
-            }[];
-        };
-    };
-    return?: {
-        id: string;
-        message: string;
-    };
-}
+import {UserData} from "@/config/interfaces";
 
 interface UserContextType {
     getUserData: () => UserData;
     updateUserData: (data: UserData) => void;
     userId: string | null;
     updateUserId: (id: string | null) => void;
+    updateUserPassword: (password: string | null) => void;
+    getUserPassword: () => string | null;
     resetLocalStorage: () => void;
 }
 
@@ -39,17 +22,23 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const [userData, setUserData] = useState<UserData>({});
     const [userId, setUserId] = useState<string | null>(null);
+    const [userPassword, setUserPassword] = useState<string | null>(null);
     const [loading, setLoading] = useState(true); // New loading state
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const storedData = localStorage.getItem('userData');
             const storedId = localStorage.getItem('userId');
-
+            const storedPassword = localStorage.getItem('userPassword');
             if (storedData) {
                 setUserData(JSON.parse(storedData));
             }
-            setUserId(storedId);
+            if (storedId) {
+                setUserId(storedId);
+            }
+            if (storedPassword) {
+                setUserPassword(storedPassword);
+            }
         }
         setLoading(false); // Data loading completed
     }, []);
@@ -75,6 +64,18 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, [userId, loading])
 
     useEffect(() => {
+        if (!loading) {
+            if (typeof window !== 'undefined') {
+                if (userPassword !== null) {
+                    localStorage.setItem('userPassword', userPassword);
+                } else {
+                    localStorage.removeItem('userPassword');
+                }
+            }
+        }
+    }, [userPassword, loading])
+
+    useEffect(() => {
         if (!loading && (!userId || Object.keys(userData).length === 0)) {
             // Only redirect if the user is NOT on the /register page
             if (pathname !== '/register') {
@@ -84,13 +85,17 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, [loading, userId, userData, pathname, router]);
 
     const getUserData = () => userData;
+    const getUserPassword = () => userPassword;
+    const updateUserPassword = (password: string | null) => setUserPassword(password);
     const updateUserData = (data: UserData) => setUserData(data);
     const updateUserId = (id: string | null) => setUserId(id);
     const resetLocalStorage = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('userData');
             localStorage.removeItem('userId');
+            localStorage.removeItem('userPassword');
         }
+        setUserPassword(null);
         setUserData({});
         setUserId(null);
         router.push('/');
@@ -107,7 +112,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     return (
-        <UserContext.Provider value={{getUserData, updateUserData, userId, updateUserId, resetLocalStorage}}>
+        <UserContext.Provider value={{getUserData, updateUserData, userId, updateUserId, resetLocalStorage, updateUserPassword, getUserPassword}}>
             {children}
         </UserContext.Provider>
     );

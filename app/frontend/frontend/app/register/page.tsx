@@ -1,12 +1,21 @@
 "use client";
 
 import CustomInput from "@/components/CustomInput";
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import CustomButton from "@/components/CustomButton";
 import {useRouter} from "next/navigation";
-import { Bars } from 'react-loading-icons'
 import usePost from "@/hooks/usePost";
 import LoadingFullPage from "@/components/LoadingFullPage";
+import {UserData} from "@/config/interfaces";
+
+// Define the payload type (U)
+interface CreateUserPayload {
+    login: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+}
+
 
 export default function Home() {
 
@@ -21,7 +30,7 @@ export default function Home() {
         error,
         loading,
         postData
-    } = usePost();
+    } = usePost<UserData, CreateUserPayload>();
 
     function resetForm() {
         setUsername("");
@@ -36,15 +45,14 @@ export default function Home() {
             return;
         }
 
-        const payload = {
+        const payload : CreateUserPayload = {
+            login: username,
+            password: password,
             firstName: fname,
-            lastName: lname,
-            acesso: {
-                login: username,
-                password: password
-            }
+            lastName: lname
         }
-        await postData("/user", payload);
+
+        await postData("/user", payload, {username: "admin", password: "admin"});
 
         if (!error) {
             alert("Register successful");

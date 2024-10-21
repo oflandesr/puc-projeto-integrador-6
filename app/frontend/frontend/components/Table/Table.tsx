@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
-import DataTable from 'react-data-table-component';
+import DataTable, {TableColumn} from 'react-data-table-component';
 import CustomInput from '@/components/CustomInput';
 import useTable from "@/hooks/useTable";
 
 interface TableProps<T> {
-    columns: Array<{ name: string; selector: (row: T) => string | number; sortable: boolean }>;
+    columns: TableColumn<T>[]; // Use TableColumn from react-data-table-component
     data: T[];
 }
 
