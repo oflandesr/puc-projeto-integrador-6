@@ -33,7 +33,7 @@ export default function Home() {
     async function handleDataSubmit() {
         try {
             if (isWalletDataValid()) {
-                const url = "/wallets";
+                const url = "/wallet";
                 const auth = { username: getUserData().login, password: getUserPassword() };
                 await createWalletResponse(url, walletData, auth);
                 if (!createWalletError) {

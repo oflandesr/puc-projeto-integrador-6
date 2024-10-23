@@ -9,9 +9,10 @@ interface LineProps {
     title: string;
     height: number;
     onclick?: () => void;
+    btnText?: string;
 }
 
-export default function Line({title, height, onclick}: LineProps) {
+export default function Line({title, height, onclick, btnText}: LineProps) {
 
     const random7values = () => {
         return Array.from({length: 7}, () => Math.floor(Math.random() * 100));
@@ -109,7 +110,7 @@ export default function Line({title, height, onclick}: LineProps) {
                     <CustomButton
                         onClick={onclick}
                         className="uppercase text-sm font-semibold">
-                        See Details
+                        {btnText || "Ver detalhes"}
                         <svg className="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
