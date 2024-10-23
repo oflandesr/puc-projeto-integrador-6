@@ -20,6 +20,12 @@ DB_PORT = os.getenv('DB_PORT')
 DB_NAME = os.getenv('DB_NAME')
 BRAPI_BASE_URL = 'https://brapi.dev/api'
 
+BRAPI_TOKEN = 'gy6EM31r2j7MDe18EQPP1j'
+DB_USER = 'proj_integ_vi'
+DB_PASSWORD = 'pucpivi-2024'
+DB_SERVER = 'localhost'
+DB_PORT = '3306'
+DB_NAME = 'proj_integ_vi'
 
 def get_response_brapi(endpoint, params):
   
@@ -247,7 +253,7 @@ def load_data(df:pd.DataFrame, table:str) -> None:
   connection = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_NAME}'
   engine = create_engine(connection)
 
-  df.to_sql(table, con=engine, schema=DB_NAME, if_exists='replace', index=False)
+  df.to_sql(table, con=engine, schema=DB_NAME, if_exists='append', index=False)
   
   return
 
@@ -262,7 +268,7 @@ def get_companies() -> None:
     df_transformed = transform_company_data(df_extracted)
     
     # Load ticker dataframe into database
-    table = 'tickers'
+    table = 'TICKERS'
     load_data(df_transformed, table)
     
     return
@@ -275,14 +281,14 @@ def get_prices() -> None:
   # Transform ticker dataframe
   df_transformed = transform_price_data(df_extracted)
   
-  table = 'prices'   
+  table = 'PRICES'   
   load_data(df_transformed, table)
     
   return
 
 def get_taxes_data(taxes:dict) -> None:
   
-  table = 'taxas'
+  table = 'TAXAS'
   
   start_date = '01/01/2023'
   end_date = '31/12/2023'

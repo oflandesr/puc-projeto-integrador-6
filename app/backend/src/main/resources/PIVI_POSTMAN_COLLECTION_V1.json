@@ -211,7 +211,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"user\": 1,\n  \"name\": \"string\",\n  \"objective\": \"string\",\n  \"intenFixIncPercent\": 1,\n  \"intenStockPercent\": 1,\n  \"intenFilPercent\": 1\n}",
+							"raw": "{\n  \"user\": 1,\n  \"name\": \"Minha Carteira\",\n  \"objective\": \"Comprar um carro\",\n  \"intenFixIncPercent\": 33,\n  \"intenStockPercent\": 10,\n  \"intenFilPercent\": 33\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -327,7 +327,7 @@
 							"variable": [
 								{
 									"key": "walletId",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -420,6 +420,241 @@
 							"variable": [
 								{
 									"key": "walletId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Fixed Transaction",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"institution\": \"string\",\n    \"type\": \"string\",\n    \"value\": 0,\n    \"startDate\": \"2024-01-01\",\n    \"endDate\": \"2024-01-02\",\n    \"indexName\": \"string\",\n    \"taxValue\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/wallet/:walletId/tfixed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"wallet",
+								":walletId",
+								"tfixed"
+							],
+							"variable": [
+								{
+									"key": "walletId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Wallet Fixed Transaction",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/wallet/:walletId/tfixed/:tfId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"wallet",
+								":walletId",
+								"tfixed",
+								":tfId"
+							],
+							"variable": [
+								{
+									"key": "walletId",
+									"value": "2"
+								},
+								{
+									"key": "tfId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List ticker",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/ticker",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ticker"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Variable Transaction",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ticker\": \"BBAS3\",\n    \"buyOrSale\": 1,\n    \"date\": \"2024-01-01\",\n    \"amount\": 0,\n    \"price\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/wallet/:walletId/tvariable",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"wallet",
+								":walletId",
+								"tvariable"
+							],
+							"variable": [
+								{
+									"key": "walletId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Wallet Variable Transaction",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/wallet/:walletId/tvariable/:tvId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"wallet",
+								":walletId",
+								"tvariable",
+								":tvId"
+							],
+							"variable": [
+								{
+									"key": "walletId",
+									"value": "1"
+								},
+								{
+									"key": "tvId",
 									"value": "1"
 								}
 							]

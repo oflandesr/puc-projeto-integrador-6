@@ -16,13 +16,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class UserModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "LOGIN", nullable = false)
 	private String login;
@@ -42,7 +42,7 @@ public class UserModel {
 
 	// @JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "PERMISSION", joinColumns = @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE", referencedColumnName = "ROLE"))
+	@JoinTable(name = "PERMISSIONS", joinColumns = @JoinColumn(name = "LOGIN", referencedColumnName = "LOGIN"), inverseJoinColumns = @JoinColumn(name = "ROLE", referencedColumnName = "ROLE"))
 	Set<RoleModel> roles;
 
 	public UserModel() {
@@ -56,11 +56,11 @@ public class UserModel {
 		this.roles = roles;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

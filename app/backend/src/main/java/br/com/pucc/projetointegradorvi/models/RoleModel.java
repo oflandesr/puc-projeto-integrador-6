@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "ROLE")
+@Table(name = "ROLES")
 public class RoleModel {
 	
 	@Id

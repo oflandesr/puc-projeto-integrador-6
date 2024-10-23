@@ -369,6 +369,32 @@ paths:
           description: Dados inválidos
         '401':
           description: Credenciais inválidas
+  /wallet/{walletId}/tfixed/{tfId}:
+    delete:
+      tags:
+        - Carteira
+      summary: Remove transação fixa
+      description: Remove uma transação fixa de uma carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: tfId
+          in: path
+          description: Identificador da transação fixa
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Transação fixa removida da carteira com sucesso
+        '404':
+          description: Carteira não encontrada
+        '401':
+          description: Credenciais inválidas
   /wallet/{walletId}/tvariable:
     post:
       tags:

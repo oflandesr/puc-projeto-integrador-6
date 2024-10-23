@@ -16,32 +16,51 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
-@Table(name = "TRANSACTION_VARIABLE_INCOME")
+@Table(name = "TRANSACTIONS_VARIABLE_INCOME")
 public class VariableTransactionModel {
 
-    @Id
-    @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "WALLET_ID", nullable = false)
-    private WalletModel wallet;
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "WALLET_ID")
+	private WalletModel wallet;
 
-    @ManyToOne
-    @JoinColumn(name = "TICKER_ID", nullable = false)
-    private TickerModel ticker;
+	@ManyToOne
+	@JoinColumn(name = "TICKER_ID")
+	private TickerModel ticker;
 
-    @Column(name = "BUY_OR_SALE", nullable = false)
-    private Integer buyOrSale;
+	@Column(name = "BUY_OR_SALE")
+	private Integer buyOrSale;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "DATE")
+	private Date date;
 
-    private Float amount;
+	@Column(name = "AMOUNT")
+	private Double amount;
 
-    private Float price;
+	@Column(name = "PRICE")
+	private Double price;
+
+	public VariableTransactionModel() {
+
+	}
+
+	public VariableTransactionModel(WalletModel wallet, TickerModel ticker, String buyOrSale, String date,
+			String amount, String price) {
+
+		this.wallet = wallet;
+		this.ticker = ticker;
+		this.buyOrSale = Integer.valueOf(buyOrSale);
+		this.date = Date.valueOf(date);
+		this.amount = Double.valueOf(amount);
+		this.price = Double.valueOf(price);
+
+	}
 
 	public Integer getId() {
 		return id;
@@ -83,20 +102,19 @@ public class VariableTransactionModel {
 		this.date = date;
 	}
 
-	public Float getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Float amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public Float getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Float price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
 }

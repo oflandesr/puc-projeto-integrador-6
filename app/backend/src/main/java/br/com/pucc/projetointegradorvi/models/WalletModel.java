@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
+import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "WALLET")
+@Table(name = "WALLETS")
 public class WalletModel {
 
 	@Id
@@ -45,10 +45,10 @@ public class WalletModel {
 	@JoinColumn(name = "USER_ID", nullable = false)
 	private UserModel user;
 
-	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
 	private List<VariableTransactionModel> variableIncomeTransactions;
 
-	@OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
 	private List<FixedTransactionModel> fixedIncomeTransactions;
 
 	public WalletModel() {
@@ -64,6 +64,13 @@ public class WalletModel {
 		this.user = user;
 		this.variableIncomeTransactions = List.of();
 		this.fixedIncomeTransactions = List.of();
+	}
+
+	public WalletDto convertToDto() {
+		return new WalletDto(this.id, this.user.getId(), this.name, this.objective, this.intenFixIncPercent,
+				this.intenStockPercent, this.intenFilPercent,
+				this.fixedIncomeTransactions == null ? List.of() : this.fixedIncomeTransactions,
+				this.variableIncomeTransactions == null ? List.of() : this.variableIncomeTransactions);
 	}
 
 	public Long getId() {
