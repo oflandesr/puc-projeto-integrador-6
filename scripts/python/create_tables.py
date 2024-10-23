@@ -78,12 +78,14 @@ CREATE TABLE IF NOT EXISTS PRICES (
 # Criar tabela USER
 CREATE_TABLE_USERS = """
 CREATE TABLE IF NOT EXISTS USERS (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    LOGIN VARCHAR(50),
-    PASSWORD VARCHAR(255),
-    FIRST_NAME VARCHAR(255),
-    LAST_NAME VARCHAR(255),
-    ENABLED INT
+    ID INT AUTO_INCREMENT,
+    LOGIN VARCHAR(50) NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL,
+    FIRST_NAME VARCHAR(255) NOT NULL,
+    LAST_NAME VARCHAR(255) NOT NULL,
+    ENABLED INT NOT NULL,
+    UNIQUE INDEX UL (LOGIN),
+    CONSTRAINT L_PK PRIMARY KEY (ID)
 );
 """
 
@@ -144,20 +146,49 @@ CREATE TABLE IF NOT EXISTS WALLETS (
 
 CREATE_TABLE_ROLES = """
 CREATE TABLE IF NOT EXISTS ROLES (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-	ROLE VARCHAR(255),
-	DESCRIPTION VARCHAR(255)
+    ROLE VARCHAR(45) NOT NULL,
+    DESCRIPTION VARCHAR(255) NULL,
+    CONSTRAINT ROLE_PK PRIMARY KEY (ROLE)
 );
 """
 
 CREATE_TABLE_PERMISSIONS = """
 CREATE TABLE IF NOT EXISTS PERMISSIONS (
-    USER_ID INT,
-    ROLE_ID INT,
-	FOREIGN KEY (ROLE_ID) REFERENCES ROLES(ID),
-    FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
+    LOGIN VARCHAR(45) NOT NULL,
+    ROLE VARCHAR(45) NOT NULL,
+    FOREIGN KEY (LOGIN) REFERENCES USERS (LOGIN),
+	FOREIGN KEY (ROLE) REFERENCES ROLES (ROLE)
 );
 """
+# Inserir o usuário admin na tabela LOGIN (chtt24)
+INSET_INTO_USER ="""
+    INSERT INTO USERS (LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED) 
+    VALUES ('admin', '$2a$10$Usgy3IEMcOK1l5plvyKONeysRa/mACW9677CQaCyJi0P2u7fBykJ.', 'ADMINISTRADOR', ' DO SISTEMA', TRUE);
+"""
+
+# Inserir uma ROLE de administrador na tabela ROLE
+INSERT_INTO_ROLE = """
+    INSERT INTO ROLES (ROLE, DESCRIPTION) 
+    VALUES ('ADMIN', 'Administrador do sistema');
+"""
+
+# Inserir uma ROLE de usuario na tabela ROLE
+INSERT_INTO_ROLE_ = """
+    INSERT INTO ROLES (ROLE, DESCRIPTION) 
+    VALUES ('USER', 'Usuário do sistema');
+"""
+
+# Associar o usuário admin com a ROLE ADMIN
+INSERT_INTO_PERMISSION = """
+    INSERT INTO PERMISSIONS (LOGIN, ROLE) 
+    VALUES ('admin', 'ADMIN');
+"""
+
+INSERT_INTO_PERMISSION_ = """
+    INSERT INTO PERMISSIONS (LOGIN, ROLE) 
+    VALUES ('admin', 'USER');
+"""
+
 
 TABLES = {
     'tickers':                      CREATE_TABLE_TICKERS, 
@@ -165,10 +196,18 @@ TABLES = {
     'users':                        CREATE_TABLE_USERS,
     'prices':                       CREATE_TABLE_PRICES, 
     'wallets':                      CREATE_TABLE_WALLETS,
-    'roles':                         CREATE_TABLE_ROLES,
+    'roles':                        CREATE_TABLE_ROLES,
     'permissions':                  CREATE_TABLE_PERMISSIONS,
     'transactions_variable_income': CREATE_TABLE_TRANSACTIONS_VARIABLE_INCOME, 
     'transactions_fixed_income':    CREATE_TABLE_TRANSACTIONS_FIXED_INCOME
+}
+
+INSERTS = {
+    'user':                         INSET_INTO_USER, 
+    'role_adm':                     INSERT_INTO_ROLE, 
+    'role_usr':                     INSERT_INTO_ROLE_,
+    'permission_adm':               INSERT_INTO_PERMISSION, 
+    'permission_usr':               INSERT_INTO_PERMISSION_
 }
 
 import mysql.connector
@@ -213,11 +252,53 @@ def create_table(table:str, query: str) -> None:
             
     return
 
+def insert_table(insert:str, query: str) -> None:
+    
+    try:
+        # Conectando ao banco de dados
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+
+        cursor = db.cursor()
+
+        try:
+            # Executando a query para criar a tabela
+            cursor.execute(query)
+            db.commit()
+            print(f"Insert {insert} executado com sucesso!")
+
+        except mysql.connector.Error as e:
+            # Captura de erro de execução da query
+            print(f"Erro ao executar a query: {e}")
+            db.rollback()  # Reverter mudanças em caso de erro
+
+        finally:
+            # Garantir que o cursor seja fechado
+            cursor.close()
+
+    except Error as e:
+        # Captura de erros de conexão
+        print(f"Erro ao conectar ao banco de dados: {e}")
+
+    finally:
+        # Garantir que a conexão com o banco seja fechada
+        if db.is_connected():
+            db.close()
+            
+    return
+
 
 def main():
   
   for table, query in TABLES.items():
     create_table(table, query)
+  
+  for insert, query in INSERTS.items():
+    insert_table(insert, query)
     
   return
 

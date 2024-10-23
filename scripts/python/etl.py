@@ -70,17 +70,23 @@ def extract_company_data(tickers: dict) -> pd.DataFrame:
         'modules': ['summaryProfile']
     }
       
-    for ticker, _ in tickers.items():  # Iterando sobre o dicionário de tickers
+    for ticker, _ in tickers.items(): 
       endpoint = f'/quote/{ticker}'
       response = get_response_brapi(endpoint, params=params)
       if response and 'results' in response:
         result = response['results'][0]
         summary_profile = result.pop('summaryProfile', {})
         result.update(summary_profile)
-        data.append(result)  # Supondo que os resultados venham em um array de objetos
+        data.append(result) 
     
     # Criar um DataFrame com todos os tickers
     df = pd.DataFrame(data)
+    
+    if df.empty:
+        print("Erro ao extrair dados das empresas da API")
+    else:
+        print("Dados das empresas coletados com sucesso")
+        
     
     return df
 
@@ -109,6 +115,11 @@ def extract_price_data(tickers: dict) -> pd.DataFrame:
             data.append(entry)  # Adiciona cada histórico de preços na lista de dados
         
     df = pd.DataFrame(data)
+    
+    if df.empty:
+        print("Erro ao extrair cotacao das acoes")
+    else:
+        print("Dados de cotacao das acoes coletados com sucesso")
     
     return df
 
@@ -279,6 +290,8 @@ def load_data(df: pd.DataFrame, table: str, key_columns: list) -> None:
         except Exception as e:
             trans.rollback()  # Reverte a transação em caso de erro
             print(f"Erro durante a inserção de dados na tabela {table}: {e}")
+            
+    print(f'Dados da tabela {table} carregados com sucesso')
     
     return
 
@@ -344,9 +357,12 @@ def get_indexes() -> None:
     return
   
 def main():
+    
   get_companies()
   get_prices()
   get_indexes()
+  
+  print("Todos os dados foram extraídos, tratados e carregados com sucesso")
 
 if __name__ == "__main__":
     main()

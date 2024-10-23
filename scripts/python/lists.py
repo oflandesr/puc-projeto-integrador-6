@@ -1,6 +1,7 @@
 TICKER_LIST = {
     'PETR4': 'Petrobras',
-    'BBAS3': 'Banco do Brasil'
+    'BBAS3': 'Banco do Brasil',
+    'ITUB4': 'Banco Itau Unibanco'
 }
 
 INDEX_LIST = {
