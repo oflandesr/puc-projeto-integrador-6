@@ -28,9 +28,9 @@ export default function WalletHeader({ walletData }: WalletPageProps) {
             <CustomButton
                 type={"button"}
                 onClick={() => alert("Delete")}
-                className={"bg-transparent hover:bg-gray-200 text-red-400 flex items-center"}
+                className={"bg-transparent hover:bg-red-200 text-red-400 flex items-center hover:bg-transparent w-16 h-8"}
             >
-                <FaTrash className="ml-1 w-4 h-4 text-gray-400" /> {/* Ícone de lixeira */}
+                <FaTrash className="w-4 h-4 text-gray-400" /> {/* Ícone de lixeira */}
             </CustomButton>
         </div>
     );

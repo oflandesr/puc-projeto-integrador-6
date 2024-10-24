@@ -14,48 +14,70 @@ interface CircleProps {
     btnText?: string;
 }
 
-export default function Circle({ title, height, onclick, data, labels, btnText }: CircleProps) {
+export default function Circle({ title, height, onclick , data, labels, btnText }: CircleProps) {
 
     const [options, setOptions] = useState<ApexOptions>({
+        series: data,
+        labels: labels,
         chart: {
-            height: "100%",
+            height: 320,
             width: "100%",
             type: "donut",
-            fontFamily: "Inter, sans-serif",
-            dropShadow: {
-                enabled: false,
-                blur: 5,
-                opacity: 0.15,
-            },
-            toolbar: {
-                show: false,
-            },
         },
         tooltip: {
             enabled: true,
         },
         dataLabels: {
-            enabled: true,
-            style: {
-                fontSize: "14px",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: "bold",
-                colors: ["#000000"],
-            },
-            dropShadow: {
-                enabled: false,
+            enabled: false,
+        },
+        grid: {
+            padding: {
+                top: -2,
             },
         },
-        labels: labels,
         stroke: {
-            width: 2,
-            colors: ['#fff'],
+            colors: ["transparent"],
+            lineCap: undefined,
         },
-        series: data,
         colors: ["#1A56DB", "#009688", "#FF6F61", "#FFEB3B", "#9C27B0", "#FF9800", "#4CAF50"],
         legend: {
-            show: true,
-            position: 'bottom',
+            position: "bottom",
+            fontFamily: "Inter, sans-serif",
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        name: {
+                            show: true,
+                            fontFamily: "Inter, sans-serif",
+                            offsetY: 20,
+                        },
+                        total: {
+                            showAlways: true,
+                            show: true,
+                            label: "Distribuição",
+                            fontFamily: "Inter, sans-serif",
+                            formatter: function (w) {
+                                const sum = w.globals.seriesTotals.reduce((a: never, b: never) => {
+                                    return a + b
+                                }, 0)
+                                return sum + '%'
+                            },
+                        },
+                        value: {
+                            show: true,
+                            fontFamily: "Inter, sans-serif",
+                            offsetY: -20,
+                            formatter: function (value) {
+                                return value + "%";
+                            },
+                        },
+                    },
+                    size: "80%",
+                },
+            },
         },
     });
 

@@ -37,6 +37,14 @@ interface CreateWallet {
     intenFilPercent: number;
 }
 
+interface PatchWalletResponse {
+    name: string;
+    objective: string;
+    intenFixIncPercent: string;
+    intenStockPercent: string;
+    intenFilPercent: string;
+}
+
 interface Wallet {
     name: string;
     objective: string;
@@ -49,4 +57,4 @@ interface Wallet {
     variableIncomeTransactions: VariableIncomeTransaction[];
 }
 
-export type { UserData, Wallet, FixedIncomeTransaction, VariableIncomeTransaction, CreateWallet };
+export type { UserData, Wallet, FixedIncomeTransaction, VariableIncomeTransaction, CreateWallet , PatchWalletResponse};

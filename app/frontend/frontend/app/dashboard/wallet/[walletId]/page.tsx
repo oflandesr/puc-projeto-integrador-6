@@ -2,15 +2,18 @@
 
 import React, {useEffect, useState} from "react";
 import {useUser} from "@/userContext"
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import Card from "@/components/Layout/Card";
 import { Wallet} from "@/config/interfaces";
 import useLazyGet from "@/hooks/useLazyGet";
 import LoadingFullPage from "@/components/LoadingFullPage";
 import WalletHeader from "@/components/Wallet/WalletHeader";
 import Circle from "@/components/Charts/Circle";
+import WalletsTable from "@/components/Table/Wallet/WalletTable";
 
 export default function Home() {
+
+    const router = useRouter();
     const {getUserData, userId, getUserPassword} = useUser();
     const { walletId } = useParams();
 
@@ -69,16 +72,24 @@ export default function Home() {
                 {/* Wallet header, will have the name here */}
                 <WalletHeader walletData={walletData} />
             </Card>
-            <Card colspan={12} rowspan={1}>
+            <Card colspan={6} rowspan={1}>
                 {/* Wallet % distributed to each type of investment, fixed income, stock, fii */}
                 <Circle
-                    title="Distribuicao de investimentos"
+                    title=""
                     height={250}
-                    onclick={() => console.log("Clicked")}
+                    onclick={() => {
+                        router.push(`/dashboard/wallet/${walletId}/edit`);
+                    }}
                     labels={["Fixed Income", "Stock", "FII"]}
                     data={series}
                     btnText="Editar"
                 />
+            </Card>
+            <Card colspan={6} rowspan={1}>
+                Custom User Data Here
+            </Card>
+            <Card colspan={12} rowspan={1}>
+                <WalletsTable customColSpan={12} customRowSpan={1} />
             </Card>
         </>
     );

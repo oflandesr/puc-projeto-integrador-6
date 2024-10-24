@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {useUser} from "@/userContext";
 import Card from "@/components/Layout/Card";
 import CustomButton from "@/components/CustomButton";
