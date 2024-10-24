@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS PRICES (
 );
 """
 
+# Criar tabela USER
 CREATE_TABLE_USERS = """
 CREATE TABLE IF NOT EXISTS USERS (
     ID INT AUTO_INCREMENT,
@@ -98,7 +99,7 @@ CREATE TABLE IF NOT EXISTS INDEXES (
 );
 """
 
-# Criar tabela TRANSACTIONS_FIXED_INCOME
+# Criar tabela TRANSACTION_FIXED_INCOME
 CREATE_TABLE_TRANSACTIONS_FIXED_INCOME = """
 CREATE TABLE IF NOT EXISTS TRANSACTIONS_FIXED_INCOME (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -159,7 +160,6 @@ CREATE TABLE IF NOT EXISTS PERMISSIONS (
 	FOREIGN KEY (ROLE) REFERENCES ROLES (ROLE)
 );
 """
-
 # Inserir o usuário admin na tabela LOGIN (chtt24)
 INSET_INTO_USER ="""
     INSERT INTO USERS (LOGIN, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED) 
@@ -189,15 +189,16 @@ INSERT_INTO_PERMISSION_ = """
     VALUES ('admin', 'USER');
 """
 
+
 TABLES = {
-    'tickers':                      CREATE_TABLE_TICKERS,
-    'indexes':                      CREATE_TABLE_INDEXES,
+    'tickers':                      CREATE_TABLE_TICKERS, 
+    'indexes':                      CREATE_TABLE_INDEXES, 
     'users':                        CREATE_TABLE_USERS,
-    'prices':                       CREATE_TABLE_PRICES,
+    'prices':                       CREATE_TABLE_PRICES, 
     'wallets':                      CREATE_TABLE_WALLETS,
     'roles':                        CREATE_TABLE_ROLES,
     'permissions':                  CREATE_TABLE_PERMISSIONS,
-    'transactions_variable_income': CREATE_TABLE_TRANSACTIONS_VARIABLE_INCOME,
+    'transactions_variable_income': CREATE_TABLE_TRANSACTIONS_VARIABLE_INCOME, 
     'transactions_fixed_income':    CREATE_TABLE_TRANSACTIONS_FIXED_INCOME
 }
 
@@ -211,6 +212,45 @@ INSERTS = {
 
 import mysql.connector
 from mysql.connector import Error
+
+def create_table(table:str, query: str) -> None:
+    
+    try:
+        # Conectando ao banco de dados
+        db = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+
+        cursor = db.cursor()
+
+        try:
+            # Executando a query para criar a tabela
+            cursor.execute(query)
+            db.commit()
+            print(f"Tabela {table} criada com sucesso!")
+
+        except mysql.connector.Error as e:
+            # Captura de erro de execução da query
+            print(f"Erro ao executar a query: {e}")
+            db.rollback()  # Reverter mudanças em caso de erro
+
+        finally:
+            # Garantir que o cursor seja fechado
+            cursor.close()
+
+    except Error as e:
+        # Captura de erros de conexão
+        print(f"Erro ao conectar ao banco de dados: {e}")
+
+    finally:
+        # Garantir que a conexão com o banco seja fechada
+        if db.is_connected():
+            db.close()
+            
+    return
 
 def insert_table(insert:str, query: str) -> None:
     
@@ -251,44 +291,6 @@ def insert_table(insert:str, query: str) -> None:
             
     return
 
-def create_table(table:str, query: str) -> None:
-    
-    try:
-        # Conectando ao banco de dados
-        db = mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-
-        cursor = db.cursor()
-
-        try:
-            # Executando a query para criar a tabela
-            cursor.execute(query)
-            db.commit()
-            print(f"Tabela {table} criada com sucesso!")
-
-        except mysql.connector.Error as e:
-            # Captura de erro de execução da query
-            print(f"Erro ao executar a query: {e}")
-            db.rollback()  # Reverter mudanças em caso de erro
-
-        finally:
-            # Garantir que o cursor seja fechado
-            cursor.close()
-
-    except Error as e:
-        # Captura de erros de conexão
-        print(f"Erro ao conectar ao banco de dados: {e}")
-
-    finally:
-        # Garantir que a conexão com o banco seja fechada
-        if db.is_connected():
-            db.close()
-            
-    return
 
 def main():
   
