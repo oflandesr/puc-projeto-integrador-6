@@ -306,7 +306,7 @@ def get_companies() -> None:
     df_transformed = transform_company_data(df_extracted)
     
     # Load ticker dataframe into database
-    table = 'tickers'
+    table = 'TICKERS'
     key_columns = ['ticker']
     load_data(df_transformed, table, key_columns)
     
@@ -320,7 +320,7 @@ def get_prices() -> None:
   # Transform ticker dataframe
   df_transformed = transform_price_data(df_extracted)
   
-  table = 'prices' 
+  table = 'PRICES' 
   key_columns = ['id']  
   load_data(df_transformed, table, key_columns)
     
@@ -350,7 +350,7 @@ def get_indexes() -> None:
     df_final = df_final.sort_values(by='DATE').reset_index(drop=True)
     
     # Definir 'DATE' como a chave primária e carregar os dados no banco de dados
-    table = 'indexes'
+    table = 'INDEXES'
     key_columns = ['DATE']
     load_data(df_final, table, key_columns)
 

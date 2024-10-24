@@ -9,7 +9,7 @@ public class ProjetoIntegradorViApplication {
 
 	public static void main(String[] args) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String rawPassword = "chtt24";
+        String rawPassword = "admin";
         String encodedPassword = encoder.encode(rawPassword);
         System.out.println("Senha encriptada: " + encodedPassword);
 		SpringApplication.run(ProjetoIntegradorViApplication.class, args);
