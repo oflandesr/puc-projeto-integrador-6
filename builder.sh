@@ -23,6 +23,8 @@ update_repository() {
 # Função para executar scripts Python para configuração do banco de dados
 setup_database() {
     echo "Executando scripts Python para setup do banco de dados..."
+    pip3 install --upgrade pi
+    pip3 install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
     python3 create_tables.py
     python3 populate_tables.py
