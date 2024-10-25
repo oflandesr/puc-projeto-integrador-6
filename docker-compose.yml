@@ -14,11 +14,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        GIT_USER: ${GIT_USER}
-        GIT_TOKEN: ${GIT_TOKEN}
-        GIT_BRANCH: ${GIT_BRANCH}
-        GIT_REPO_NAME: ${GIT_REPO_NAME}
+    environment:
+      - GIT_BRANCH=${GIT_BRANCH}
+      - GIT_REPO_NAME=${GIT_REPO_NAME}
+      - GIT_USER=${GIT_USER}
+      - GIT_TOKEN=${GIT_TOKEN}
+    entrypoint: ["./scripts/builder.sh", "${GIT_BRANCH}", "${GIT_REPO_NAME}", "${GIT_USER}", "${GIT_TOKEN}"]
     depends_on:
       - mysql
 
