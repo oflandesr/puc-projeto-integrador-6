@@ -30,7 +30,7 @@ RUN mvn clean package -DskipTests
 WORKDIR /${GIT_REPO_NAME}/scripts/python
 
 # Instala as dependências do Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Executa os scripts Python
 RUN python3 create_tables.py && \
