@@ -1,4 +1,4 @@
 pandas
 sqlalchemy
 mysql-connector-python
-dotenv
+python-dotenv

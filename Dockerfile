@@ -13,12 +13,7 @@ ARG GIT_USER
 ARG GIT_TOKEN
 
 # Verifica se o diretório já existe; se sim, faz pull, se não, clona
-RUN if [ ! -d "${GIT_REPO_NAME}" ]; then \
-        git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git"; \
-    else \
-        git -C "${GIT_REPO_NAME}" fetch origin && \
-        git -C "${GIT_REPO_NAME}" pull origin "${GIT_BRANCH}"; \
-    fi
+RUN if [ ! -d "${GIT_REPO_NAME}" ]; then git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git"; else git -C "${GIT_REPO_NAME}" fetch origin && git -C "${GIT_REPO_NAME}" pull origin "${GIT_BRANCH}"; fi
 
 # Muda para o diretório da aplicação Java
 WORKDIR /${GIT_REPO_NAME}/app/backend
@@ -28,6 +23,8 @@ RUN mvn clean package -DskipTests
 
 # Muda para o diretório dos scripts Python
 WORKDIR /${GIT_REPO_NAME}/scripts/python
+
+RUN pip3 install --upgrade pi
 
 # Instala as dependências do Python
 RUN pip3 install --no-cache-dir -r requirements.txt
