@@ -4,4 +4,9 @@ const createBasicAuthHeader = (username: string, password: string) => {
     return `Basic ${token}`;
 };
 
-export { createBasicAuthHeader };
+const formatDate = (stringDate: string) => {
+    const date = new Date(stringDate);
+    return date.toLocaleDateString();
+}
+
+export { createBasicAuthHeader, formatDate };

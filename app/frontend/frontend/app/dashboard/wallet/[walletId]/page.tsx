@@ -10,6 +10,7 @@ import LoadingFullPage from "@/components/LoadingFullPage";
 import WalletHeader from "@/components/Wallet/WalletHeader";
 import Circle from "@/components/Charts/Circle";
 import WalletsTable from "@/components/Table/Wallet/WalletTable";
+import FixedTransactionsPreview from "@/components/Wallet/FixedTransactionsPreview";
 
 export default function Home() {
 
@@ -86,7 +87,7 @@ export default function Home() {
                 />
             </Card>
             <Card colspan={6} rowspan={1}>
-                Custom User Data Here
+                <FixedTransactionsPreview wallet={walletData} />
             </Card>
             <Card colspan={12} rowspan={1}>
                 <WalletsTable customColSpan={12} customRowSpan={1} />

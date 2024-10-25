@@ -60,7 +60,6 @@ const WalletsTable = ({ customColSpan, customRowSpan, parentRefresh}: WalletsTab
     return (
         <>
             {walletData ? (
-                /*Expect error below if using a button on one of the rows*/
                 <Table columns={tableCols} data={walletData} />
             ) : (
                 <div>No wallets to display</div>
