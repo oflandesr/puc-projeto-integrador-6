@@ -1,19 +1,15 @@
 import requests
 from requests.exceptions import HTTPError, Timeout, RequestException
-import json
 import pandas as pd
-import numpy as np
 from dotenv import load_dotenv
 import os
-import mysql.connector
-from sqlalchemy import create_engine, Table, MetaData, text
-from sqlalchemy.dialects.mysql import insert
+from sqlalchemy import create_engine, text
 from lists import INDEX_LIST, TICKER_LIST
 
 
 # Getting envoironment variables and defining constants
 current_dir = os.path.dirname(os.path.abspath(__file__))
-env_path = os.path.join(current_dir, '../..', '.env')
+env_path = os.path.join(current_dir, '../../', '.env')
 load_dotenv(dotenv_path=env_path)
 
 BRAPI_TOKEN = os.getenv('BRAPI_TOKEN')
