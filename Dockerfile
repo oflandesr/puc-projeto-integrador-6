@@ -1,7 +1,6 @@
-# Dockerfile
 FROM openjdk:17-jdk-slim
 
-# Instala o Git e Python
+# Instala o Git, Python e Maven
 RUN apt-get update && apt-get install -y git python3 python3-pip maven
 
 # Diretório de trabalho
@@ -12,20 +11,30 @@ ARG GIT_BRANCH
 ARG GIT_REPO_NAME
 ARG GIT_USER
 ARG GIT_TOKEN
-RUN git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git" pivi
+
+# Verifica se o diretório já existe; se sim, faz pull, se não, clona
+RUN if [ ! -d "${GIT_REPO_NAME}" ]; then \
+        git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git"; \
+    else \
+        git -C "${GIT_REPO_NAME}" fetch origin && \
+        git -C "${GIT_REPO_NAME}" pull origin "${GIT_BRANCH}"; \
+    fi
 
 # Muda para o diretório da aplicação Java
-WORKDIR /pivi/app/backend
+WORKDIR /${GIT_REPO_NAME}/app/backend
 
 # Compila o projeto Maven sem executar testes
 RUN mvn clean package -DskipTests
 
 # Muda para o diretório dos scripts Python
-WORKDIR /pivi/scripts/python
+WORKDIR /${GIT_REPO_NAME}/scripts/python
+
+# Instala as dependências do Python
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Executa os scripts Python
 RUN python3 create_tables.py && \
     python3 populate_tables.py
 
 # Comando para executar o .jar
-CMD ["java", "-jar", "/app/backend/target/seu_projeto.jar"]
+CMD ["java", "-jar", "/${GIT_REPO_NAME}/app/backend/target/seu_projeto.jar"]
