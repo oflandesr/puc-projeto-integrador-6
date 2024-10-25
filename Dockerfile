@@ -13,7 +13,7 @@ ARG GIT_USER
 ARG GIT_TOKEN
 
 # Verifica se o diretório já existe; se sim, faz pull, se não, clona
-RUN if [ ! -d "${GIT_REPO_NAME}" ]; then git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git"; else git -C "${GIT_REPO_NAME}" fetch origin && git -C "${GIT_REPO_NAME}" pull origin "${GIT_BRANCH}"; fi
+RUN if [ ! -d "${GIT_REPO_NAME}" ]; then git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git"; else git fetch -a && git pull origin "${GIT_REPO_NAME}"; fi
 
 # Muda para o diretório da aplicação Java
 WORKDIR /${GIT_REPO_NAME}/app/backend
