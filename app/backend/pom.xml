@@ -12,9 +12,8 @@
 	<groupId>br.com.pucc</groupId>
 	<artifactId>
 		ProjetoIntegradorVI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>
-		ProjetoIntegradorVI</name>
+	<version>0.0.1</version>
+	<name>ProjetoIntegradorVI</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
 	<licenses>
@@ -29,11 +28,6 @@
 		<tag />
 		<url />
 	</scm>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

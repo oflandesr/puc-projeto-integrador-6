@@ -1,3 +1,2 @@
 # Ignorar arquivos de configuração locais
-scripts/keys.env
-scripts/.env
+python/__*

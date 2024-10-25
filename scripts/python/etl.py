@@ -13,16 +13,16 @@ from lists import INDEX_LIST, TICKER_LIST
 
 # Getting envoironment variables and defining constants
 current_dir = os.path.dirname(os.path.abspath(__file__))
-env_path = os.path.join(current_dir, '..', 'keys.env')
+env_path = os.path.join(current_dir, '../..', '.env')
 load_dotenv(dotenv_path=env_path)
 
 BRAPI_TOKEN = os.getenv('BRAPI_TOKEN')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD= os.getenv('DB_PASSWORD')
-DB_SERVER = os.getenv('DB_SERVER')
-DB_PORT = os.getenv('DB_PORT')
-DB_NAME = os.getenv('DB_NAME')
-BRAPI_BASE_URL = 'https://brapi.dev/api'
+DB_USER = os.getenv('MYSQL_USER')
+DB_PASSWORD= os.getenv('MYSQL_PASSWORD')
+DB_SERVER = os.getenv('MYSQL_HOST')
+DB_PORT = os.getenv('MYSQL_PORT')
+DB_NAME = os.getenv('MYSQL_DATABASE')
+BRAPI_BASE_URL = os.getenv('BRAPI_BASE_URL')
 
 
 def get_response_brapi(endpoint, params):

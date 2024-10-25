@@ -4,14 +4,14 @@ import os
 
 # Carregar o arquivo .env
 current_dir = os.path.dirname(os.path.abspath(__file__))
-env_path = os.path.join(current_dir, '..', 'keys.env')
+env_path = os.path.join(current_dir, '../../', '.env')
 load_dotenv(dotenv_path=env_path)
 
 # Obter as variáveis de ambiente
-DB_HOST = os.getenv('DB_HOST')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_NAME = os.getenv('DB_NAME')
+DB_HOST = os.getenv('MYSQL_HOST')
+DB_USER = os.getenv('MYSQL_USER')
+DB_PASSWORD = os.getenv('MYSQL_PASSWORD')
+DB_NAME = os.getenv('MYSQL_DATABASE')
 
 # Criar tabela TICKER
 CREATE_TABLE_TICKERS = """
