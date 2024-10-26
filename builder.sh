@@ -22,15 +22,16 @@ install_and_configure_mysql() {
 
     # Inicia o MySQL em segundo plano
     mysqld_safe --datadir=/var/lib/mysql &
-    sleep 5
+    sleep 10  # Aumente o tempo de espera
+
     # Aguarda o MySQL iniciar
     echo "Aguardando MySQL iniciar..."
-    for i in {1..10}; do
+    for i in {1..20}; do  # Aumente o número de tentativas
         if mysql -h "${MYSQL_HOST}" -u root -e "SELECT 1;" --silent; then
             echo "MySQL iniciado com sucesso."
             break
         else
-            echo "Esperando MySQL iniciar ($i/10)..."
+            echo "Esperando MySQL iniciar ($i/20)..."
             sleep 2
         fi
     done
@@ -38,11 +39,11 @@ install_and_configure_mysql() {
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';  # Permite conexão de qualquer endereço
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';  # Permissões
 FLUSH PRIVILEGES;
 EOF
-    
+
     echo "MySQL configurado e inicializado."
 }
 
