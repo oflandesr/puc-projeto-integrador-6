@@ -26,7 +26,7 @@ install_and_configure_mysql() {
     # Aguarda o MySQL iniciar
     echo "Aguardando MySQL iniciar..."
     for i in {1..10}; do
-        if mysql -u root ping -h ${MYSQL_HOST} --silent; then
+        if mysql -h "${MYSQL_HOST}" -u root -e "SELECT 1;" --silent; then
             echo "MySQL iniciado com sucesso."
             break
         else
