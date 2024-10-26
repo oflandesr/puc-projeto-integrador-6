@@ -1,8 +1,22 @@
 #!/bin/bash
 set -e
 
-# Instala libs
-apt-get update && apt-get install -y git python3 python3-pip maven && rm -rf /var/lib/apt/lists/*
+# Função para instalar OpenJDK 17 e bibliotecas necessárias
+install_dependencies() {
+    echo "Instalando OpenJDK 17 e bibliotecas necessárias..."
+
+    # Atualiza a lista de pacotes e instala as bibliotecas
+    apt-get update && \
+    apt-get install -y openjdk-17-jdk git python3 python3-pip maven && apt-get clean
+    pip3 install --upgrade pi
+    rm -rf /var/lib/apt/lists/*
+
+    # Define JAVA_HOME
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    echo "JAVA_HOME setado para $JAVA_HOME"
+
+    echo "Instalação concluída."
+}
 
 # Função para clonar ou atualizar o repositório
 update_repository() {
@@ -23,11 +37,10 @@ update_repository() {
 # Função para executar scripts Python para configuração do banco de dados
 setup_database() {
     echo "Executando scripts Python para setup do banco de dados..."
-    pip3 install --upgrade pi
     pip3 install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
-    python3 create_tables.py
-    python3 populate_tables.py
+    python3 "/${GIT_REPO_NAME}/scripts/pythoncreate_tables.py"
+    python3 "/${GIT_REPO_NAME}/scripts/pythonpopulate_tables.py"
 }
 
 # Função para compilar e iniciar a aplicação Java
@@ -48,7 +61,8 @@ handle_error() {
 
 # Chamadas das funções com tratamento de erro
 {
-    update_repository
-    setup_database
-    build_and_run_java_app
+    install_dependencies
+    #update_repository
+    #setup_database
+    #build_and_run_java_app
 } || handle_error
