@@ -1,10 +1,13 @@
 #!/bin/bash
 set -e
 
+# Define MYSQL_HOST se não estiver definido
+MYSQL_HOST="${MYSQL_HOST:-database}"
+
 # Função para instalar pacotes e configurar o ambiente
 install_and_configure_packages() {
     echo "Instalando pacotes e configurando ambiente..."
-    apk add --no-cache python3 py3-pip py3-virtualenv openjdk17 mysql mysql-client git maven
+    apk add --no-cache python3 py3-pip py3-virtualenv openjdk17 mysql-client git maven
 
     # Configura JAVA_HOME
     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
@@ -13,48 +16,14 @@ install_and_configure_packages() {
     echo "Instalação e configuração do ambiente concluída."
 }
 
-# Função para instalar e configurar o MySQL
-install_and_configure_mysql() {
-    echo "Instalando e configurando MySQL..."
-
-    # Inicializa o diretório de dados
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql
-    
-    # Cria o arquivo de configuração do MySQL se não existir
-    if [ ! -f /etc/my.cnf ]; then
-        echo "[mysqld]" > /etc/my.cnf
-    fi
-
-    # Adiciona a configuração do bind-address
-    if ! grep -q "bind-address" /etc/my.cnf; then
-        echo "bind-address = 0.0.0.0" >> /etc/my.cnf
-        echo "bind-address adicionado ao arquivo de configuração do MySQL."
-    fi
-
-    # Inicia o MySQL em segundo plano
-    mysqld_safe --datadir=/var/lib/mysql &
-    sleep 5
-    # Aguarda o MySQL iniciar
+# Função para esperar o MySQL iniciar
+wait_for_mysql() {
     echo "Aguardando MySQL iniciar..."
-    for i in {1..10}; do
-        if mysql -h "${MYSQL_HOST}" -u root -e "SELECT 1;" --silent; then
-            echo "MySQL iniciado com sucesso."
-            break
-        else
-            echo "Esperando MySQL iniciar ($i/10)..."
-            sleep 2
-        fi
+    until mysql -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "SELECT 1;" >/dev/null 2>&1; do
+        sleep 2
+        echo "Tentando conectar ao MySQL..."
     done
-
-    # Configura o MySQL (exemplo de criação de banco e usuário)
-    mysql -u root <<EOF
-    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
-    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
-    FLUSH PRIVILEGES;
-EOF
-    
-    echo "MySQL configurado e inicializado."
+    echo "MySQL está pronto para conexões."
 }
 
 # Função para testar a conexão com o MySQL
@@ -66,6 +35,30 @@ test_mysql_connection() {
         echo "Erro: Não foi possível conectar ao MySQL com as credenciais fornecidas."
         exit 1
     fi
+}
+
+# Função para configurar o banco de dados
+configure_database() {
+    echo "Configurando o banco de dados no MySQL..."
+
+    # Conecta ao MySQL como root para criar o usuário
+    mysql -h "${MYSQL_HOST}" -uroot -p"${MYSQL_ROOT_PASSWORD}" <<EOF
+    -- Tenta criar o usuário; se já existir, ignora o erro
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+
+    -- Conceder permissões de root ao usuário
+    GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+
+    -- Cria o banco de dados
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+    
+    -- Concede todas as permissões do banco de dados ao usuário
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+    FLUSH PRIVILEGES;
+EOF
+
+    echo "Banco de dados e usuário configurados."
 }
 
 # Função para clonar ou atualizar o repositório
@@ -115,8 +108,9 @@ handle_error() {
 # Chamadas das funções com tratamento de erro
 {
     install_and_configure_packages
-    install_and_configure_mysql
+    wait_for_mysql
     test_mysql_connection
+    configure_database
     update_repository
     #setup_database_and_build
 } || handle_error
