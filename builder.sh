@@ -56,7 +56,6 @@ update_repository() {
 setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
     
-    
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
     pip3 install --no-cache-dir -r requirements.txt
     python3 create_tables.py
