@@ -1,12 +1,10 @@
 #!/bin/bash
 set -e
 
-install_dependencies() {
-    echo "Instalando OpenJDK 17, Git, Maven e Python..."
-
-    apt-get update && \
-    apt-get install -y openjdk-17-jdk git maven python3 python3-pip && \
-    rm -rf /var/lib/apt/lists/*
+install_and_configure_java() {
+    echo "Instalando Maven e Java..."
+    
+    apk add --no-cache openjdk17 maven
 
     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     echo "JAVA_HOME setado para $JAVA_HOME"
@@ -16,19 +14,29 @@ install_dependencies() {
 
 # Função para instalar e configurar o MySQL
 install_and_configure_mysql() {
-    echo "Instalando o MySQL..."
-    apk update && \
-    apk add --no-cache openjdk17 mysql mysql-client && \
-    rm -rf /var/cache/apk/*
+    echo "Instalando MySQL..."
+    
+    # Instala o MySQL e cria o diretório de dados
+    apk add --no-cache mysql mysql-client
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
+    # Cria o usuário e o banco de dados
     echo "Configurando o MySQL..."
-    service mysql start
+    mysqld_safe --datadir=/var/lib/mysql &
 
-    # Criação do banco de dados e usuário (personalize conforme necessário)
-    mysql -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};"
-    mysql -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';"
-    mysql -e "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'localhost';"
-    mysql -e "FLUSH PRIVILEGES;"
+    # Aguarda o MySQL inicializar
+    sleep 5
+
+    # Configura o MySQL (exemplo de criação de banco e usuário)
+    mysql -u root <<EOF
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+    FLUSH PRIVILEGES;
+EOF
+    
+    echo "MySQL inicializado e configurado."
 }
 
 # Função para clonar ou atualizar o repositório
@@ -59,7 +67,7 @@ setup_database_and_build() {
     mvn clean package -DskipTests
 
     echo "Iniciando a aplicação Java..."
-    exec java -jar "/${GIT_REPO_NAME}/app/backend/target/seu_projeto.jar"
+    exec java -jar /${GIT_REPO_NAME}/app/backend/target/*.jar
 }
 
 # Função para tratar erros
@@ -71,7 +79,7 @@ handle_error() {
 # Chamadas das funções com tratamento de erro
 {
     install_dependencies
-    #install_and_configure_mysql
+    install_and_configure_mysql
     #update_repository
     #setup_database_and_build
 } || handle_error

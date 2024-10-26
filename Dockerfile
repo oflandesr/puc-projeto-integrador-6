@@ -1,7 +1,14 @@
+# Usando a imagem Alpine como base
 FROM alpine:latest
 
-# Copia o script entrypoint
-COPY builder.sh /builder.sh
+
+# Instala o bash para execução do builder
+RUN apk add --no-cache bash
+
+# Copia o script builder para o container
+COPY ./builder.sh /builder.sh
+
+# Torna o script executável
 RUN chmod +x /builder.sh
 
 # Exponha a porta do MySQL
