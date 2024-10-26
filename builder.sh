@@ -59,9 +59,13 @@ update_repository() {
 # Função para configurar o banco de dados e compilar o projeto Java
 setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
+    apk add --no-cache python3 python3-pip
+    pip3 install --upgrade pi
+    
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
+    pip3 install --no-cache-dir -r requirements.txt
     python3 create_tables.py
-    python3 populate_tables.py
+    python3 etl.py
 
     echo "Compilando o projeto Java..."
     cd "/${GIT_REPO_NAME}/app/backend" || exit
