@@ -42,7 +42,8 @@ EOF
 # Função para clonar ou atualizar o repositório
 update_repository() {
     echo "Verificando o repositório..."
-
+    apk add --no-cache git
+    
     if [ -d "/${GIT_REPO_NAME}" ]; then
         echo "Diretório do repositório encontrado. Atualizando com git pull..."
         cd "/${GIT_REPO_NAME}" || exit
