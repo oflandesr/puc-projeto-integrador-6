@@ -16,7 +16,7 @@ install_and_configure_packages() {
 # Função para instalar e configurar o MySQL
 install_and_configure_mysql() {
     echo "Instalando e configurando MySQL..."
-    
+
     # Inicializa o diretório de dados
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
@@ -24,7 +24,16 @@ install_and_configure_mysql() {
     mysqld_safe --datadir=/var/lib/mysql &
     
     # Aguarda o MySQL iniciar
-    sleep 5
+    echo "Aguardando MySQL iniciar..."
+    for i in {1..10}; do
+        if mysqladmin ping -h "localhost" --silent; then
+            echo "MySQL iniciado com sucesso."
+            break
+        else
+            echo "Esperando MySQL iniciar ($i/10)..."
+            sleep 2
+        fi
+    done
 
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
@@ -62,7 +71,7 @@ setup_database_and_build() {
     echo "Configurando ambiente Python..."
     python3 -m venv /venv
     source /venv/bin/activate
-    
+
     echo "Executando scripts..."
     pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     python3 "/${GIT_REPO_NAME}/scripts/python/create_tables.py"
