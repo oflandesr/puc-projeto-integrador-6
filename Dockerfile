@@ -1,4 +1,4 @@
-FROM mysql:oraclelinux9
+FROM mysql:8.0.40-debian
 
 # Copia o script entrypoint
 COPY builder.sh builder.sh
