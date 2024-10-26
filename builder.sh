@@ -1,45 +1,47 @@
 #!/bin/bash
 set -e
 
-install_and_configure_java() {
-    echo "Instalando Maven e Java..."
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+# Função para instalar pacotes e configurar o ambiente
+install_and_configure_packages() {
+    echo "Instalando pacotes e configurando ambiente..."
+    apk add --no-cache python3 py3-pip py3-virtualenv openjdk17 mysql mysql-client git maven
+
+    # Configura JAVA_HOME
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
     echo "JAVA_HOME setado para $JAVA_HOME"
 
-    echo "Instalação concluída."
+    echo "Instalação e configuração do ambiente concluída."
 }
 
 # Função para instalar e configurar o MySQL
 install_and_configure_mysql() {
-    echo "Instalando MySQL..."
+    echo "Instalando e configurando MySQL..."
     
-    # Instala o MySQL e cria o diretório de dados
+    # Inicializa o diretório de dados
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-    # Cria o usuário e o banco de dados
-    echo "Configurando o MySQL..."
+    # Inicia o MySQL em segundo plano
     mysqld_safe --datadir=/var/lib/mysql &
-
-    # Aguarda o MySQL inicializar
+    
+    # Aguarda o MySQL iniciar
     sleep 5
 
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
-    FLUSH PRIVILEGES;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+FLUSH PRIVILEGES;
 EOF
-    
-    echo "MySQL inicializado e configurado."
+
+    echo "MySQL configurado e inicializado."
 }
 
 # Função para clonar ou atualizar o repositório
 update_repository() {
     echo "Verificando o repositório..."
-    apk add --no-cache git
-    
+
     if [ -d "/${GIT_REPO_NAME}" ]; then
         echo "Diretório do repositório encontrado. Atualizando com git pull..."
         cd "/${GIT_REPO_NAME}" || exit
@@ -55,9 +57,10 @@ update_repository() {
 # Função para configurar o banco de dados e compilar o projeto Java
 setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
-    
+
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
-    pip3 install --no-cache mysql-connector-python
+    source /venv/bin/activate
+    pip install --no-cache-dir -r requirements.txt
     python3 create_tables.py
     python3 etl.py
 
@@ -66,7 +69,7 @@ setup_database_and_build() {
     mvn clean package -DskipTests
 
     echo "Iniciando a aplicação Java..."
-    exec java -jar /${GIT_REPO_NAME}/app/backend/target/*.jar
+    #exec java -jar /${GIT_REPO_NAME}/app/backend/target/*.jar
 }
 
 # Função para tratar erros
@@ -77,7 +80,7 @@ handle_error() {
 
 # Chamadas das funções com tratamento de erro
 {
-    install_and_configure_java
+    install_and_configure_packages
     install_and_configure_mysql
     update_repository
     setup_database_and_build

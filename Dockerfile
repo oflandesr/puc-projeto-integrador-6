@@ -1,10 +1,10 @@
 # Usando a imagem Alpine como base
 FROM alpine:latest
 
-# Instala as dependências necessárias
-RUN apk add --no-cache python3 py3-pip openjdk17 mysql mysql-client bash maven
+# Instala dependências, incluindo pip3 e venv
+RUN apk add --no-cache bash
 
-# Copia o script entrypoint
+# Copia o script entrypoint e define permissões de execução
 COPY ./builder.sh /app/builder.sh
 RUN chmod +x /app/builder.sh
 
@@ -14,5 +14,5 @@ EXPOSE 3306
 # Exponha a porta da sua aplicação (ajuste conforme necessário)
 EXPOSE 8080
 
-# Define o entrypoint
-ENTRYPOINT ["/app/builder.sh"]
+# Define o entrypoint para rodar dentro do ambiente virtual
+ENTRYPOINT ["/app/venv/bin/python3", "/app/builder.sh"]
