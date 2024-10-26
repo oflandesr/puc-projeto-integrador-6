@@ -41,7 +41,8 @@ CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
 FLUSH PRIVILEGES;
-EOF    
+EOF
+    
     echo "MySQL configurado e inicializado."
 }
 
@@ -106,7 +107,7 @@ handle_error() {
     install_and_configure_mysql
     test_mysql_connection
     update_repository
-    setup_database_and_build
+    #setup_database_and_build
 } || handle_error
 
 # Manter o contêiner em execução
