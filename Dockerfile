@@ -1,9 +1,6 @@
 FROM debian:bullseye-slim
 
 # Instala o Git, Python, Maven e MySQL
-RUN apt-get update && \
-    apt-get install -y git python3 python3-pip maven mysql-server && \
-    rm -rf /var/lib/apt/lists/*
 
 # Copia o script entrypoint
 COPY ./builder.sh /app/builder.sh

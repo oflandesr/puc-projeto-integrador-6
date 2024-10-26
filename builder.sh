@@ -17,7 +17,7 @@ install_and_configure_mysql() {
     echo "Instalando MySQL..."
     
     # Instala o MySQL e cria o diretório de dados
-    //apk add --no-cache mysql mysql-client
+    apk add --no-cache mysql mysql-client
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
     # Cria o usuário e o banco de dados
