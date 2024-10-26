@@ -1,21 +1,34 @@
 #!/bin/bash
 set -e
 
-# Função para instalar OpenJDK 17 e bibliotecas necessárias
 install_dependencies() {
-    echo "Instalando OpenJDK 17 e bibliotecas necessárias..."
+    echo "Instalando OpenJDK 17, Git, Maven e Python..."
 
-    # Atualiza a lista de pacotes e instala as bibliotecas
     apt-get update && \
-    apt-get install -y openjdk-17-jdk git maven && apt-get clean
-    pip3 install --upgrade pi
+    apt-get install -y openjdk-17-jdk git maven python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
-    # Define JAVA_HOME
     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     echo "JAVA_HOME setado para $JAVA_HOME"
 
     echo "Instalação concluída."
+}
+
+# Função para instalar e configurar o MySQL
+install_and_configure_mysql() {
+    echo "Instalando o MySQL..."
+    apt-get update && \
+    apt-get install -y mysql-server && \
+    rm -rf /var/lib/apt/lists/*
+
+    echo "Configurando o MySQL..."
+    service mysql start
+
+    # Criação do banco de dados e usuário (personalize conforme necessário)
+    mysql -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};"
+    mysql -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+    mysql -e "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'localhost';"
+    mysql -e "FLUSH PRIVILEGES;"
 }
 
 # Função para clonar ou atualizar o repositório
@@ -34,23 +47,19 @@ update_repository() {
     fi
 }
 
-# Função para executar scripts Python para configuração do banco de dados
-setup_database() {
+# Função para configurar o banco de dados e compilar o projeto Java
+setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
-    pip3 install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
-    python3 "/${GIT_REPO_NAME}/scripts/pythoncreate_tables.py"
-    python3 "/${GIT_REPO_NAME}/scripts/pythonpopulate_tables.py"
-}
+    python3 create_tables.py
+    python3 populate_tables.py
 
-# Função para compilar e iniciar a aplicação Java
-build_and_run_java_app() {
     echo "Compilando o projeto Java..."
     cd "/${GIT_REPO_NAME}/app/backend" || exit
     mvn clean package -DskipTests
 
     echo "Iniciando a aplicação Java..."
-    exec java -jar "/${GIT_REPO_NAME}/app/backend/target/ProjetoIntegradorVI*.jar"
+    exec java -jar "/${GIT_REPO_NAME}/app/backend/target/seu_projeto.jar"
 }
 
 # Função para tratar erros
@@ -62,7 +71,7 @@ handle_error() {
 # Chamadas das funções com tratamento de erro
 {
     install_dependencies
+    #install_and_configure_mysql
     #update_repository
-    #setup_database
-    #build_and_run_java_app
+    #setup_database_and_build
 } || handle_error
