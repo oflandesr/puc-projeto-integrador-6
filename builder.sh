@@ -26,7 +26,7 @@ install_and_configure_mysql() {
     # Aguarda o MySQL iniciar
     echo "Aguardando MySQL iniciar..."
     for i in {1..10}; do
-        if mysqladmin ping -h "localhost" --silent; then
+        if mysql -u root ping -h ${MYSQL_HOST} --silent; then
             echo "MySQL iniciado com sucesso."
             break
         else
@@ -42,7 +42,8 @@ CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
 FLUSH PRIVILEGES;
 EOF
-
+    mysql -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "SHOW DATABASES;"
+    
     echo "MySQL configurado e inicializado."
 }
 
