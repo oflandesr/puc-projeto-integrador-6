@@ -4,9 +4,6 @@ FROM alpine:latest
 # Instala as dependências necessárias
 RUN apk add --no-cache python3 py3-pip openjdk17 mysql mysql-client bash maven
 
-# Atualiza o pip e instala a biblioteca 'pi'
-RUN pip3 install mysql-connector-python
-
 # Copia o script entrypoint
 COPY ./builder.sh /app/builder.sh
 RUN chmod +x /app/builder.sh
