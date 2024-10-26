@@ -108,9 +108,9 @@ handle_error() {
 # Chamadas das funções com tratamento de erro
 {
     install_and_configure_packages
+    configure_database
     wait_for_mysql
     test_mysql_connection
-    configure_database
     update_repository
     #setup_database_and_build
 } || handle_error

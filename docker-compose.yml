@@ -1,5 +1,5 @@
 services:
-  app:
+  projeto-integrador:
     build:
       context: .
       dockerfile: Dockerfile
@@ -8,14 +8,15 @@ services:
       - GIT_REPO_NAME=${GIT_REPO_NAME}
       - GIT_USER=${GIT_USER}
       - GIT_TOKEN=${GIT_TOKEN}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     depends_on:
-      - localhost
+      - mysql-local
 
-  localhost:
+  mysql-local:
     image: mysql:5.7
     restart: always
     environment:
