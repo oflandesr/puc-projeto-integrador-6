@@ -22,7 +22,7 @@ install_and_configure_mysql() {
 
     # Inicia o MySQL em segundo plano
     mysqld_safe --datadir=/var/lib/mysql &
-    
+    sleep 5
     # Aguarda o MySQL iniciar
     echo "Aguardando MySQL iniciar..."
     for i in {1..10}; do
@@ -41,9 +41,7 @@ CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
 FLUSH PRIVILEGES;
-EOF
-    mysql -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "SHOW DATABASES;"
-    
+EOF    
     echo "MySQL configurado e inicializado."
 }
 
@@ -107,6 +105,9 @@ handle_error() {
     install_and_configure_packages
     install_and_configure_mysql
     test_mysql_connection
-    #update_repository
-    #setup_database_and_build
+    update_repository
+    setup_database_and_build
 } || handle_error
+
+# Manter o contêiner em execução
+tail -f /dev/null
