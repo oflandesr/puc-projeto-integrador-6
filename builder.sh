@@ -38,8 +38,8 @@ install_and_configure_mysql() {
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
@@ -49,7 +49,7 @@ EOF
 # Função para testar a conexão com o MySQL
 test_mysql_connection() {
     echo "Testando conexão com o MySQL..."
-    if mysql -h "${MYSQL_HOST}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "USE ${MYSQL_DATABASE};" >/dev/null 2>&1; then
+    if mysql -h "localhost" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "USE ${MYSQL_DATABASE};" >/dev/null 2>&1; then
         echo "Conexão com o MySQL foi bem-sucedida."
     else
         echo "Erro: Não foi possível conectar ao MySQL com as credenciais fornecidas."
@@ -106,6 +106,6 @@ handle_error() {
     install_and_configure_packages
     install_and_configure_mysql
     test_mysql_connection
-    update_repository
-    setup_database_and_build
+    #update_repository
+    #setup_database_and_build
 } || handle_error

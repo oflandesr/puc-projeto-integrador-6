@@ -8,10 +8,10 @@ env_path = os.path.join(current_dir, '../../', '.env')
 load_dotenv(dotenv_path=env_path)
 
 # Obter as variáveis de ambiente
-DB_HOST = "127.0.0.1"
-DB_USER = "proj_integ_vi"
-DB_PASSWORD = "pucpivi-2024"
-DB_NAME = "proj_integ_vi"
+DB_HOST = os.getenv('MYSQL_HOST')
+DB_USER = os.getenv('MYSQL_USER')
+DB_PASSWORD = os.getenv('MYSQL_PASSWORD')
+DB_NAME = os.getenv('MYSQL_DATABASE')
 
 # Criar tabela TICKER
 CREATE_TABLE_TICKERS = """
