@@ -7,7 +7,7 @@ install_dependencies() {
 
     # Atualiza a lista de pacotes e instala as bibliotecas
     apt-get update && \
-    apt-get install -y openjdk-17-jdk git python3 python3-pip maven && apt-get clean
+    apt-get install -y openjdk-17-jdk git maven && apt-get clean
     pip3 install --upgrade pi
     rm -rf /var/lib/apt/lists/*
 
