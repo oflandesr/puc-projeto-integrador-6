@@ -18,7 +18,7 @@ install_and_configure_mysql() {
     echo "Instalando e configurando MySQL..."
 
     # Inicializa o diretório de dados
-    mysql_install_db --user=root --datadir=/var/lib/mysql
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
     
     # Cria o arquivo de configuração do MySQL se não existir
     if [ ! -f /etc/my.cnf ]; then
@@ -48,9 +48,10 @@ install_and_configure_mysql() {
 
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
     CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
-    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
     FLUSH PRIVILEGES;
 EOF
     
