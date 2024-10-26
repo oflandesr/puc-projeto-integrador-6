@@ -1,27 +1,14 @@
-# Use a imagem base do Alpine
 FROM alpine:latest
 
-# Instale pacotes necessários
-RUN apk update && \
-    apk add --no-cache openjdk17 mysql mysql-client && \
-    rm -rf /var/cache/apk/*
+# Copia o script entrypoint
+COPY builder.sh /builder.sh
+RUN chmod +x /builder.sh
 
-# Crie um usuário e grupo para o MySQL
-#RUN adduser -S mysql -G mysql
-
-# Defina a variável de ambiente JAVA_HOME
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-ENV PATH="$JAVA_HOME/bin:$PATH"
-
-# Crie o diretório para o MySQL e ajuste permissões
-RUN mkdir /var/lib/mysql && \
-    chown -R mysql:mysql /var/lib/mysql
-
-# Exponha a porta padrão do MySQL
+# Exponha a porta do MySQL
 EXPOSE 3306
 
-# Mude para o usuário mysql
-USER mysql
+# Exponha a porta da sua aplicação (ajuste conforme necessário)
+EXPOSE 8080
 
-# Comando para iniciar o MySQL
-CMD ["mysqld"]
+# Define o entrypoint
+ENTRYPOINT ["/builder.sh"]

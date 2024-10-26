@@ -17,9 +17,9 @@ install_dependencies() {
 # Função para instalar e configurar o MySQL
 install_and_configure_mysql() {
     echo "Instalando o MySQL..."
-    apt-get update && \
-    apt-get install -y mysql-server && \
-    rm -rf /var/lib/apt/lists/*
+    apk update && \
+    apk add --no-cache openjdk17 mysql mysql-client && \
+    rm -rf /var/cache/apk/*
 
     echo "Configurando o MySQL..."
     service mysql start
