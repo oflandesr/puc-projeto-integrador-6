@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Instala dependências, incluindo pip3 e venv
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash sudo
 
 # Copia o script entrypoint e define permissões de execução
 COPY ./builder.sh /builder.sh
