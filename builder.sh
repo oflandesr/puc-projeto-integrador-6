@@ -36,22 +36,25 @@ install_and_configure_mysql() {
     done
 
     # Configura o MySQL (exemplo de criação de banco e usuário)
-    if mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"; then
-        echo "Senha do root configurada."
-    else
-        echo "Erro ao definir a senha root. Verifique se o MySQL foi inicializado corretamente."
-        exit 1
-    fi
-    
-    # Configura banco de dados e usuário
-    mysql -u root --password="${MYSQL_ROOT_PASSWORD}" <<EOF
+    mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
     echo "MySQL configurado e inicializado."
+}
+
+# Função para testar a conexão com o MySQL
+test_mysql_connection() {
+    echo "Testando conexão com o MySQL..."
+    if mysql -h "localhost" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -e "USE ${MYSQL_DATABASE};" >/dev/null 2>&1; then
+        echo "Conexão com o MySQL foi bem-sucedida."
+    else
+        echo "Erro: Não foi possível conectar ao MySQL com as credenciais fornecidas."
+        exit 1
+    fi
 }
 
 # Função para clonar ou atualizar o repositório
@@ -72,16 +75,15 @@ update_repository() {
 
 # Função para configurar o banco de dados e compilar o projeto Java
 setup_database_and_build() {
-    echo "Configurando ambiente Python e executando scripts de setup..."
+    echo "Executando scripts Python para setup do banco de dados..."
 
     # Cria e ativa o ambiente virtual Python
-    python3 -m venv /app/venv
-    source /app/venv/bin/activate
+    echo "Configurando ambiente Python..."
+    python3 -m venv /venv
+    source /venv/bin/activate
 
-    echo "Instalando dependências do Python..."
+    echo "Executando scripts..."
     pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
-
-    echo "Executando scripts para criar tabelas e ETL..."
     python3 "/${GIT_REPO_NAME}/scripts/python/create_tables.py"
     python3 "/${GIT_REPO_NAME}/scripts/python/etl.py"
 
@@ -89,7 +91,8 @@ setup_database_and_build() {
     cd "/${GIT_REPO_NAME}/app/backend" || exit
     mvn clean package -DskipTests
 
-    echo "Preparado para iniciar a aplicação Java."
+    echo "Iniciando a aplicação Java..."
+    exec java -jar /${GIT_REPO_NAME}/app/backend/target/*.jar
 }
 
 # Função para tratar erros
@@ -102,6 +105,7 @@ handle_error() {
 {
     install_and_configure_packages
     install_and_configure_mysql
+    test_mysql_connection
     update_repository
     setup_database_and_build
 } || handle_error
