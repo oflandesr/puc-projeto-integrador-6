@@ -107,7 +107,7 @@ handle_error() {
     install_and_configure_mysql
     test_mysql_connection
     update_repository
-    #setup_database_and_build
+    setup_database_and_build
 } || handle_error
 
 # Manter o contêiner em execução
