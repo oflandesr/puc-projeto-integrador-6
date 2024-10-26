@@ -80,6 +80,6 @@ handle_error() {
 {
     install_dependencies
     install_and_configure_mysql
-    #update_repository
-    #setup_database_and_build
+    update_repository
+    setup_database_and_build
 } || handle_error
