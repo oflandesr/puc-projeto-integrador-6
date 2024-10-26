@@ -18,32 +18,42 @@ install_and_configure_mysql() {
     echo "Instalando e configurando MySQL..."
 
     # Inicializa o diretório de dados
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql
+    mysql_install_db --user=root --datadir=/var/lib/mysql
+    
+    # Cria o arquivo de configuração do MySQL se não existir
+    if [ ! -f /etc/my.cnf ]; then
+        echo "[mysqld]" > /etc/my.cnf
+    fi
+
+    # Adiciona a configuração do bind-address
+    if ! grep -q "bind-address" /etc/my.cnf; then
+        echo "bind-address = 0.0.0.0" >> /etc/my.cnf
+        echo "bind-address adicionado ao arquivo de configuração do MySQL."
+    fi
 
     # Inicia o MySQL em segundo plano
     mysqld_safe --datadir=/var/lib/mysql &
-    sleep 10  # Aumente o tempo de espera
-
+    sleep 5
     # Aguarda o MySQL iniciar
     echo "Aguardando MySQL iniciar..."
-    for i in {1..20}; do  # Aumente o número de tentativas
+    for i in {1..10}; do
         if mysql -h "${MYSQL_HOST}" -u root -e "SELECT 1;" --silent; then
             echo "MySQL iniciado com sucesso."
             break
         else
-            echo "Esperando MySQL iniciar ($i/20)..."
+            echo "Esperando MySQL iniciar ($i/10)..."
             sleep 2
         fi
     done
 
     # Configura o MySQL (exemplo de criação de banco e usuário)
     mysql -u root <<EOF
-CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';  # Permite conexão de qualquer endereço
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';  # Permissões
-FLUSH PRIVILEGES;
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}';
+    FLUSH PRIVILEGES;
 EOF
-
+    
     echo "MySQL configurado e inicializado."
 }
 
@@ -108,7 +118,7 @@ handle_error() {
     install_and_configure_mysql
     test_mysql_connection
     update_repository
-    setup_database_and_build
+    #setup_database_and_build
 } || handle_error
 
 # Manter o contêiner em execução
