@@ -1,6 +1,8 @@
-FROM debian:bullseye-slim
+# Usando a imagem Alpine como base
+FROM alpine:latest
 
-# Instala o Git, Python, Maven e MySQL
+# Instala as dependências necessárias
+RUN apk add --no-cache openjdk17 mysql mysql-client bash
 
 # Copia o script entrypoint
 COPY ./builder.sh /app/builder.sh

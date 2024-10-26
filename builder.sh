@@ -3,9 +3,6 @@ set -e
 
 install_and_configure_java() {
     echo "Instalando Maven e Java..."
-    
-    apk add --no-cache openjdk17 maven
-
     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     echo "JAVA_HOME setado para $JAVA_HOME"
 
@@ -17,7 +14,6 @@ install_and_configure_mysql() {
     echo "Instalando MySQL..."
     
     # Instala o MySQL e cria o diretório de dados
-    apt-get install mysql mysql-client
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
     # Cria o usuário e o banco de dados
@@ -59,8 +55,7 @@ update_repository() {
 # Função para configurar o banco de dados e compilar o projeto Java
 setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
-    apk add --no-cache python3
-    pip3 install --upgrade pi
+    
     
     cd "/${GIT_REPO_NAME}/scripts/python" || exit
     pip3 install --no-cache-dir -r requirements.txt
@@ -83,7 +78,7 @@ handle_error() {
 
 # Chamadas das funções com tratamento de erro
 {
-    install_dependencies
+    install_and_configure_java
     install_and_configure_mysql
     update_repository
     setup_database_and_build
