@@ -1,15 +1,13 @@
-# Usando a imagem Alpine como base
-FROM alpine:latest
+FROM debian:bullseye-slim
 
+# Instala o Git, Python, Maven e MySQL
+RUN apt-get update && \
+    apt-get install -y git python3 python3-pip maven mysql-server && \
+    rm -rf /var/lib/apt/lists/*
 
-# Instala o bash para execução do builder
-RUN apk add --no-cache bash
-
-# Copia o script builder para o container
-COPY ./builder.sh /builder.sh
-
-# Torna o script executável
-RUN chmod +x /builder.sh
+# Copia o script entrypoint
+COPY ./builder.sh /app/builder.sh
+RUN chmod +x /app/builder.sh
 
 # Exponha a porta do MySQL
 EXPOSE 3306
@@ -18,4 +16,4 @@ EXPOSE 3306
 EXPOSE 8080
 
 # Define o entrypoint
-ENTRYPOINT ["/builder.sh"]
+ENTRYPOINT ["/app/builder.sh"]
