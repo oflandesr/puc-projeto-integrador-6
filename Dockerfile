@@ -5,8 +5,8 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 # Copia o script entrypoint e define permissões de execução
-COPY ./builder.sh /app/builder.sh
-RUN chmod +x /app/builder.sh
+COPY ./builder.sh /builder.sh
+RUN chmod +x /builder.sh
 
 # Exponha a porta do MySQL
 EXPOSE 3306
@@ -15,4 +15,4 @@ EXPOSE 3306
 EXPOSE 8080
 
 # Define o entrypoint para rodar dentro do ambiente virtual
-ENTRYPOINT ["/app/venv/bin/python3", "/app/builder.sh"]
+ENTRYPOINT ["/builder.sh"]

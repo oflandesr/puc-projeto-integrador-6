@@ -58,11 +58,15 @@ update_repository() {
 setup_database_and_build() {
     echo "Executando scripts Python para setup do banco de dados..."
 
-    cd "/${GIT_REPO_NAME}/scripts/python" || exit
+    # Cria e ativa o ambiente virtual Python
+    echo "Configurando ambiente Python..."
+    python3 -m venv /venv
     source /venv/bin/activate
-    pip install --no-cache-dir -r requirements.txt
-    python3 create_tables.py
-    python3 etl.py
+    
+    echo "Executando scripts..."
+    pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
+    python3 "/${GIT_REPO_NAME}/scripts/python/create_tables.py"
+    python3 "/${GIT_REPO_NAME}/scripts/python/etl.py"
 
     echo "Compilando o projeto Java..."
     cd "/${GIT_REPO_NAME}/app/backend" || exit
