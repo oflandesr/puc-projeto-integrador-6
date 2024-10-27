@@ -13,6 +13,7 @@ get_or_update_repository() {
         git pull origin "${GIT_BRANCH}"
     else
         echo "Clonando o repositório..."
+        cd "/${GIT_REPO_NAME}" || exit
         git clone -b "${GIT_BRANCH}" "https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git" "/${GIT_REPO_NAME}"
     fi
 }
