@@ -1,12 +1,14 @@
 # Usando a imagem Alpine como base
-FROM alpine:latest
+FROM openjdk:17.0.1-jdk-slim
 
-# Instala dependências, incluindo pip3 e venv
-RUN apk add --no-cache bash sudo
+# Instala as dependências necessárias
+RUN apt-get update && \
+apt-get install -y python3 python3-pip python3-venv default-mysql-client git maven && \
+rm -rf /var/lib/apt/lists/*
 
-# Copia o script entrypoint e define permissões de execução
-COPY ./builder.sh /builder.sh
-RUN chmod +x /builder.sh
+# Copia o script entrypoint
+COPY ./builder.sh /app/builder.sh
+RUN chmod +x /app/builder.sh
 
 # Exponha a porta do MySQL
 EXPOSE 3306
@@ -14,5 +16,5 @@ EXPOSE 3306
 # Exponha a porta da sua aplicação (ajuste conforme necessário)
 EXPOSE 8080
 
-# Define o entrypoint para rodar dentro do ambiente virtual
-ENTRYPOINT ["/builder.sh"]
+# Define o entrypoint
+ENTRYPOINT ["/app/builder.sh"]

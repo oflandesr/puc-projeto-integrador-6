@@ -1,51 +1,8 @@
 #!/bin/bash
 set -e
 
-# Define MYSQL_HOST se não estiver definido
-MYSQL_HOST="${MYSQL_HOST:-database}"
-
-# Função para instalar pacotes e configurar o ambiente
-install_and_configure_packages() {
-    echo "Instalando pacotes e configurando ambiente..."
-    apk add --no-cache python3 py3-pip py3-virtualenv openjdk17 mysql mysql-client git maven
-
-    # Configura JAVA_HOME
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-    echo "JAVA_HOME setado para $JAVA_HOME"
-
-    echo "Instalação e configuração do ambiente concluída."
-}
-
-# Função para instalar e configurar o MySQL
-install_and_configure_mysql() {
-    echo "Instalando e configurando MySQL..."
-
-    mysql -h ${MYSQL_HOST} -uroot -p"${MYSQL_ROOT_PASSWORD}" -e "SELECT 1;"
-
-    # Configura o MySQL (exemplo de criação de banco e usuário)
-    mysql -u root -p ${MYSQL_ROOT_PASSWORD} <<EOF
-CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}@'%';
-FLUSH PRIVILEGES;
-EOF
-    
-    echo "MySQL configurado e inicializado."
-}
-
-# Função para testar a conexão com o MySQL
-test_mysql_connection() {
-    echo "Testando conexão com o MySQL..."
-    if mysql -h "${MYSQL_HOST}" -uroot -p"${MYSQL_ROOT_PASSWORD}" -e "USE ${MYSQL_DATABASE};" >/dev/null 2>&1; then
-        echo "Conexão com o MySQL foi bem-sucedida."
-    else
-        echo "Erro: Não foi possível conectar ao MySQL com as credenciais fornecidas."
-        exit 1
-    fi
-}
-
 # Função para clonar ou atualizar o repositório
-update_repository() {
+get_or_update_repository() {
     echo "Verificando o repositório..."
 
     if [ -d "/${GIT_REPO_NAME}" ]; then
@@ -60,8 +17,28 @@ update_repository() {
     fi
 }
 
-# Função para configurar o banco de dados e compilar o projeto Java
-setup_database_and_build() {
+# Função configurar o MySQL
+configure_mysql() {
+
+    # Testa conexão com banco
+    echo "Configurando usuário MYSQL para o backend..."
+
+    # Configura o MySQL (exemplo de criação de banco e usuário)
+    mysql -h "${MYSQL_HOST}" -uroot -p"${MYSQL_PASSWORD}" <<EOF
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+EOF
+    
+    echo "MySQL configurado e inicializado."
+}
+
+popule_mysql() {
+    echo "Aguardando conexão com o MySQL..."
+    until mysql -h "${MYSQL_HOST}" -uroot -p"${MYSQL_PASSWORD}" -e "SELECT 1;" > /dev/null 2>&1; do
+        echo "MySQL ainda não está acessível. Tentando novamente em 5 segundos..."
+        sleep 5
+    done
+    echo "MySQL está acessível!"
+
     echo "Executando scripts Python para setup do banco de dados..."
 
     # Cria e ativa o ambiente virtual Python
@@ -73,7 +50,9 @@ setup_database_and_build() {
     pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     python3 "/${GIT_REPO_NAME}/scripts/python/create_tables.py"
     python3 "/${GIT_REPO_NAME}/scripts/python/etl.py"
+}
 
+buidl_and_execute_application(){
     echo "Compilando o projeto Java..."
     cd "/${GIT_REPO_NAME}/app/backend" || exit
     mvn clean package -DskipTests
@@ -82,20 +61,10 @@ setup_database_and_build() {
     exec java -jar /${GIT_REPO_NAME}/app/backend/target/*.jar
 }
 
-# Função para tratar erros
-handle_error() {
-    echo "Ocorreu um erro na execução do script."
-    exit 1
-}
-
-# Chamadas das funções com tratamento de erro
-{
-    install_and_configure_packages
-    install_and_configure_mysql
-    test_mysql_connection
-    update_repository
-    #setup_database_and_build
-} || handle_error
-
+# Inicia funções ordenadamente
+get_or_update_repository
+configure_mysql
+popule_mysql
+buidl_and_execute_application
 # Manter o contêiner em execução
 tail -f /dev/null
