@@ -80,12 +80,7 @@ upsert_database() {
     echo "Executando scripts Python para o banco de dados..."
     
     # Ativa o ambiente virtual se existir
-    if [ -d "/venv" ]; then
-        source /venv/bin/activate
-    else
-        echo "Ambiente virtual Python não encontrado. Verifique a configuração do Python."
-        exit 1
-    fi
+    setup_python_env
 
     if [ ! -f "/${GIT_REPO_NAME}/.mysql_initialized" ]; then
         echo "Criando tabelas e usuários..."
