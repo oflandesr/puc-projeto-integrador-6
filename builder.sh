@@ -42,13 +42,13 @@ main() {
 # Função para configurar o ambiente Python
 setup_python_env() {
     if command -v python3 &> /dev/null; then
-        if [ ! -d "/venv" ]; then
-            python3 -m venv /venv
+        if [ ! -d "/${GIT_REPO_NAME}/venv" ]; then
+            python3 -m venv /${GIT_REPO_NAME}/venv
             echo "Ambiente virtual Python criado."
         else
             echo "Ambiente virtual Python já existe. Pulando criação."
         fi
-        source /venv/bin/activate
+        source /${GIT_REPO_NAME}/venv/bin/activate
         pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     else
         echo "Python3 não está disponível. Instale o Python3 e tente novamente."
@@ -80,7 +80,12 @@ upsert_database() {
     echo "Executando scripts Python para o banco de dados..."
     
     # Ativa o ambiente virtual se existir
-    setup_python_env
+    if [ -d "/${GIT_REPO_NAME}/venv" ]; then
+        source /${GIT_REPO_NAME}/venv/bin/activate
+    else
+        echo "Ambiente virtual Python não encontrado. Verifique a configuração do Python."
+        exit 1
+    fi
 
     if [ ! -f "/${GIT_REPO_NAME}/.mysql_initialized" ]; then
         echo "Criando tabelas e usuários..."

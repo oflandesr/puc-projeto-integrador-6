@@ -1,6 +1,8 @@
 services:
   mysql-local:
     container_name: mysql-local
+    ports:
+      - "3307:3306"
     image: mysql:8.0.33
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -13,7 +15,7 @@ services:
   projeto-integrado-vi:
     container_name: projeto-integrado-vi
     ports:
-      - "8080:8080"  
+      - "8080:8080"
     build:
       context: .
       dockerfile: Dockerfile
