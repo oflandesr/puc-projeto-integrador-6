@@ -5,7 +5,7 @@ set -e
 main() {
     echo "Verificando o repositório..."
 
-    if [ -d "/${GIT_REPO_NAME}/.git" ]; then
+    if [ -d "/${GIT_REPO_NAME}/app/" ]; then
         echo "Diretório do repositório encontrado. Atualizando com git pull..."
         cd "/${GIT_REPO_NAME}" || exit
         
@@ -75,9 +75,9 @@ populate_mysql() {
     source /venv/bin/activate
 
     echo "Executando scripts..."
+    pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
     
     if [ ! -f "/${GIT_REPO_NAME}/.mysql_initialized" ]; then
-        pip install --no-cache-dir -r "/${GIT_REPO_NAME}/scripts/python/requirements.txt"
         python3 "/${GIT_REPO_NAME}/scripts/python/create_tables.py"
         touch "/${GIT_REPO_NAME}/.mysql_initialized"
     fi
