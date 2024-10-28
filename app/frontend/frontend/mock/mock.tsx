@@ -1,6 +1,9 @@
 import Link from "next/link";
 import {TableColumn} from "react-data-table-component";
-import {Wallet} from "@/config/interfaces";
+import {FixedIncomeTransaction, Wallet} from "@/config/interfaces";
+import { formatDate } from "@/config/helpers";
+import CustomIconButton from "@/components/Button/CustomIconButton";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 interface InterfaceUserTableData {
     id: number;
@@ -59,5 +62,46 @@ const tableCols : TableColumn<Wallet>[] = [
     }
 ];
 
-export { tableData, tableCols };
+const getFixedTransactionsTableCols = (walletId: string | string[], deleteTransaction: (walletId: string, transactionId: string) => void): TableColumn<FixedIncomeTransaction>[] => [
+    {
+        name: 'Value',
+        selector: (row: FixedIncomeTransaction) => row.indexName,
+        sortable: true,
+    },
+    {
+        name: 'Index Name',
+        selector: (row: FixedIncomeTransaction) => row.institution,
+        sortable: true,
+    },
+    {
+        name: 'Tax Value',
+        selector: (row: FixedIncomeTransaction) => row.taxValue,
+        sortable: true,
+    },
+    {
+        name: 'Start Date',
+        selector: (row: FixedIncomeTransaction) => formatDate(row.startDate),
+        sortable: true,
+    },
+    {
+        name: 'End Date',
+        selector: (row: FixedIncomeTransaction) => formatDate(row.endDate),
+        sortable: true,
+    },
+    {
+        name: 'Delete',
+        cell: (row: FixedIncomeTransaction) => (
+            <div className="flex justify-center">
+                <CustomIconButton
+                    icon={<FaRegTrashAlt />}
+                    onClick={() => deleteTransaction(walletId as string, row.id.toString())}
+                />
+            </div>
+        ),
+        sortable: false,
+    },
+];
+
+
+export { tableData, tableCols, getFixedTransactionsTableCols };
 export type { InterfaceUserTableData };

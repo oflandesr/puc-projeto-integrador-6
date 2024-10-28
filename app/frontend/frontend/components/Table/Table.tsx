@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import DataTable, {TableColumn} from 'react-data-table-component';
-import CustomInput from '@/components/CustomInput';
+import CustomInput from '@/components/Layout/CustomInput';
 import useTable from "@/hooks/useTable";
 
 interface TableProps<T> {

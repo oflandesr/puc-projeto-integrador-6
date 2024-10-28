@@ -1,12 +1,12 @@
 "use client";
 
-import CustomInput from "@/components/CustomInput";
+import CustomInput from "@/components/Layout/CustomInput";
 import React, {useEffect, useState} from "react";
-import useLazyGet from "@/hooks/useLazyGet";
-import CustomButton from "@/components/CustomButton";
+import useLazyGet from "@/hooks/API/useLazyGet";
+import CustomButton from "@/components/Button/CustomButton";
 import {useUser} from "@/userContext";
 import {useRouter} from "next/navigation";
-import LoadingFullPage from "@/components/LoadingFullPage";
+import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import {UserData} from "@/config/interfaces";
 
 export default function Home() {

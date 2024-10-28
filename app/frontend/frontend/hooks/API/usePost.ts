@@ -27,7 +27,7 @@ const usePost = <T, U>() => {
 
             const response = await axiosInstance.post<T>(url, payload, { headers });
 
-            if (response.status === 201 || response.status === 200) {
+            if (response.status === 201 || response.status === 200 || response.status === 204) {
                 setData(response.data);
             } else {
                 setError(`Unexpected status code: ${response.status}`);

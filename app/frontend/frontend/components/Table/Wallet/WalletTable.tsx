@@ -5,8 +5,8 @@ import { useUser } from "@/userContext";
 import Card from "@/components/Layout/Card";
 import Table from "@/components/Table/Table";
 import { tableCols } from "@/mock/mock";
-import LoadingFullPage from "@/components/LoadingFullPage";
-import useLazyGet from "@/hooks/useLazyGet";
+import LoadingFullPage from "@/components/Layout/LoadingFullPage";
+import useLazyGet from "@/hooks/API/useLazyGet";
 import { Wallet } from "@/config/interfaces";
 
 interface WalletsTableProps {

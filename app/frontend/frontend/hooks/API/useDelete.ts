@@ -33,7 +33,7 @@ const useDelete = <T>() => {
                 headers
             });
 
-            if (response.status === 200 || response.status === 204) {
+            if (response.status === 200 || response.status === 204 || response.status === 202) {
                 setData(response.data || null);
             } else {
                 setError(`Unexpected status code: ${response.status}`);

@@ -3,8 +3,9 @@
 import React, {useEffect, useState} from "react";
 import { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "@/components/Button/CustomButton";
 // TODO https://flowbite.com/docs/plugins/charts/
+
 interface CircleProps {
     title: string;
     height: number;
@@ -82,19 +83,22 @@ export default function Circle({ title, height, onclick , data, labels, btnText 
     });
 
     useEffect(() => {
-        // If data is not available, return just 0
-        if (!data) {
-            setOptions({
-                ...options,
-                series: [0],
-            });
-        } else {
-            setOptions({
-                ...options,
-                series: data,
-            });
+        if (typeof window !== "undefined") {
+            // Verifica se os dados estão disponíveis, se não, define o valor padrão
+            if (!data) {
+                setOptions((prevOptions) => ({
+                    ...prevOptions,
+                    series: [0],
+                }));
+            } else {
+                setOptions((prevOptions) => ({
+                    ...prevOptions,
+                    series: data,
+                }));
+            }
         }
     }, [data]);
+    
 
     return (
         <>

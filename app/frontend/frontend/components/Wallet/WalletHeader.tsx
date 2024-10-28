@@ -2,9 +2,9 @@
 
 import React, { useEffect } from "react";
 import { Wallet } from "@/config/interfaces";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "@/components/Button/CustomButton";
 import { FaTrash} from "react-icons/fa";
-import useDelete from "@/hooks/useDelete";
+import useDelete from "@/hooks/API/useDelete";
 import { useUser } from "@/userContext";
 import { useRouter } from "next/navigation";
 

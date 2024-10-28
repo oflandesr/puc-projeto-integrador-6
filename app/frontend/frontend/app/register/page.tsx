@@ -1,11 +1,11 @@
 "use client";
 
-import CustomInput from "@/components/CustomInput";
+import CustomInput from "@/components/Layout/CustomInput";
 import React, { useState} from "react";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "@/components/Button/CustomButton";
 import {useRouter} from "next/navigation";
-import usePost from "@/hooks/usePost";
-import LoadingFullPage from "@/components/LoadingFullPage";
+import usePost from "@/hooks/API/usePost";
+import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import {UserData} from "@/config/interfaces";
 
 // Define the payload type (U)

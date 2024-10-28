@@ -3,7 +3,7 @@
 import React  from "react";
 import {ApexOptions} from "apexcharts";
 import Chart from "react-apexcharts";
-import CustomButton from "@/components/CustomButton";
+import CustomButton from "@/components/Button/CustomButton";
 
 interface LineProps {
     title: string;
@@ -15,6 +15,10 @@ interface LineProps {
 export default function Line({title, height, onclick, btnText}: LineProps) {
 
     const random7values = () => {
+        return Array.from({length: 7}, () => Math.floor(Math.random() * 100));
+    }
+
+    const random7days = () => {
         return Array.from({length: 7}, () => Math.floor(Math.random() * 100));
     }
 
@@ -69,7 +73,7 @@ export default function Line({title, height, onclick, btnText}: LineProps) {
             },
         ],
         xaxis: {
-            categories: ['01 February', '02 February', '03 February', '04 February', '05 February', '06 February', '07 February'],
+            categories: random7days(),
             labels: {
                 show: false,
             },
