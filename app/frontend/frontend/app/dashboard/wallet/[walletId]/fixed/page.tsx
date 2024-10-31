@@ -7,8 +7,10 @@ import Card from "@/components/Layout/Card";
 import {AddFixedIncomeTransaction, AddFixedIncomeTransactionResponse} from "@/config/interfaces";
 import CustomInput from "@/components/Layout/CustomInput";
 import CustomButton from "@/components/Button/CustomButton";
+import CustomDropdown from "@/components/Button/CustomDropdown";
 import FixedTransactionsTable from "@/components/Table/FixedTransactions/FixedTransactionsTable";
 import usePost from "@/hooks/API/usePost";
+import { indexesOptions } from "@/config/helpers";
 
 export default function Home() {
 
@@ -18,7 +20,7 @@ export default function Home() {
     const [parentRefresh, setParentRefresh] = useState<boolean>(false);
     const [currentWalletData, setCurrentWalletData] = useState<AddFixedIncomeTransaction>({
         institution: "",
-        type: "",
+        type: indexesOptions[0],
         value: 0,
         indexName: "",
         taxValue: 0,
@@ -44,6 +46,7 @@ export default function Home() {
                 username: getUserData().login,
                 password: getUserPassword(),
             };
+            console.log(currentWalletData);
             await postTransaction(url, currentWalletData, headers);
             setParentRefresh(!parentRefresh);
         } catch (error) {
@@ -52,7 +55,6 @@ export default function Home() {
     }
 
     function isDataValid( data: AddFixedIncomeTransaction ): boolean {
-        // check if date is like dd/mm/yyyy
         if (data.startDate.length !== 10 || data.endDate.length !== 10) {
             alert("Invalid date 1");
             return false;
@@ -70,7 +72,7 @@ export default function Home() {
                 <div className={"grid grid-cols-12 gap-4"}>
                     <div className={"col-span-12"}>
                         <CustomInput 
-                            placeholder={"Institution"}
+                            placeholder={"Apelido"}
                             value={currentWalletData.institution}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, institution: e.target.value})}
                             type={'text'} 
@@ -80,12 +82,12 @@ export default function Home() {
                     </div>
                     <div className={"col-span-6"}>
                         <CustomInput 
-                            placeholder={"Type"}
-                            value={currentWalletData.type}
-                            onChange={(e) => setCurrentWalletData({...currentWalletData, type: e.target.value})}
+                            placeholder={"Index Name"}
+                            value={currentWalletData.indexName}
+                            onChange={(e) => setCurrentWalletData({...currentWalletData, indexName: e.target.value})}
                             type={'text'} 
-                            name={'type'} 
-                            id={'type'}
+                            name={'indexName'} 
+                            id={'indexName'}
                         />
                     </div>
                     <div className={"col-span-6"}>
@@ -99,13 +101,12 @@ export default function Home() {
                         />
                     </div>
                     <div className={"col-span-6"}>
-                        <CustomInput 
-                            placeholder={"Index Name"}
-                            value={currentWalletData.indexName}
-                            onChange={(e) => setCurrentWalletData({...currentWalletData, indexName: e.target.value})}
-                            type={'text'} 
-                            name={'indexName'} 
-                            id={'indexName'}
+                        <CustomDropdown 
+                            label={null}
+                            placeholder={"Type"}
+                            selected={currentWalletData.type}
+                            onChange={(e) => setCurrentWalletData({...currentWalletData, type: e.target.value})}
+                            options={Object.values(indexesOptions)}
                         />
                     </div>
                     <div className={"col-span-6"}>

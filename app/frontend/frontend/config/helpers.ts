@@ -43,5 +43,7 @@ const TickerExtendedName = {
     earningsPerShare: 'Earnings Per Share'
 } as const;
 
+const indexesOptions = ["CDI", "SELIC", "IPCA"];
 
-export { createBasicAuthHeader, formatDate, tickerFilterFunction, TickerExtendedName };
+
+export { createBasicAuthHeader, formatDate, tickerFilterFunction, TickerExtendedName, indexesOptions };

@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Wallet } from "@/config/interfaces";
 import { formatDate } from "@/config/helpers";
-import CustomIconButton from "../Button/CustomIconButton";
-import CustomButton from "../Button/CustomButton";
+import CustomIconButton from "@/components/Button/CustomIconButton";
 import { CiViewList } from "react-icons/ci";
 
 interface Transaction {

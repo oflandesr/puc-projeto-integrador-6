@@ -32,10 +32,9 @@ export default function Navbar() {
         menuItems = [
             { name: "Dashboard", icon: <AiOutlineDashboard />, href: "/dashboard" },
             { name: "Home", icon: <FiHome />, href: `/dashboard/wallet/${walletId}` },
-            { name: "Tickers", icon: <BsGraphUp />, href: `/dashboard/wallet/${walletId}/tickers` },
+            { name: "List Stocks", icon: <BsGraphUp />, href: `/dashboard/wallet/${walletId}/tickers` },
             { name: "Manage Fixed", icon: <IoPinOutline />, href: `/dashboard/wallet/${walletId}/fixed` },
-            { name: "Add Variable", icon: <GrTransaction />, href: `/dashboard/wallet/${walletId}/add-variable` },
-            { name: "Variable", icon: <HiOutlineVariable />, href: `/dashboard/wallet/${walletId}/variable-transactions` },
+            { name: "Manage Variable", icon: <HiOutlineVariable />, href: `/dashboard/wallet/${walletId}/add-variable` },
             { name: "Settings", icon: <FiSettings />, href: "/dashboard/settings" , opposite: true },
         ];
     }

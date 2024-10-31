@@ -13,7 +13,7 @@ interface LineProps {
 export default function Card ({ colspan, rowspan, children, className, key }: LineProps) {
 
     return (
-        <div className={`col-span-${colspan} row-span-${rowspan} bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6` + (className ? ` ${className}` : '')} 
+        <div className={`sm:col-span-${colspan} sm:row-span-${rowspan} bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6` + (className ? ` ${className}` : '') + ` col-span-12 row-span-1`} 
             key={key ? key : ''}
         >
                 {children}

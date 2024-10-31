@@ -64,34 +64,34 @@ const tableCols : TableColumn<Wallet>[] = [
 
 const getFixedTransactionsTableCols = (walletId: string | string[], deleteTransaction: (walletId: string, transactionId: string) => void): TableColumn<FixedIncomeTransaction>[] => [
     {
-        name: 'Value',
-        selector: (row: FixedIncomeTransaction) => row.indexName,
+        name: 'Type',
+        selector: (row: FixedIncomeTransaction) => row.type,
         sortable: true,
     },
     {
         name: 'Index Name',
+        selector: (row: FixedIncomeTransaction) => row.indexName,
+        sortable: true,
+    },
+    {
+        name: 'Institution',
         selector: (row: FixedIncomeTransaction) => row.institution,
         sortable: true,
     },
     {
-        name: 'Tax Value',
-        selector: (row: FixedIncomeTransaction) => row.taxValue,
+        name: 'Start / End Date',
+        selector: (row: FixedIncomeTransaction) => `${formatDate(row.startDate)} - ${formatDate(row.endDate)}`,
         sortable: true,
     },
     {
-        name: 'Start Date',
-        selector: (row: FixedIncomeTransaction) => formatDate(row.startDate),
+        name: 'Value / Tax Value',
+        selector: (row: FixedIncomeTransaction) => `${row.value} / ${row.taxValue}`,
         sortable: true,
-    },
+    },    
     {
-        name: 'End Date',
-        selector: (row: FixedIncomeTransaction) => formatDate(row.endDate),
-        sortable: true,
-    },
-    {
-        name: 'Delete',
+        name: <span className="text-center w-full block">Actions</span>,
         cell: (row: FixedIncomeTransaction) => (
-            <div className="flex justify-center">
+            <div className="flex justify-center w-full text-center">
                 <CustomIconButton
                     icon={<FaRegTrashAlt />}
                     onClick={() => deleteTransaction(walletId as string, row.id.toString())}

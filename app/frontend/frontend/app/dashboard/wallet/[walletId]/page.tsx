@@ -10,8 +10,8 @@ import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import WalletHeader from "@/components/Wallet/WalletHeader";
 import Circle from "@/components/Charts/Circle";
 import WalletsTable from "@/components/Table/Wallet/WalletTable";
-import FixedTransactionsPreview from "@/components/Wallet/FixedTransactionsPreview";
-import VariableTransactionsPreview from "@/components/Wallet/VariableTransactionsPreview";
+import FixedTransactionsPreview from "@/components/Wallet/TableSimple/FixedTransactionsPreview";
+import VariableTransactionsPreview from "@/components/Wallet/TableSimple/VariableTransactionsPreview";
 
 export default function Home() {
 
