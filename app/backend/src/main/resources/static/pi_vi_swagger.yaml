@@ -15,6 +15,8 @@ tags:
     description: Operações referentes às carteiras
   - name: Tickers
     description: Operações referentes aos tickers
+  - name: Indexies
+    description: Operações referentes aos indexies
 security:
   - basicAuth: []
 paths:
@@ -453,6 +455,30 @@ paths:
                   $ref: '#/components/schemas/Ticker'
         '401':
           description: Credenciais inválidas
+  /index:
+    get:
+      tags:
+        - Indexies
+      summary: Lista indexies
+      description: Retorna os indexies cadastrados
+      parameters:
+        - name: data
+          in: query
+          description: Data para busca do index (yyyy-MM-dd)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickers listados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Index'
+        '401':
+          description: Credenciais inválidas
 components:
   schemas:
     User:
@@ -603,6 +629,17 @@ components:
           type: number
         ticker:
           $ref: '#/components/schemas/Ticker'
+    Index:
+      type: object
+      properties:
+        date:
+          type: string
+        selic:
+          type: number
+        cdi:
+          type: number
+        ipca:
+          type: number
   requestBodies:
     VariableTransaction:
       description: Payload para criação de uma transação variável
