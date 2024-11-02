@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import br.com.pucc.projetointegradorvi.models.TickerModel;
+import br.com.pucc.projetointegradorvi.models.IndexModel;
 
 @Service
-public interface TickerService {
-	public List<TickerModel> getTicker(Optional<String> id);
+public interface IndexService {
+	public List<IndexModel> getIndex(Optional<String> date);
 }

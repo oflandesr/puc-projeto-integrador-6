@@ -1,8 +1,12 @@
 package br.com.pucc.projetointegradorvi.models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -11,7 +15,7 @@ public class TickerModel {
 
 	@Id
 	@Column(name = "TICKER")
-	private String ticker;
+	private String id;
 
 	@Column(name = "CURRENCY")
 	private String currency;
@@ -109,16 +113,19 @@ public class TickerModel {
 	@Column(name = "EARNINGS_PER_SHARE")
 	private Float earningsPerShare;
 
+	@OneToMany(mappedBy = "ticker", fetch = FetchType.EAGER)
+	private List<PriceModel> prices;
+
 	// Construtor padrão
 	public TickerModel() {
 	}
 
-	public String getTicker() {
-		return ticker;
+	public String getId() {
+		return id;
 	}
 
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getCurrency() {
@@ -375,6 +382,14 @@ public class TickerModel {
 
 	public void setEarningsPerShare(Float earningsPerShare) {
 		this.earningsPerShare = earningsPerShare;
+	}
+
+	public List<PriceModel> getPrices() {
+		return prices;
+	}
+
+	public void setPrices(List<PriceModel> prices) {
+		this.prices = prices;
 	}
 
 }

@@ -11,6 +11,8 @@ import br.com.pucc.projetointegradorvi.models.dto.UserCreationReqDto;
 @Service
 public interface UserService {
 
+	public List<UserModel> getUser(Optional<String> userId, Optional<String> userLogin);
+	
 	public List<UserModel> getAllUsers();
 
 	public Optional<UserModel> getUserByLogin(String login);

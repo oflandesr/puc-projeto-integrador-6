@@ -28,28 +28,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<UserModel>> listUsers(@RequestParam("userId") Optional<String> userId,
 			@RequestParam("login") Optional<String> login) {
-
-		List<UserModel> usersList = List.of();
-
-		if (userId.isPresent() && login.isPresent()) {
-			// String u = userId.get();
-			// String lString = login.get();
-		} else if (userId.isPresent()) {
-			Optional<UserModel> um = this.userService.getUserById(userId.get());
-			if (um.isPresent()) {
-				usersList = List.of(um.get());
-			}
-		} else if (login.isPresent()) {
-			Optional<UserModel> um = this.userService.getUserByLogin(login.get());
-			if (um.isPresent()) {
-				usersList = List.of(um.get());
-			}
-		} else {
-
-			usersList = this.userService.getAllUsers();
-		}
-
-		return new ResponseEntity<List<UserModel>>(usersList, HttpStatus.OK);
+		return new ResponseEntity<List<UserModel>>(this.userService.getUser(userId, login), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
@@ -59,12 +38,12 @@ public class UserController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<UserModel> detailUser(@PathVariable("id") String id) {
-		
+
 		Optional<UserModel> um = this.userService.getUserById(id);
 		if (um.isPresent()) {
 			return new ResponseEntity<UserModel>(um.get(), HttpStatus.OK);
 		}
-		
+
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 	}
 }

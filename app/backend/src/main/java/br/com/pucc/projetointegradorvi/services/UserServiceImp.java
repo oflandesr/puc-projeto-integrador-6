@@ -1,5 +1,6 @@
 package br.com.pucc.projetointegradorvi.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class UserServiceImp implements UserService {
 
 		UserModel user = new UserModel(req.getLogin(), encoder.encode(req.getPassword()), req.getFirstName(),
 				req.getLastName(), roles);
-		
+
 		return this.userRepository.saveAndFlush(user);
 
 	}
@@ -61,6 +62,34 @@ public class UserServiceImp implements UserService {
 	@Override
 	public Optional<UserModel> getUserById(String userId) {
 		return this.userRepository.findById(Long.valueOf(userId));
+	}
+
+	@Override
+	public List<UserModel> getUser(Optional<String> id, Optional<String> login) {
+
+		List<UserModel> res = new ArrayList<UserModel>();
+
+		if (id.isPresent() && login.isPresent()) {
+			Optional<UserModel> um = this.userRepository.findByIdAndLogin(Long.valueOf(id.get()), login.get());
+			if (um.isPresent()) {
+				res.add(um.get());
+			}
+		} else if (id.isPresent()) {
+			Optional<UserModel> um = this.userRepository.findById(Long.valueOf(id.get()));
+			if (um.isPresent()) {
+				res.add(um.get());
+			}
+		} else if (login.isPresent()) {
+			Optional<UserModel> um = this.userRepository.findByLogin(login.get());
+			if (um.isPresent()) {
+				res.add(um.get());
+			}
+		} else {
+
+			res = this.userRepository.findAll();
+		}
+
+		return res;
 	}
 
 }

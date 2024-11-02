@@ -13,6 +13,8 @@ tags:
     description: Operações referentes aos usuários
   - name: Carteira
     description: Operações referentes às carteiras
+  - name: Tickers
+    description: Operações referentes aos tickers
 security:
   - basicAuth: []
 paths:
@@ -161,9 +163,9 @@ paths:
           required: false
           schema:
             type: string
-        - name: transactionType
+        - name: userId
           in: query
-          description: Tipo transacao [F - fixa, V - variável]
+          description: Identificador do usuário
           required: false
           schema:
             type: string
@@ -409,17 +411,46 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Dados da carteira
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VariableTransaction'
+        $ref: '#/components/requestBodies/VariableTransaction'
       responses:
         '201':
           description: Transação variável adicionada a carteira com sucesso
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: integer
+                  - $ref: '#/components/schemas/VariableTransaction'
+                    
         '400':
           description: Dados inválidos
+        '401':
+          description: Credenciais inválidas
+  /ticker:
+    get:
+      tags:
+        - Tickers
+      summary: Lista tickers
+      description: Retorna os tickers cadastrados
+      parameters:
+        - name: id
+          in: query
+          description: Identificador do ticker
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickers listados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ticker'
         '401':
           description: Credenciais inválidas
 components:
@@ -457,6 +488,78 @@ components:
           type: string
         intenFilPercent:
           type: string
+    Price:
+      type: object
+      properties:
+        id:
+          type: string
+        timestamp:
+          type: integer
+        ticker:
+          type: string
+        open:
+          type: number
+        high:
+          type: number
+        low:
+          type: number
+        close:
+          type: number
+        adjustedClose:
+          type: number
+        volume:
+          type: number
+    Ticker:
+      type: object
+      properties:
+        id:
+          type: string
+        currency:
+          type: string
+        shortName:
+          type: string
+        longName:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+        industry:
+          type: string
+        sector:
+          type: string
+        numberOfEmployees:
+          type: integer
+        regularMarketChange:
+          type: number
+        regularMarketPrice:
+          type: number
+        regularMarketDayHigh:
+          type: number
+        regularMarketDayLow:
+          type: number
+        regularMarketVolume:
+          type: integer
+        regularMarketOpen:
+          type: number
+        priceEarnings:
+          type: number
+        earningsPerShare:
+          type: number
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
     FixedTransaction:
       type: object
       required:
@@ -473,7 +576,6 @@ components:
           type: string
         value:
           type: number
-          format: float
         startDate:
           type: string
         endDate:
@@ -482,7 +584,6 @@ components:
           type: string
         taxValue:
           type: number
-          format: float
     VariableTransaction:
       type: object
       required:
@@ -490,6 +591,7 @@ components:
         - date
         - amount
         - price
+        - ticker
       properties:
         buyOrSale:
           type: string
@@ -497,10 +599,35 @@ components:
           type: string
         amount:
           type: number
-          format: float
         price:
           type: number
-          format: float
+        ticker:
+          $ref: '#/components/schemas/Ticker'
+  requestBodies:
+    VariableTransaction:
+      description: Payload para criação de uma transação variável
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - buyOrSale
+              - date
+              - amount
+              - price
+              - ticker
+            properties:
+              buyOrSale:
+                type: string
+              date:
+                type: string
+              amount:
+                type: number
+              price:
+                type: number
+              ticker:
+                type: string
   securitySchemes:
     basicAuth:
       type: http

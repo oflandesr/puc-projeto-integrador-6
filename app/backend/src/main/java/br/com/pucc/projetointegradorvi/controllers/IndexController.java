@@ -11,18 +11,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.pucc.projetointegradorvi.models.TickerModel;
-import br.com.pucc.projetointegradorvi.services.TickerService;
+import br.com.pucc.projetointegradorvi.models.IndexModel;
+import br.com.pucc.projetointegradorvi.services.IndexService;
 
 @RestController
-@RequestMapping("/ticker")
-public class TickerController {
-
+@RequestMapping("/index")
+public class IndexController {
 	@Autowired
-	private TickerService tickerService;
+	private IndexService indexService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<List<TickerModel>> listTicker(@RequestParam("id") Optional<String> id) {
-		return new ResponseEntity<List<TickerModel>>(tickerService.getTicker(id), HttpStatus.OK);
+	public ResponseEntity<List<IndexModel>> listIndexies(@RequestParam("date") Optional<String> date) {
+		return new ResponseEntity<List<IndexModel>>(this.indexService.getIndex(date), HttpStatus.OK);
 	}
 }

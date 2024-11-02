@@ -116,7 +116,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/user",
+							"raw": "http://localhost:8080/api/user?login=admin",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -129,8 +129,7 @@
 							"query": [
 								{
 									"key": "login",
-									"value": "admin",
-									"disabled": true
+									"value": "admin"
 								},
 								{
 									"key": "userId",
@@ -528,41 +527,6 @@
 					"response": []
 				},
 				{
-					"name": "List ticker",
-					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "password",
-									"value": "admin",
-									"type": "string"
-								},
-								{
-									"key": "username",
-									"value": "admin",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/ticker",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"ticker"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Add Variable Transaction",
 					"request": {
 						"auth": {
@@ -656,6 +620,98 @@
 								{
 									"key": "tvId",
 									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ticker",
+			"item": [
+				{
+					"name": "List ticker",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/ticker?id=BBAS3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"ticker"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "BBAS3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Index",
+			"item": [
+				{
+					"name": "List index",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/index?date=2023-01-02",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"index"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2023-01-02"
 								}
 							]
 						}
