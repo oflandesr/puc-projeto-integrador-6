@@ -10,7 +10,7 @@ import CustomButton from "@/components/Button/CustomButton";
 import CustomDropdown from "@/components/Button/CustomDropdown";
 import FixedTransactionsTable from "@/components/Table/FixedTransactions/FixedTransactionsTable";
 import usePost from "@/hooks/API/usePost";
-import { indexesOptions } from "@/config/helpers";
+import { indexesOptions, typesOptions } from "@/config/helpers";
 
 export default function Home() {
 
@@ -20,9 +20,9 @@ export default function Home() {
     const [parentRefresh, setParentRefresh] = useState<boolean>(false);
     const [currentWalletData, setCurrentWalletData] = useState<AddFixedIncomeTransaction>({
         institution: "",
-        type: indexesOptions[0],
+        type: typesOptions[0],
         value: 0,
-        indexName: "",
+        indexName: indexesOptions[0],
         taxValue: 0,
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
@@ -81,13 +81,12 @@ export default function Home() {
                         />
                     </div>
                     <div className={"col-span-6"}>
-                        <CustomInput 
-                            placeholder={"Index Name"}
-                            value={currentWalletData.indexName}
-                            onChange={(e) => setCurrentWalletData({...currentWalletData, indexName: e.target.value})}
-                            type={'text'} 
-                            name={'indexName'} 
-                            id={'indexName'}
+                        <CustomDropdown 
+                            label={null}
+                            placeholder={"Type"}
+                            selected={currentWalletData.type}
+                            onChange={(e) => setCurrentWalletData({...currentWalletData, type: e.target.value})}
+                            options={Object.values(typesOptions)}
                         />
                     </div>
                     <div className={"col-span-6"}>
@@ -103,9 +102,9 @@ export default function Home() {
                     <div className={"col-span-6"}>
                         <CustomDropdown 
                             label={null}
-                            placeholder={"Type"}
-                            selected={currentWalletData.type}
-                            onChange={(e) => setCurrentWalletData({...currentWalletData, type: e.target.value})}
+                            placeholder={"Index"}
+                            selected={currentWalletData.indexName}
+                            onChange={(e) => setCurrentWalletData({...currentWalletData, indexName: e.target.value})}
                             options={Object.values(indexesOptions)}
                         />
                     </div>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {TableColumn} from "react-data-table-component";
-import {FixedIncomeTransaction, Wallet} from "@/config/interfaces";
+import {FixedIncomeTransaction, VariableIncomeTransaction, Wallet} from "@/config/interfaces";
 import { formatDate } from "@/config/helpers";
 import CustomIconButton from "@/components/Button/CustomIconButton";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -62,6 +62,46 @@ const tableCols : TableColumn<Wallet>[] = [
     }
 ];
 
+const getVariableTransactionsTableCols = (walletId: string | string[], deleteTransaction: (walletId: string, transactionId: string) => void): TableColumn<VariableIncomeTransaction>[] => [
+    {
+        name: 'Ticker',
+        selector: (row: VariableIncomeTransaction) => row.ticker.ticker,
+        sortable: true,
+    },
+    {
+        name: 'Buy / Sale',
+        selector: (row: VariableIncomeTransaction) => row.buyOrSale === 0 ? 'Buy' : 'Sale',
+        sortable: true,
+    },
+    {
+        name: 'Date',
+        selector: (row: VariableIncomeTransaction) => formatDate(row.date),
+        sortable: true,
+    },
+    {
+        name: 'Amount',
+        selector: (row: VariableIncomeTransaction) => row.amount,
+        sortable: true,
+    },
+    {
+        name: 'Price',
+        selector: (row: VariableIncomeTransaction) => row.price,
+        sortable: true,
+    },
+    {
+        name: <span className="text-center w-full block">Actions</span>,
+        cell: (row: VariableIncomeTransaction) => (
+            <div className="flex justify-center w-full text-center">
+                <CustomIconButton
+                    icon={<FaRegTrashAlt />}
+                    onClick={() => deleteTransaction(walletId as string, row.id.toString())}
+                />
+            </div>
+        ),
+        sortable: false,
+    },
+];
+
 const getFixedTransactionsTableCols = (walletId: string | string[], deleteTransaction: (walletId: string, transactionId: string) => void): TableColumn<FixedIncomeTransaction>[] => [
     {
         name: 'Type',
@@ -102,6 +142,5 @@ const getFixedTransactionsTableCols = (walletId: string | string[], deleteTransa
     },
 ];
 
-
-export { tableData, tableCols, getFixedTransactionsTableCols };
+export { tableData, tableCols, getFixedTransactionsTableCols , getVariableTransactionsTableCols };
 export type { InterfaceUserTableData };

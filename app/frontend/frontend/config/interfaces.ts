@@ -122,6 +122,11 @@ interface AddVariableIncomeTransaction {
     price: number;
 }
 
+interface CustomDropdownV2Options {
+    name: string | number;
+    value: string | number;
+}
+
 export type { 
     UserData, 
     Wallet, 
@@ -132,5 +137,6 @@ export type {
     Ticker ,
     AddFixedIncomeTransaction,
     AddFixedIncomeTransactionResponse,
-    AddVariableIncomeTransaction
+    AddVariableIncomeTransaction,
+    CustomDropdownV2Options
 };
