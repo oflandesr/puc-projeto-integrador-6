@@ -26,21 +26,26 @@ const VariableTransactionForm: React.FC<VariableTransactionFormProps> = ({ ticke
 
     return (
         <div className="grid grid-cols-12 gap-4">
-            <CustomDropdownV2
-                label={null}
-                options={isBuyOrSaleOptions}
-                placeholder={"Buy or Sell"}
-                selected={variableIncomeParams.buyOrSale.toString()}
-                onChange={(e) => handleInputChange("buyOrSale", parseInt(e.target.value))}
-            />
-            <CustomInput
-                placeholder={"Date"}
-                value={variableIncomeParams.date}
-                onChange={(e) => handleInputChange("date", e.target.value)}
-                type="date"
-                name="date"
-                id="date"
-            />
+            <div className={"col-span-12"}>
+                <CustomDropdownV2
+                    label={null}
+                    options={isBuyOrSaleOptions}
+                    placeholder={"Buy or Sell"}
+                    selected={variableIncomeParams.buyOrSale.toString()}
+                    onChange={(e) => handleInputChange("buyOrSale", parseInt(e.target.value))}
+                />
+            </div>
+            <div className={"col-span-12"}>
+                <CustomInput
+                    placeholder={"Date"}
+                    value={variableIncomeParams.date}
+                    onChange={(e) => handleInputChange("date", e.target.value)}
+                    type="date"
+                    name="date"
+                    id="date"
+                />
+            </div>
+            <div className="col-span-6">
             <CustomInput
                 placeholder={"Amount"}
                 value={variableIncomeParams.amount}
@@ -49,17 +54,22 @@ const VariableTransactionForm: React.FC<VariableTransactionFormProps> = ({ ticke
                 name="amount"
                 id="amount"            
             />
-            <CustomInput
-                placeholder={"Price"}
-                value={variableIncomeParams.price}
-                onChange={(e) => handleInputChange("price", parseFloat(e.target.value))}
-                type="number"
-                name="price"
-                id="price"
-            />
+            </div>
+            <div className="col-span-6">
+                <CustomInput
+                    placeholder={"Price"}
+                    value={variableIncomeParams.price}
+                    onChange={(e) => handleInputChange("price", parseFloat(e.target.value))}
+                    type="number"
+                    name="price"
+                    id="price"
+                />
+            </div>
+            <div className="col-span-12">
             <CustomButton type="button" onClick={() => onSubmit(variableIncomeParams)} loading={loading}>
                 Add New Transaction
             </CustomButton>
+            </div>
         </div>
     );
 };

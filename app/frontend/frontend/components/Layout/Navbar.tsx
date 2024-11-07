@@ -34,7 +34,7 @@ export default function Navbar() {
             { name: "Home", icon: <FiHome />, href: `/dashboard/wallet/${walletId}` },
             { name: "List Stocks", icon: <BsGraphUp />, href: `/dashboard/wallet/${walletId}/tickers` },
             { name: "Manage Fixed", icon: <IoPinOutline />, href: `/dashboard/wallet/${walletId}/fixed` },
-            { name: "Manage Variable", icon: <HiOutlineVariable />, href: `/dashboard/wallet/${walletId}/add-variable` },
+            { name: "Manage Variable", icon: <HiOutlineVariable />, href: `/dashboard/wallet/${walletId}/variable` },
             { name: "Settings", icon: <FiSettings />, href: "/dashboard/settings" , opposite: true },
         ];
     }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Wallet } from "@/config/interfaces";
-import { formatDate } from "@/config/helpers";
+import { convertBuyOrSaleNumberToString, formatDate } from "@/config/helpers";
 import { CiViewList } from "react-icons/ci";
 import CustomIconButton from "@/components/Button/CustomIconButton";
 
@@ -65,7 +65,7 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
                                 {element.amount} - {element.price} each
                             </td>
                             <td className="px-6 py-4 text-center">
-                                {element.buyOrSale === 1 ? "Buy" : "Sale"}
+                                {convertBuyOrSaleNumberToString(element.buyOrSale)}
                             </td>
                             <td className="px-6 py-4 text-center">
                                 {formatDate(element.date)}
