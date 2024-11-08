@@ -3,7 +3,7 @@ services:
     container_name: mysql-local
     ports:
       - "3307:3306"
-    image: mysql:8.0.33
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
