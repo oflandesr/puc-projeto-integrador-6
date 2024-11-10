@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import {useUser} from "@/userContext";
-import Line from "@/components/Charts/Line";
+import Line from "@/components/Charts/Line/Line";
 import Card from "@/components/Layout/Card";
 import WalletsTable from "@/components/Table/Wallet/WalletTable";
 

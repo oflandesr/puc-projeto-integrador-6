@@ -4,14 +4,14 @@ import React, {useEffect, useState} from "react";
 import {useUser} from "@/userContext"
 import {useParams, useRouter} from "next/navigation";
 import Card from "@/components/Layout/Card";
-import { Wallet} from "@/config/interfaces";
+import { Index, Wallet} from "@/config/interfaces";
 import useLazyGet from "@/hooks/API/useLazyGet";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import WalletHeader from "@/components/Wallet/WalletHeader";
-import Circle from "@/components/Charts/Circle";
-import WalletsTable from "@/components/Table/Wallet/WalletTable";
+import Circle from "@/components/Charts/Circle/Circle";
 import FixedTransactionsPreview from "@/components/Wallet/TableSimple/FixedTransactionsPreview";
 import VariableTransactionsPreview from "@/components/Wallet/TableSimple/VariableTransactionsPreview";
+import FixedTransactionChart from "@/components/Charts/Fixed/FixedTransactionsChart";
 
 export default function Home() {
 
@@ -88,13 +88,13 @@ export default function Home() {
                 />
             </Card>
             <Card colspan={6} rowspan={1}>
-                <WalletsTable customColSpan={12} customRowSpan={1} />
-            </Card>
-            <Card colspan={6} rowspan={1}>
                 <FixedTransactionsPreview wallet={walletData} qnt={5} />
             </Card>
-            <Card colspan={6} rowspan={1}>
+            <Card colspan={12} rowspan={1}>
                 <VariableTransactionsPreview wallet={walletData} qnt={5} />
+            </Card>
+            <Card colspan={12} rowspan={1}>
+                <FixedTransactionChart />
             </Card>
         </>
     );

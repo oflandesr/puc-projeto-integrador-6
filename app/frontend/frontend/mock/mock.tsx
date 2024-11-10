@@ -65,7 +65,7 @@ const tableCols : TableColumn<Wallet>[] = [
 const getVariableTransactionsTableCols = (walletId: string | string[], deleteTransaction: (walletId: string, transactionId: string) => void): TableColumn<VariableIncomeTransaction>[] => [
     {
         name: 'Ticker',
-        selector: (row: VariableIncomeTransaction) => row.ticker.ticker,
+        selector: (row: VariableIncomeTransaction) => row.ticker.id,
         sortable: true,
     },
     {
@@ -86,6 +86,11 @@ const getVariableTransactionsTableCols = (walletId: string | string[], deleteTra
     {
         name: 'Price',
         selector: (row: VariableIncomeTransaction) => row.price,
+        sortable: true,
+    },
+    {
+        name: 'Total',
+        selector: (row: VariableIncomeTransaction) => row.price * row.amount + '$',
         sortable: true,
     },
     {

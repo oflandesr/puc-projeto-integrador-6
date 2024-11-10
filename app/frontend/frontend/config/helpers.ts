@@ -1,4 +1,4 @@
-import { AddVariableIncomeTransaction, CustomDropdownV2Options, Ticker } from "./interfaces";
+import { AddVariableIncomeTransaction, CustomDropdownV2Options, extraYAxis, Index, Ticker } from "./interfaces";
 
 // Utility function to create Basic Auth header
 const createBasicAuthHeader = (username: string, password: string) => {
@@ -36,28 +36,27 @@ function convertBuyOrSaleStringToNumber(buyOrSale: string) {
 }
 
 const TickerExtendedName = {
-    ticker: 'Ticker',
-    currency: 'Currency',
-    shortName: 'Short Name',
-    longName: 'Long Name',
-    address2: 'Address',
-    city: 'City',
-    state: 'State',
-    zip: 'Zip',
-    country: 'Country',
-    phone: 'Phone',
-    website: 'Website',
-    industry: 'Industry',
-    sector: 'Sector',
-    numberOfEmployees: 'Number of Employees',
-    regularMarketChange: 'Regular Market Change',
-    regularMarketPrice: 'Regular Market Price',
-    regularMarketDayHigh: 'Regular Market Day High',
-    regularMarketDayLow: 'Regular Market Day Low',
-    regularMarketVolume: 'Regular Market Volume',
-    regularMarketOpen: 'Regular Market Open',
-    priceEarnings: 'Price Earnings',
-    earningsPerShare: 'Earnings Per Share'
+    currency: "Currency",
+    shortName: "Short Name",
+    longName: "Long Name",
+    address2: "Address",
+    city: "City",
+    state: "State",
+    zip: "Zip",
+    country: "Country",
+    phone: "Phone",
+    website: "Website",
+    industry: "Industry",
+    sector: "Sector",
+    numberOfEmployees: "Number of Employees",
+    regularMarketChange: "Regular Market Change",
+    regularMarketPrice: "Regular Market Price",
+    regularMarketDayHigh: "Regular Market Day High",
+    regularMarketDayLow: "Regular Market Day Low",
+    regularMarketVolume: "Regular Market Volume",
+    regularMarketOpen: "Regular Market Open",
+    priceEarnings: "Price Earnings",
+    earningsPerShare: "Earnings Per Share",
 } as const;
 
 const indexesOptions = ["CDI", "SELIC", "IPCA"];

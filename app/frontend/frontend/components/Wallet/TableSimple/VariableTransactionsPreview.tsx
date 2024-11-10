@@ -45,7 +45,10 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
                             Instituition
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Value
+                            Paid
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-center">
+                            Amount
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
                             Action
@@ -59,10 +62,13 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
                     {transactions.variableIncomeTransactions.map(element => (
                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={Math.random()}>
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 text-center">
-                                {element.ticker.ticker}
+                                {element.ticker.id}
                             </th>
                             <td className="px-6 py-4 text-center">
-                                {element.amount} - {element.price} each
+                                {element.price * element.amount}
+                            </td>
+                            <td className="px-6 py-4 text-center">
+                                {element.amount}
                             </td>
                             <td className="px-6 py-4 text-center">
                                 {convertBuyOrSaleNumberToString(element.buyOrSale)}

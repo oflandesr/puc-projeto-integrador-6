@@ -35,21 +35,22 @@ export default function InfoTickerTable({ ticker }: InfoTickerTableProps) {
                 <tbody>
                     {
                         // Loop trough the object and show the values
-                        ticker && Object.entries(ticker).map(([key, value]) => (
-                            <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-100">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {
-                                    // Check if `key` is a key of TickerExtendedName and then retrieve the value
-                                    key in TickerExtendedName 
-                                    ? TickerExtendedName[key as keyof typeof TickerExtendedName] 
-                                    : key
-                                }
-                                </th>
-                                <td className=" py-4">
-                                    {value}
-                                </td>
-                            </tr>
-                        ))
+                        ticker && Object.entries(ticker).map(([key, value]) => {
+                            if (!(key in TickerExtendedName)) {
+                                return null;
+                            }
+
+                            return (
+                                <tr key={key} className="bg-gray-50 odd:bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
+                                        {TickerExtendedName[key as keyof typeof TickerExtendedName] || key}
+                                    </td>
+                                    <td className="py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                        {value}
+                                    </td>
+                                </tr>
+                            );
+                        })
                     }
                 </tbody>
             </table>

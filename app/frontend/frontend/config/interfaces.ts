@@ -140,6 +140,18 @@ interface CustomDropdownV2Options {
     value: string | number;
 }
 
+interface Index {
+    date: string;
+    selic: number | null;
+    cdi: number | null;
+    ipca: number | null;
+}
+
+interface extraYAxis {
+    name: string;
+    extraYAxis: number[];
+}
+
 export type { 
     UserData, 
     Wallet, 
@@ -151,5 +163,7 @@ export type {
     AddFixedIncomeTransaction,
     AddFixedIncomeTransactionResponse,
     AddVariableIncomeTransaction,
-    CustomDropdownV2Options
+    CustomDropdownV2Options,
+    Index,
+    extraYAxis
 };
