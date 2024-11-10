@@ -1,8 +1,6 @@
 "use client";
 
-import ChartHeader from "./ChartHeader";
 import getChartOptions from "./getChartOptions";
-import PerformanceLabel from "./PerformanceLabel";
 import React from "react";
 import Chart from "react-apexcharts";
 import CustomButton from "@/components/Button/CustomButton";
@@ -17,21 +15,20 @@ interface LineProps {
     showLabel: boolean;
     isBtnActive: boolean;
     onClick: () => void;
+    extraYAxis?: extraYAxis[];
     btnText?: string;
 }
 
-export default function Line( { title, seriesName, height, yAxis, xAxis, showLabel, isBtnActive, onClick, btnText }: LineProps) {
+export default function MultiLine( { title, seriesName, height, yAxis, xAxis, showLabel, isBtnActive, onClick, extraYAxis, btnText }: LineProps) {
 
-const latestValue = yAxis[yAxis.length - 1];
-const startDate = String(xAxis[0]);
-const endDate = String(xAxis[xAxis.length - 1]);
-const options = getChartOptions({ seriesName, xAxis, yAxis, showLabel });
+const options = getChartOptions({ seriesName, xAxis, yAxis, showLabel, extraYAxis });
 
 return (
     <>
         <div className="flex justify-between">
-            <ChartHeader title={title} latestValue={latestValue} startDate={startDate} endDate={endDate} />
-            <PerformanceLabel start={yAxis[0]} end={latestValue} />
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                {title}
+            </h3>
         </div>
         <div>
             <Chart options={options} series={options.series} type="area" height={height} />

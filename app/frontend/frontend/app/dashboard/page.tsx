@@ -18,16 +18,10 @@ export default function Home() {
     return (
         <>
             <Card colspan={6} rowspan={1}>
-                <Line
-                    title="Revenue"
-                    height={250}
-                />
+                Random Line Chart
             </Card>
             <Card colspan={6} rowspan={1}>
-                <Line
-                    title="Stock"
-                    height={250}
-                />
+                Random Line Chart
             </Card>
             <Card colspan={12} rowspan={1}>
                 <WalletsTable customColSpan={12} customRowSpan={1} />

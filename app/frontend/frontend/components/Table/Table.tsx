@@ -2,7 +2,7 @@
 import React from 'react';
 import DataTable, {TableColumn} from 'react-data-table-component';
 import CustomInput from '@/components/Layout/CustomInput';
-import useTable from "@/hooks/useTable";
+import useTable from "@/hooks/Initialize/useTable";
 
 interface TableProps<T> {
     columns: TableColumn<T>[]; // Use TableColumn from react-data-table-component

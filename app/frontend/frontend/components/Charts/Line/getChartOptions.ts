@@ -59,7 +59,7 @@ const getMultiLineChartOptions = ({ seriesName, xAxis, yAxis, showLabel, extraYA
             },
         },
         dataLabels: { enabled: false },
-        stroke: { width: 6 },
+        stroke: { width: 6, curve: "smooth" },
         grid: {
             show: false,
             strokeDashArray: 2,

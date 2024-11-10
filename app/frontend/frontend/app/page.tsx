@@ -2,7 +2,7 @@
 
 import CustomInput from "@/components/Layout/CustomInput";
 import React, {useEffect, useState} from "react";
-import useLazyGet from "@/hooks/API/useLazyGet";
+import useLazyGet from "@/hooks/Api/useLazyGet";
 import CustomButton from "@/components/Button/CustomButton";
 import {useUser} from "@/userContext";
 import {useRouter} from "next/navigation";

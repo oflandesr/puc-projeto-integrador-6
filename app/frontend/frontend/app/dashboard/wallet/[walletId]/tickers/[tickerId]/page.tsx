@@ -7,7 +7,7 @@ import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import ErrorFullPage from "@/components/Layout/ErrorFullPage";
 import HeaderCards from "@/components/Ticker/Header/HeaderCards";
 import InfoTickerTable from "@/components/Ticker/TableSimple/InfoTickerTable";
-import useFetchTicker from "@/hooks/useFetchTicker";
+import useFetchTicker from "@/hooks/Api/useFetchTicker";
 import TickerActions from "@/components/Ticker/Extra/TickerActions";
 import TickerHeader from "@/components/Ticker/Header/TickerHeader";
 import Line from "@/components/Charts/Line/Line";

@@ -4,7 +4,7 @@ import CustomInput from "@/components/Layout/CustomInput";
 import React, { useState} from "react";
 import CustomButton from "@/components/Button/CustomButton";
 import {useRouter} from "next/navigation";
-import usePost from "@/hooks/API/usePost";
+import usePost from "@/hooks/Api/usePost";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import {UserData} from "@/config/interfaces";
 

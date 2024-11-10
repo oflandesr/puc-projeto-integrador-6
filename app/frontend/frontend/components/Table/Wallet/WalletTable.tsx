@@ -6,7 +6,7 @@ import Card from "@/components/Layout/Card";
 import Table from "@/components/Table/Table";
 import { tableCols } from "@/mock/mock";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
-import useLazyGet from "@/hooks/API/useLazyGet";
+import useLazyGet from "@/hooks/Api/useLazyGet";
 import { Wallet } from "@/config/interfaces";
 
 interface WalletsTableProps {

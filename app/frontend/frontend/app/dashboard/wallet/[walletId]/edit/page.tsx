@@ -5,10 +5,10 @@ import {useUser} from "@/userContext"
 import {useParams} from "next/navigation";
 import Card from "@/components/Layout/Card";
 import {PatchWalletResponse, Wallet} from "@/config/interfaces";
-import useLazyGet from "@/hooks/API/useLazyGet";
+import useLazyGet from "@/hooks/Api/useLazyGet";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import WalletsTable from "@/components/Table/Wallet/WalletTable";
-import usePatch from "@/hooks/API/usePatch";
+import usePatch from "@/hooks/Api/usePatch";
 import CustomInput from "@/components/Layout/CustomInput";
 import CustomButton from "@/components/Button/CustomButton";
 import ErrorCard from "@/components/Layout/ErrorCard";

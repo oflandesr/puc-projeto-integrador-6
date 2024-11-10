@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@/userContext";
-import useGet from "./API/useGet";
+import useGet from "./useGet";
 import { Ticker } from "@/config/interfaces";
 
 export default function useFetchTicker(tickerId : string) {

@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@/userContext";
 import { useParams, useRouter } from "next/navigation";
 import Card from "@/components/Layout/Card";
-import useGet from "@/hooks/API/useGet";
+import useGet from "@/hooks/Api/useGet";
 import { Ticker } from "@/config/interfaces";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import CustomDropdown from "@/components/Button/CustomDropdown";
 import CustomInput from "@/components/Layout/CustomInput";
-import useFetchIndustriesAndSectors from "@/hooks/useFetchIndustriesAndSectors";
-import useFilter from "@/hooks/useFilter";
+import useFetchIndustriesAndSectors from "@/hooks/Filters/useFetchIndustriesAndSectors";
+import useFilter from "@/hooks/Filters/useFilter";
 import { tickerFilterFunction } from "@/config/helpers";
 import TickerItem from "@/components/Ticker/Search/TickerItem";
 

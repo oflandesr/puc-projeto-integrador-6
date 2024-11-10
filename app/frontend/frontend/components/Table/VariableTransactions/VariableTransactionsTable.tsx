@@ -6,11 +6,11 @@ import Card from "@/components/Layout/Card";
 import Table from "@/components/Table/Table";
 import { getFixedTransactionsTableCols, getVariableTransactionsTableCols, tableCols } from "@/mock/mock";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
-import useLazyGet from "@/hooks/API/useLazyGet";
+import useLazyGet from "@/hooks/Api/useLazyGet";
 import { Wallet } from "@/config/interfaces";
 import { useParams } from "next/navigation";
-import useGet from "@/hooks/API/useGet";
-import useDelete from "@/hooks/API/useDelete";
+import useGet from "@/hooks/Api/useGet";
+import useDelete from "@/hooks/Api/useDelete";
 
 interface WalletsTableProps {
     customColSpan: number;

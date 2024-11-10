@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Wallet } from "@/config/interfaces";
 import CustomButton from "@/components/Button/CustomButton";
 import { FaTrash} from "react-icons/fa";
-import useDelete from "@/hooks/API/useDelete";
+import useDelete from "@/hooks/Api/useDelete";
 import { useUser } from "@/userContext";
 import { useRouter } from "next/navigation";
 
@@ -57,17 +57,10 @@ export default function WalletHeader({ walletData }: WalletPageProps) {
     }
 
     return (
-        <div className="flex flex-col items-center h-16">
-            <h1 className="text-2xl font-semibold mb-2">
+        <div className="flex flex-col items-center">
+            <h1 className="text-2xl font-semibold">
                 {walletData?.name}
             </h1>
-            <CustomButton
-                type={"button"}
-                onClick={() => handleDeleteWallet()}
-                className={"bg-transparent hover:bg-red-200 text-red-400 flex items-center hover:bg-transparent w-16 h-8"}
-            >
-                <FaTrash className="w-4 h-4 text-gray-400" /> {/* Ícone de lixeira */}
-            </CustomButton>
         </div>
     );
 }

@@ -1,60 +1,54 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect } from "react";
 import {useUser} from "@/userContext"
-import {useParams, useRouter} from "next/navigation";
+import {useParams } from "next/navigation";
 import Card from "@/components/Layout/Card";
 import { Index, Wallet} from "@/config/interfaces";
-import useLazyGet from "@/hooks/API/useLazyGet";
+import useLazyGet from "@/hooks/Api/useLazyGet";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import WalletHeader from "@/components/Wallet/WalletHeader";
-import Circle from "@/components/Charts/Circle/Circle";
 import FixedTransactionsPreview from "@/components/Wallet/TableSimple/FixedTransactionsPreview";
 import VariableTransactionsPreview from "@/components/Wallet/TableSimple/VariableTransactionsPreview";
-import FixedTransactionChart from "@/components/Charts/Fixed/FixedTransactionsChart";
+import WalletSummary from "@/components/Wallet/WalletSummary";
 
 export default function Home() {
 
-    const router = useRouter();
     const {getUserData, userId, getUserPassword} = useUser();
     const { walletId } = useParams();
-
-    const [series, setSeries] = useState<number[]>([]);
-
     const {
         error : walletError,
         loading : loadingWallet,
         data : walletData,
         fetchData : fetchWalletData
     } = useLazyGet<Wallet>();
+    const {
+        error: indexError,
+        loading: loadingIndex,
+        data: indexData,
+        fetchData: fetchIndexData,
+    } = useLazyGet<Index[]>();    
 
-    async function handleGetWalletData() {
+    async function handleGetPageData() {
         try {
-            const url = `/wallet/${walletId}`;
+            const urlWallet = `/wallet/${walletId}`;
+            const urlIndex = `/index`;
+
             const headers = {
                 username: getUserData().login,
                 password: getUserPassword(),
             };
-            await fetchWalletData(url, headers);
+
+            await fetchWalletData(urlWallet, headers);
+            await fetchIndexData(urlIndex, headers);
         } catch (e) {
             console.error(e);
         }
     }
 
     useEffect(() => {
-        handleGetWalletData();
+        handleGetPageData();
     }, [getUserData, userId]);
-
-    useEffect(() => {
-        if (!walletData || !walletData?.intenFixIncPercent || !walletData?.intenStockPercent || !walletData?.intenFilPercent) {
-            return;
-        }
-        setSeries([
-            parseInt(walletData.intenFixIncPercent ?? "0"),
-            parseInt(walletData.intenStockPercent ?? "0"),
-            parseInt(walletData.intenFilPercent ?? "0"),
-        ]);
-    }, [walletData]);
 
     if (loadingWallet) {
         return <LoadingFullPage />;
@@ -71,30 +65,19 @@ export default function Home() {
     return (
         <>
             <Card colspan={12} rowspan={1}>
-                {/* Wallet header, will have the name here */}
                 <WalletHeader walletData={walletData} />
             </Card>
-            <Card colspan={6} rowspan={1}>
-                {/* Wallet % distributed to each type of investment, fixed income, stock, fii */}
-                <Circle
-                    title=""
-                    height={250}
-                    onclick={() => {
-                        router.push(`/dashboard/wallet/${walletId}/edit`);
-                    }}
-                    labels={["Fixed Income", "Stock", "FII"]}
-                    data={series}
-                    btnText="Editar"
-                />
+            <Card colspan={12} rowspan={1}>
+                {walletData && <WalletSummary walletData={walletData} />}
             </Card>
             <Card colspan={6} rowspan={1}>
                 <FixedTransactionsPreview wallet={walletData} qnt={5} />
             </Card>
-            <Card colspan={12} rowspan={1}>
+            <Card colspan={6} rowspan={1}>
                 <VariableTransactionsPreview wallet={walletData} qnt={5} />
             </Card>
             <Card colspan={12} rowspan={1}>
-                <FixedTransactionChart />
+                Fixed Transactions Chart Will Be Here
             </Card>
         </>
     );

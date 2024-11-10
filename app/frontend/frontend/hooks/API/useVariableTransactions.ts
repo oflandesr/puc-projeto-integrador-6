@@ -1,5 +1,5 @@
 import { useState } from "react";
-import usePost from "@/hooks/API/usePost";
+import usePost from "@/hooks/Api/usePost";
 import { AddVariableIncomeTransaction, VariableIncomeTransaction } from "@/config/interfaces";
 import { isAddVariableIncomeTransactionValid } from "@/config/helpers";
 import { useUser } from "@/userContext";

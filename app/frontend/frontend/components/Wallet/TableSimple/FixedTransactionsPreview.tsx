@@ -36,7 +36,6 @@ export default function FixedTransactionsPreview({ wallet, qnt = 5 }: Transactio
         <div className="flex flex-col items-center scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto max-h-96">
             <h1 className="text-2xl font-semibold mb-3">
                 Fixed Income Transactions 
-                <CustomIconButton icon={<CiViewList size={20} color="black"/>} />
             </h1>
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 rounded-lg">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 rouded-t-lg">

@@ -4,9 +4,9 @@ import React from "react";
 import { useParams } from "next/navigation";
 import Card from "@/components/Layout/Card";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
-import useFetchTicker from "@/hooks/useFetchTicker";
+import useFetchTicker from "@/hooks/Api/useFetchTicker";
 import VariableTransactionsTable from "@/components/Table/VariableTransactions/VariableTransactionsTable";
-import { useVariableTransaction } from "@/hooks/useVariableTransactions";
+import { useVariableTransaction } from "@/hooks/Api/useVariableTransactions";
 import VariableTransactionForm from "@/components/Ticker/Add/VariableTransactionForm";
 
 export default function Home() {
