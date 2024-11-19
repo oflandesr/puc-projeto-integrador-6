@@ -17,7 +17,11 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
 import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
 import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
@@ -75,10 +79,43 @@ public class WalletController {
 	// FIXED TRANSACTION
 	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<FixedTransactionModel> createWalletFixedTransaction(@PathVariable("walletId") String walletId,
-			@RequestBody FixedTransactionDto wallet) {
+			@RequestBody FixedTransactionReqDto wallet) {
 
 		return new ResponseEntity<FixedTransactionModel>(
 				this.walletService.createWalletFixedTransaction(walletId, wallet), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionDto>> listWalletFixedTransaction(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt) {
+
+		return new ResponseEntity<List<FixedTransactionDto>>(
+				this.walletService.getWalletFixedTransaction(walletId, startAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/institution", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionByInstitutionDto>> listWalletFixedTransactionByInstitution(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt) {
+
+		return new ResponseEntity<List<FixedTransactionByInstitutionDto>>(
+				this.walletService.getWalletFixedTransactionByInstitution(walletId, startAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/variation", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<FixedTransactionWithVariationDto> listWalletFixedTransactionWithVariation(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt) {
+
+		return new ResponseEntity<FixedTransactionWithVariationDto>(
+				this.walletService.getWalletFixedTransactionWithVariation(walletId, startAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/variation/institution", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>> listWalletFixedTransactionWithVariationByInstitution(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt) {
+
+		return new ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>>(
+				this.walletService.getWalletFixedTransactionWithVariationByInstitution(walletId, startAt),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/{tfId}", method = RequestMethod.DELETE, produces = "application/json")

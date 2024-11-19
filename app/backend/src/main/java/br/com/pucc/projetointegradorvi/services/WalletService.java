@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
 import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
 import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
@@ -28,7 +32,7 @@ public interface WalletService {
 
 	public Optional<WalletModel> deleteWallet(String walletId);
 
-	public FixedTransactionModel createWalletFixedTransaction(String walletId, FixedTransactionDto ftransaction);
+	public FixedTransactionModel createWalletFixedTransaction(String walletId, FixedTransactionReqDto ftransaction);
 
 	public Optional<FixedTransactionModel> deleteWalletFixedTransaction(String walletId, String ftId);
 
@@ -36,4 +40,15 @@ public interface WalletService {
 			VariableTransactionDto vtransaction);
 
 	public Optional<VariableTransactionModel> deleteWalletVariableTransaction(String walletId, String vtId);
+
+	public List<FixedTransactionDto> getWalletFixedTransaction(String walletId, Optional<String> startAt);
+
+	public List<FixedTransactionByInstitutionDto> getWalletFixedTransactionByInstitution(String walletId,
+			Optional<String> startAt);
+
+	public FixedTransactionWithVariationDto getWalletFixedTransactionWithVariation(String walletId,
+			Optional<String> startAt);
+
+	public List<FixedTransactionWithVariationByInstitutionDto> getWalletFixedTransactionWithVariationByInstitution(
+			String walletId, Optional<String> startAt);
 }

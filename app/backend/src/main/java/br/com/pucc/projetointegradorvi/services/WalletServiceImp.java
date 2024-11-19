@@ -1,6 +1,8 @@
 package br.com.pucc.projetointegradorvi.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +16,11 @@ import br.com.pucc.projetointegradorvi.models.TickerModel;
 import br.com.pucc.projetointegradorvi.models.UserModel;
 import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
 import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
@@ -23,6 +29,7 @@ import br.com.pucc.projetointegradorvi.models.dto.WalletUpdateResDto;
 import br.com.pucc.projetointegradorvi.repositories.FixedTransactionRepository;
 import br.com.pucc.projetointegradorvi.repositories.TickerRepository;
 import br.com.pucc.projetointegradorvi.repositories.VariableTransactionRepository;
+import br.com.pucc.projetointegradorvi.repositories.WalletQueriedRepository;
 import br.com.pucc.projetointegradorvi.repositories.WalletRepository;
 
 @Service
@@ -35,10 +42,13 @@ public class WalletServiceImp implements WalletService {
 	private WalletRepository walletRepository;
 
 	@Autowired
-	private FixedTransactionRepository ftRepository;
+	private WalletQueriedRepository walletQueriedRepository;
 
 	@Autowired
-	private VariableTransactionRepository vtRepository;
+	private FixedTransactionRepository fixedTransactionRepository;
+
+	@Autowired
+	private VariableTransactionRepository variableTransactionRepository;
 
 	@Autowired
 	private TickerRepository tickerRepository;
@@ -137,7 +147,7 @@ public class WalletServiceImp implements WalletService {
 	}
 
 	@Override
-	public FixedTransactionModel createWalletFixedTransaction(String walletId, FixedTransactionDto ftransaction) {
+	public FixedTransactionModel createWalletFixedTransaction(String walletId, FixedTransactionReqDto ftransaction) {
 		Optional<WalletModel> optionalWallet = walletRepository.findById(Long.valueOf(walletId));
 
 		if (optionalWallet.isPresent()) {
@@ -145,7 +155,7 @@ public class WalletServiceImp implements WalletService {
 			FixedTransactionModel ftm = new FixedTransactionModel(w, ftransaction.getInstitution(),
 					ftransaction.getType(), ftransaction.getValue(), ftransaction.getStartDate(),
 					ftransaction.getEndDate(), ftransaction.getIndexName(), ftransaction.getValue());
-			return this.ftRepository.saveAndFlush(ftm);
+			return this.fixedTransactionRepository.saveAndFlush(ftm);
 		}
 
 		throw new RuntimeException("Wallet not found with id: " + walletId);
@@ -155,9 +165,9 @@ public class WalletServiceImp implements WalletService {
 	public Optional<FixedTransactionModel> deleteWalletFixedTransaction(String walletId, String ftId) {
 		Optional<WalletModel> w = walletRepository.findById(Long.valueOf(walletId));
 		if (w.isPresent()) {
-			Optional<FixedTransactionModel> f = this.ftRepository.findById(Long.valueOf(ftId));
+			Optional<FixedTransactionModel> f = this.fixedTransactionRepository.findById(Long.valueOf(ftId));
 			if (f.isPresent()) {
-				this.ftRepository.delete(f.get());
+				this.fixedTransactionRepository.delete(f.get());
 				return f;
 			}
 			throw new RuntimeException("Fixed transaction not found with id: " + ftId);
@@ -178,7 +188,7 @@ public class WalletServiceImp implements WalletService {
 
 				VariableTransactionModel v = new VariableTransactionModel(w.get(), t.get(), vtransaction.getBuyOrSale(),
 						vtransaction.getDate(), vtransaction.getAmount(), vtransaction.getPrice());
-				return this.vtRepository.saveAndFlush(v);
+				return this.variableTransactionRepository.saveAndFlush(v);
 			}
 			throw new RuntimeException("Ticker not found with id: " + vtransaction.getTicker());
 		}
@@ -190,14 +200,73 @@ public class WalletServiceImp implements WalletService {
 	public Optional<VariableTransactionModel> deleteWalletVariableTransaction(String walletId, String vtId) {
 		Optional<WalletModel> w = walletRepository.findById(Long.valueOf(walletId));
 		if (w.isPresent()) {
-			Optional<VariableTransactionModel> v = this.vtRepository.findById(Long.valueOf(vtId));
+			Optional<VariableTransactionModel> v = this.variableTransactionRepository.findById(Long.valueOf(vtId));
 			if (v.isPresent()) {
-				this.vtRepository.delete(v.get());
+				this.variableTransactionRepository.delete(v.get());
 				return v;
 			}
 			throw new RuntimeException("Fixed transaction not found with id: " + vtId);
 		}
 		throw new RuntimeException("Wallet not found with id: " + walletId);
+	}
+
+	@Override
+	public List<FixedTransactionDto> getWalletFixedTransaction(String walletId, Optional<String> startAt) {
+		LocalDate ld = startAt.map(date -> LocalDate.parse(date)).orElse(LocalDate.now());
+
+		List<FixedTransactionDto> investments = this.walletQueriedRepository
+				.findFixedTransaction(Long.valueOf(walletId), ld);
+
+		if (investments != null && !investments.isEmpty()) {
+			return investments;
+		}
+
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<FixedTransactionByInstitutionDto> getWalletFixedTransactionByInstitution(String walletId,
+			Optional<String> startAt) {
+		LocalDate ld = startAt.map(date -> LocalDate.parse(date)).orElse(LocalDate.now());
+
+		List<FixedTransactionByInstitutionDto> investments = this.walletQueriedRepository
+				.findFixedTransactionsByInstitution(Long.valueOf(walletId), ld);
+
+		if (investments != null && !investments.isEmpty()) {
+			return investments;
+		}
+
+		return Collections.emptyList();
+	}
+
+	@Override
+	public FixedTransactionWithVariationDto getWalletFixedTransactionWithVariation(String walletId,
+			Optional<String> startAt) {
+		LocalDate ld = startAt.map(date -> LocalDate.parse(date)).orElse(LocalDate.now());
+
+		FixedTransactionWithVariationDto investment = this.walletQueriedRepository
+				.findFixedTransactionWithVariation(Long.valueOf(walletId), ld);
+
+		if (investment != null) {
+			return investment;
+		}
+
+		return new FixedTransactionWithVariationDto(0.0);
+	}
+
+	@Override
+	public List<FixedTransactionWithVariationByInstitutionDto> getWalletFixedTransactionWithVariationByInstitution(
+			String walletId, Optional<String> startAt) {
+		LocalDate ld = startAt.map(date -> LocalDate.parse(date)).orElse(LocalDate.now());
+
+		List<FixedTransactionWithVariationByInstitutionDto> investments = this.walletQueriedRepository
+				.findFixedTransactionWithVariationByInstitution(Long.valueOf(walletId), ld);
+
+		if (investments != null && !investments.isEmpty()) {
+			return investments;
+		}
+
+		return Collections.emptyList();
 	}
 
 }
