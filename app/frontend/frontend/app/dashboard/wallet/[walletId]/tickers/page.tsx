@@ -13,6 +13,7 @@ import useFetchIndustriesAndSectors from "@/hooks/Filters/useFetchIndustriesAndS
 import useFilter from "@/hooks/Filters/useFilter";
 import { tickerFilterFunction } from "@/config/helpers";
 import TickerItem from "@/components/Ticker/Search/TickerItem";
+import Header from "@/components/Layout/Header";
 
 export default function Home() {
     const router = useRouter();
@@ -63,6 +64,7 @@ export default function Home() {
 
     return (
         <>
+            <Header title="Procure por uma ação" />
             <Card colspan={12} rowspan={1}>
                 <div className="grid grid-cols-12 gap-4">
                     <div className="col-span-12">

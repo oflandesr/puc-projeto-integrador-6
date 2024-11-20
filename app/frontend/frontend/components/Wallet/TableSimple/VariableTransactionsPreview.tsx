@@ -17,6 +17,7 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
 
     useEffect(() => {
         setTransactions(wallet);
+        console.log(wallet);
     }, [wallet]);
 
     useEffect(() => {
@@ -41,19 +42,19 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 rouded-t-lg">
                     <tr>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Instituition
+                            Ativo
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Paid
+                            Pago
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Amount
+                            Quantidade
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Action
+                            Compra / Venda
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Date
+                            Dia
                         </th>
                     </tr>
                 </thead>
@@ -70,7 +71,7 @@ export default function VariableTransactionsPreview({ wallet, qnt = 5 }: Transac
                                 {element.amount}
                             </td>
                             <td className="px-6 py-4 text-center">
-                                {convertBuyOrSaleNumberToString(element.buyOrSale)}
+                                {convertBuyOrSaleNumberToString(element.buyOrSale)} ({element.buyOrSale})
                             </td>
                             <td className="px-6 py-4 text-center">
                                 {formatDate(element.date)}

@@ -75,18 +75,18 @@ export default function Home() {
             <Card colspan={12} rowspan={1}>
                 <div className={"grid grid-cols-12 gap-4"}>
                     <div className={"col-span-6"}>
-                        <CustomInput placeholder={"Wallet Name"} value={walletData.name}
+                        <CustomInput placeholder={"Nome Carteira"} value={walletData.name}
                                      onChange={(e) => setWalletData({...walletData, name: e.target.value})}
                                      type={'text'} name={'name'} id={'name'}/>
                     </div>
                     <div className={"col-span-6"}>
-                        <CustomInput placeholder={"Wallet Objective"} value={walletData.objective}
+                        <CustomInput placeholder={"Objetivo Carteira"} value={walletData.objective}
                                      onChange={(e) => setWalletData({...walletData, objective: e.target.value})}
                                      type={'text'} name={'objective'} id={'objective'}/>
                     </div>
                     <div className={"col-span-4"}>
                         <CustomInput
-                            placeholder={"Fixed Income %"}
+                            placeholder={"Renda Fixa %"}
                             value={walletData.intenFixIncPercent || ""} // Use an empty string if the value is falsy
                             onChange={(e) => {
                                 const value = e.target.value;
@@ -102,7 +102,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-4"}>
                         <CustomInput
-                            placeholder={"Stock %"}
+                            placeholder={"Ações %"}
                             value={walletData.intenStockPercent || ""}
                             onChange={(e) => {
                                 const value = e.target.value;
@@ -118,7 +118,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-4"}>
                         <CustomInput
-                            placeholder={"Fii %"}
+                            placeholder={"Fundos %"}
                             value={walletData.intenFilPercent || ""}
                             onChange={(e) => {
                                 const value = e.target.value;
@@ -134,7 +134,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-12"}>
                         <CustomButton type={"button"} onClick={handleDataSubmit} loading={createWalletLoading}>
-                            <span>Create Wallet</span>
+                            <span>Criar Carteira</span>
                         </CustomButton>
                     </div>
                 </div>

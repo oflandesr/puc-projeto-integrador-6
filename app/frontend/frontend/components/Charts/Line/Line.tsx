@@ -17,12 +17,17 @@ interface LineProps {
     showLabel: boolean;
     isBtnActive: boolean;
     onClick: () => void;
+    symbol?: string;
     btnText?: string;
 }
 
-export default function Line( { title, seriesName, height, yAxis, xAxis, showLabel, isBtnActive, onClick, btnText }: LineProps) {
+export default function Line( { title, seriesName, height, yAxis, xAxis, showLabel, isBtnActive, onClick, symbol = "$", btnText }: LineProps) {
 
-const latestValue = yAxis[yAxis.length - 1];
+// Find the first value > 0
+const firstValueGreaterThanZero = yAxis.find((value) => value > 0) ?? 0;
+// Find the last value > 0
+const lastValueGreaterThanZero = yAxis.reverse().find((value) => value > 0) ?? 0;
+
 const startDate = String(xAxis[0]);
 const endDate = String(xAxis[xAxis.length - 1]);
 const options = getChartOptions({ seriesName, xAxis, yAxis, showLabel });
@@ -30,8 +35,8 @@ const options = getChartOptions({ seriesName, xAxis, yAxis, showLabel });
 return (
     <>
         <div className="flex justify-between">
-            <ChartHeader title={title} latestValue={latestValue} startDate={startDate} endDate={endDate} />
-            <PerformanceLabel start={yAxis[0]} end={latestValue} />
+            <ChartHeader title={title} latestValue={firstValueGreaterThanZero} startDate={startDate} endDate={endDate} symbol={symbol} />
+            <PerformanceLabel start={lastValueGreaterThanZero} end={firstValueGreaterThanZero} />
         </div>
         <div>
             <Chart options={options} series={options.series} type="area" height={height} />

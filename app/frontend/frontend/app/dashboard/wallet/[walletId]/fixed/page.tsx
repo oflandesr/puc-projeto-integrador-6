@@ -11,6 +11,7 @@ import CustomDropdown from "@/components/Button/CustomDropdown";
 import FixedTransactionsTable from "@/components/Table/FixedTransactions/FixedTransactionsTable";
 import usePost from "@/hooks/Api/usePost";
 import { indexesOptions, typesOptions } from "@/config/helpers";
+import Header from "@/components/Layout/Header";
 
 export default function Home() {
 
@@ -68,6 +69,7 @@ export default function Home() {
 
     return (
         <>
+            <Header title={"Investimentos Fixos"} />
             <Card colspan={12} rowspan={1}>
                 <div className={"grid grid-cols-12 gap-4"}>
                     <div className={"col-span-12"}>

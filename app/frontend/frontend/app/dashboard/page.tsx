@@ -17,11 +17,10 @@ export default function Home() {
 
     return (
         <>
-            <Card colspan={6} rowspan={1}>
-                Random Line Chart
-            </Card>
-            <Card colspan={6} rowspan={1}>
-                Random Line Chart
+            <Card colspan={12} rowspan={1}>
+                <div className="flex justify-between items-center text-2xl font-semibold">
+                    Escolha ou crie uma nova carteira para começar
+                </div>
             </Card>
             <Card colspan={12} rowspan={1}>
                 <WalletsTable customColSpan={12} customRowSpan={1} />

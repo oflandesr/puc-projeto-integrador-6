@@ -28,11 +28,11 @@ function isAddVariableIncomeTransactionValid(params: AddVariableIncomeTransactio
 }
 
 function convertBuyOrSaleNumberToString(buyOrSale: number) {
-    return buyOrSale === 0 ? "Buy" : "Sell";
+    return buyOrSale === 0 ? "Compra" : "Venda";
 }
 
 function convertBuyOrSaleStringToNumber(buyOrSale: string) {
-    return buyOrSale === "Buy" ? 0 : 1;
+    return buyOrSale === "Buy" || "Compra" ? 0 : 1;
 }
 
 const TickerExtendedName = {

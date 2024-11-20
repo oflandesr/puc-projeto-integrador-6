@@ -35,22 +35,22 @@ export default function FixedTransactionsPreview({ wallet, qnt = 5 }: Transactio
     return (
         <div className="flex flex-col items-center scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 overflow-y-auto max-h-96">
             <h1 className="text-2xl font-semibold mb-3">
-                Fixed Income Transactions 
+                Transações de Renda Fixa
             </h1>
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 rounded-lg">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 rouded-t-lg">
                     <tr>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Instituition
+                            Instituição
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Action
+                            Ativo
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Value
+                            Total
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Amount
+                            Quantidade
                         </th>
                     </tr>
                 </thead>

@@ -30,34 +30,34 @@ const tableData: InterfaceUserTableData[] = [
 
 const tableCols : TableColumn<Wallet>[] = [
     {
-        name: 'Wallet Name',
+        name: 'Nome',
         selector: (row: InterfaceUserTableData) => row.name,
         sortable: true,
     },
     {
-        name: 'Objective',
+        name: 'Objetivo',
         selector: (row: InterfaceUserTableData) => row.objective,
         sortable: true,
     },
     {
-        name: 'Inten Fix Inc %',
+        name: 'Renda Fixa % Obj',
         selector: (row: InterfaceUserTableData) => row.intenFixIncPercent,
         sortable: true,
     },
     {
-        name: 'Inten Stock %',
+        name: 'Ações % Obj',
         selector: (row: InterfaceUserTableData) => row.intenStockPercent,
         sortable: true,
     },
     {
-        name: 'Inten Fil %',
+        name: 'Fundos Imobiliários % Obj',
         selector: (row: InterfaceUserTableData) => row.intenFilPercent,
         sortable: true,
     },
     // Add a button to access the wallet
     {
-        name: 'Access',
-        cell: (row: InterfaceUserTableData) => <Link href={`/dashboard/wallet/${row.id}`} className={"text-blue-500"}><span>Access Wallet</span></Link>,
+        name: 'Acessar Carteira',
+        cell: (row: InterfaceUserTableData) => <Link href={`/dashboard/wallet/${row.id}`} className={"text-blue-500"}><span>Acessar Carteira</span></Link>,
         sortable: false,
     }
 ];
