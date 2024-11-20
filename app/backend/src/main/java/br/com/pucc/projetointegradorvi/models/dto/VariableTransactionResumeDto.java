@@ -1,24 +1,15 @@
 package br.com.pucc.projetointegradorvi.models.dto;
 
-public class VariableTransactionDto {
-	private String ticker;
+public class VariableTransactionResumeDto {
+
 	private Double amountBuyed;
 	private Double amountSold;
 	private Double averageInvested;
 
-	public VariableTransactionDto(String ticker, Double amountBuyed, Double amountSold, Double averageInvested) {
-		this.ticker = ticker;
+	public VariableTransactionResumeDto(Double amountBuyed, Double amountSold, Double averageInvested) {
 		this.amountBuyed = amountBuyed;
 		this.amountSold = amountSold;
 		this.averageInvested = averageInvested;
-	}
-
-	public String getTicker() {
-		return ticker;
-	}
-
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
 	}
 
 	public Double getAmountBuyed() {
@@ -44,5 +35,4 @@ public class VariableTransactionDto {
 	public void setAverageInvested(Double averageInvested) {
 		this.averageInvested = averageInvested;
 	}
-
 }

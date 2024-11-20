@@ -7,16 +7,32 @@ import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionD
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionResumeDto;
 
 public interface WalletQueriedRepository {
 
-	public List<FixedTransactionDto> findFixedTransaction(Long walletId, LocalDate currentDate);
+	// FIXED TRANSACTION
+	public List<FixedTransactionDto> findWalletFixedTransaction(Long walletId, LocalDate currentDate);
 
-	public List<FixedTransactionByInstitutionDto> findFixedTransactionsByInstitution(Long walletId,
+	public List<FixedTransactionByInstitutionDto> findWalletFixedTransactionsByInstitution(Long walletId,
 			LocalDate currentDate);
 
-	public FixedTransactionWithVariationDto findFixedTransactionWithVariation(Long walletId, LocalDate currentDate);
+	public FixedTransactionWithVariationDto findWalletFixedTransactionWithVariation(Long walletId,
+			LocalDate currentDate);
 
-	public List<FixedTransactionWithVariationByInstitutionDto> findFixedTransactionWithVariationByInstitution(
+	public List<FixedTransactionWithVariationByInstitutionDto> findWalletFixedTransactionWithVariationByInstitution(
 			Long walletId, LocalDate currentDate);
+
+	// VARIABLE TRANSACTION
+	public List<VariableTransactionDto> findWalletVariableTransaction(Long walletId, LocalDate startDate,
+			LocalDate endDate);
+
+	public VariableTransactionResumeDto findWalletVariableTransactionResume(Long walletId, LocalDate startDate,
+			LocalDate endDate);
+
+	public List<VariableTransactionDto> findWalletVariableTransactionWithVariation(Long walletId, LocalDate endDate);
+
+	public VariableTransactionResumeDto findWalletVariableTransactionResumeWithVariation(Long walletId,
+			LocalDate endDate);
 }

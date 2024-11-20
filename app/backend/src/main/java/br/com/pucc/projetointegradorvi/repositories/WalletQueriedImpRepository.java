@@ -11,6 +11,8 @@ import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionD
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionResumeDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -21,8 +23,9 @@ public class WalletQueriedImpRepository implements WalletQueriedRepository {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	// FIXED TRANSACTION
 	@Override
-	public List<FixedTransactionDto> findFixedTransaction(Long walletId, LocalDate currentDate) {
+	public List<FixedTransactionDto> findWalletFixedTransaction(Long walletId, LocalDate currentDate) {
 		String nativeQuery = """
 				    WITH CurrentIndexes AS (
 				        SELECT
@@ -75,7 +78,7 @@ public class WalletQueriedImpRepository implements WalletQueriedRepository {
 	}
 
 	@Override
-	public List<FixedTransactionByInstitutionDto> findFixedTransactionsByInstitution(Long walletId,
+	public List<FixedTransactionByInstitutionDto> findWalletFixedTransactionsByInstitution(Long walletId,
 			LocalDate currentDate) {
 		String nativeQuery = """
 				    WITH CurrentIndexes AS (
@@ -119,7 +122,8 @@ public class WalletQueriedImpRepository implements WalletQueriedRepository {
 	}
 
 	@Override
-	public FixedTransactionWithVariationDto findFixedTransactionWithVariation(Long walletId, LocalDate currentDate) {
+	public FixedTransactionWithVariationDto findWalletFixedTransactionWithVariation(Long walletId,
+			LocalDate currentDate) {
 		String nativeQuery = """
 				    WITH CurrentIndexes AS (
 				        SELECT
@@ -157,7 +161,7 @@ public class WalletQueriedImpRepository implements WalletQueriedRepository {
 	}
 
 	@Override
-	public List<FixedTransactionWithVariationByInstitutionDto> findFixedTransactionWithVariationByInstitution(
+	public List<FixedTransactionWithVariationByInstitutionDto> findWalletFixedTransactionWithVariationByInstitution(
 			Long walletId, LocalDate currentDate) {
 		String nativeQuery = """
 				    WITH CurrentIndexes AS (
@@ -238,4 +242,188 @@ public class WalletQueriedImpRepository implements WalletQueriedRepository {
 						((Number) result[3]).doubleValue(), ((Number) result[4]).doubleValue()))
 				.toList();
 	}
+
+	// VARIABLE TRANSACTION
+	@Override
+	public List<VariableTransactionDto> findWalletVariableTransaction(Long walletId, LocalDate startDate,
+			LocalDate endDate) {
+		String nativeQuery = """
+				    SELECT
+					    TICKER_ID,
+					    SUM(CASE WHEN BUY_OR_SALE = 1 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_BUYED,
+					    SUM(CASE WHEN BUY_OR_SALE = 0 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_SOLD,
+					    AVG(CASE WHEN BUY_OR_SALE = 1 THEN PRICE ELSE NULL END) AS AVG_VALUE_INVESTED
+					FROM
+					    TRANSACTIONS_VARIABLE_INCOME
+					WHERE
+					    WALLET_ID = :walletId
+					    AND DATE >= :startDate AND DATE <= :endDate
+					GROUP BY
+					    TICKER_ID;
+				""";
+
+		Query query = entityManager.createNativeQuery(nativeQuery);
+		query.setParameter("walletId", walletId);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+
+		@SuppressWarnings("unchecked")
+		List<Object[]> results = query.getResultList();
+		return results.stream()
+				.map(result -> new VariableTransactionDto((String) result[0], ((Number) result[1]).doubleValue(),
+						((Number) result[2]).doubleValue(), ((Number) result[3]).doubleValue()))
+				.toList();
+	}
+
+	@Override
+	public VariableTransactionResumeDto findWalletVariableTransactionResume(Long walletId, LocalDate startDate,
+			LocalDate endDate) {
+		String nativeQuery = """
+				    SELECT
+				        SUM(CASE WHEN BUY_OR_SALE = 1 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_BUYED,
+				        SUM(CASE WHEN BUY_OR_SALE = 0 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_SOLD,
+				        AVG(CASE WHEN BUY_OR_SALE = 1 THEN PRICE ELSE NULL END) AS AVG_VALUE_INVESTED
+				    FROM
+				        TRANSACTIONS_VARIABLE_INCOME
+				    WHERE
+				        WALLET_ID = :walletId
+				        AND DATE >= :startDate AND DATE <= :endDate
+				""";
+
+		Query query = entityManager.createNativeQuery(nativeQuery);
+		query.setParameter("walletId", walletId);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+
+		Object[] result = (Object[]) query.getSingleResult();
+
+		Double totalAmountBuyed = result[0] != null ? ((Number) result[0]).doubleValue() : 0.0;
+		Double totalAmountSold = result[1] != null ? ((Number) result[1]).doubleValue() : 0.0;
+		Double avgValueInvested = result[2] != null ? ((Number) result[2]).doubleValue() : 0.0;
+
+		return new VariableTransactionResumeDto(totalAmountBuyed, totalAmountSold, avgValueInvested);
+	}
+
+	@Override
+	public List<VariableTransactionDto> findWalletVariableTransactionWithVariation(Long walletId, LocalDate endDate) {
+		String nativeQuery = """
+				    WITH net_shares AS (
+				        SELECT
+				            TICKER_ID,
+				            SUM(CASE WHEN BUY_OR_SALE = 1 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_BUYED,
+				            SUM(CASE WHEN BUY_OR_SALE = 0 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_SOLD,
+				            AVG(CASE WHEN BUY_OR_SALE = 1 THEN PRICE ELSE NULL END) AS AVG_VALUE_INVESTED
+				        FROM
+				            TRANSACTIONS_VARIABLE_INCOME
+				        WHERE
+				            WALLET_ID = :walletId
+				            AND DATE <= :endDate
+				        GROUP BY
+				            TICKER_ID
+				    ),
+				    last_prices AS (
+				        SELECT
+				            p1.TICKER AS TICKER_ID,
+				            p1.CLOSE AS PRICE
+				        FROM
+				            PRICES p1
+				        INNER JOIN (
+				            SELECT
+				                TICKER,
+				                MAX(TIMESTAMP) AS MAX_TIMESTAMP
+				            FROM
+				                PRICES
+				            WHERE
+				                TIMESTAMP <= UNIX_TIMESTAMP(:endDate + INTERVAL 1 DAY) - 1
+				            GROUP BY
+				                TICKER
+				        ) p2 ON p1.TICKER = p2.TICKER AND p1.TIMESTAMP = p2.MAX_TIMESTAMP
+				    )
+				    SELECT
+				        ns.TICKER_ID,
+				        COALESCE(SUM(ns.TOTAL_AMOUNT_BUYED), 0) AS TOTAL_BUYED,
+				        COALESCE(SUM(ns.TOTAL_AMOUNT_SOLD), 0) AS TOTAL_SOLD,
+				        COALESCE(SUM((ns.TOTAL_AMOUNT_BUYED - ns.TOTAL_AMOUNT_SOLD) * lp.PRICE), 0) AS TOTAL_VARIABLE_INVESTED_VALUE
+				    FROM
+				        net_shares ns
+				    INNER JOIN
+				        last_prices lp ON ns.TICKER_ID = lp.TICKER_ID
+				    GROUP BY
+				        ns.TICKER_ID;
+				""";
+
+		Query query = entityManager.createNativeQuery(nativeQuery);
+		query.setParameter("walletId", walletId);
+		query.setParameter("endDate", endDate);
+
+		@SuppressWarnings("unchecked")
+		List<Object[]> results = query.getResultList();
+
+		return results.stream()
+				.map(result -> new VariableTransactionDto((String) result[0], ((Number) result[1]).doubleValue(),
+						((Number) result[2]).doubleValue(), ((Number) result[3]).doubleValue()))
+				.toList();
+	}
+
+	@Override
+	public VariableTransactionResumeDto findWalletVariableTransactionResumeWithVariation(Long walletId,
+			LocalDate endDate) {
+		String nativeQuery = """
+				    WITH net_shares AS (
+				        SELECT
+				            TICKER_ID,
+				            SUM(CASE WHEN BUY_OR_SALE = 1 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_BUYED,
+				            SUM(CASE WHEN BUY_OR_SALE = 0 THEN AMOUNT ELSE 0 END) AS TOTAL_AMOUNT_SOLD,
+				            AVG(CASE WHEN BUY_OR_SALE = 1 THEN PRICE ELSE NULL END) AS AVG_VALUE_INVESTED
+				        FROM
+				            TRANSACTIONS_VARIABLE_INCOME
+				        WHERE
+				            WALLET_ID = :walletId
+				            AND DATE <= :endDate
+				        GROUP BY
+				            TICKER_ID
+				    ),
+				    last_prices AS (
+				        SELECT
+				            p1.TICKER AS TICKER_ID,
+				            p1.CLOSE AS PRICE
+				        FROM
+				            PRICES p1
+				        INNER JOIN (
+				            SELECT
+				                TICKER,
+				                MAX(TIMESTAMP) AS MAX_TIMESTAMP
+				            FROM
+				                PRICES
+				            WHERE
+				                TIMESTAMP <= UNIX_TIMESTAMP(:endDate + INTERVAL 1 DAY) - 1
+				            GROUP BY
+				                TICKER
+				        ) p2 ON p1.TICKER = p2.TICKER AND p1.TIMESTAMP = p2.MAX_TIMESTAMP
+				    )
+				    SELECT
+				        SUM(ns.TOTAL_AMOUNT_BUYED) AS TOTAL_BUYED,
+				        SUM(ns.TOTAL_AMOUNT_SOLD) AS TOTAL_SOLD,
+				        SUM((ns.TOTAL_AMOUNT_BUYED - ns.TOTAL_AMOUNT_SOLD) * lp.PRICE) AS TOTAL_INVESTED_VALUE
+				    FROM
+				        net_shares ns
+				    INNER JOIN
+				        last_prices lp ON ns.TICKER_ID = lp.TICKER_ID;
+				""";
+
+		Query query = entityManager.createNativeQuery(nativeQuery);
+		query.setParameter("walletId", walletId);
+		query.setParameter("endDate", endDate);
+
+		Object[] result = (Object[]) query.getSingleResult();
+
+		// Processa os resultados, validando valores nulos
+		Double totalAmountBuyed = result[0] != null ? ((Number) result[0]).doubleValue() : 0.0;
+		Double totalAmountSold = result[1] != null ? ((Number) result[1]).doubleValue() : 0.0;
+		Double totalInvestedValue = result[2] != null ? ((Number) result[2]).doubleValue() : 0.0;
+
+		// Retorna o DTO ajustado
+		return new VariableTransactionResumeDto(totalAmountBuyed, totalAmountSold, totalInvestedValue);
+	}
+
 }
