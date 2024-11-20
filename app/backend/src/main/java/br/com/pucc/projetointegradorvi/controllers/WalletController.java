@@ -17,8 +17,14 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.pucc.projetointegradorvi.models.FixedTransactionModel;
 import br.com.pucc.projetointegradorvi.models.VariableTransactionModel;
 import br.com.pucc.projetointegradorvi.models.WalletModel;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionByInstitutionDto;
 import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationByInstitutionDto;
+import br.com.pucc.projetointegradorvi.models.dto.FixedTransactionWithVariationDto;
 import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionReqDto;
+import br.com.pucc.projetointegradorvi.models.dto.VariableTransactionResumeDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletCreationResDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletDto;
 import br.com.pucc.projetointegradorvi.models.dto.WalletReqDto;
@@ -75,10 +81,43 @@ public class WalletController {
 	// FIXED TRANSACTION
 	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<FixedTransactionModel> createWalletFixedTransaction(@PathVariable("walletId") String walletId,
-			@RequestBody FixedTransactionDto wallet) {
+			@RequestBody FixedTransactionReqDto wallet) {
 
 		return new ResponseEntity<FixedTransactionModel>(
 				this.walletService.createWalletFixedTransaction(walletId, wallet), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionDto>> listWalletFixedTransaction(
+			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+
+		return new ResponseEntity<List<FixedTransactionDto>>(
+				this.walletService.getWalletFixedTransaction(walletId, endDate), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/institution", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionByInstitutionDto>> listWalletFixedTransactionByInstitution(
+			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+
+		return new ResponseEntity<List<FixedTransactionByInstitutionDto>>(
+				this.walletService.getWalletFixedTransactionByInstitution(walletId, endDate), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/variation", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<FixedTransactionWithVariationDto> listWalletFixedTransactionWithVariation(
+			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+
+		return new ResponseEntity<FixedTransactionWithVariationDto>(
+				this.walletService.getWalletFixedTransactionWithVariation(walletId, endDate), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tfixed/variation/institution", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>> listWalletFixedTransactionWithVariationByInstitution(
+			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+
+		return new ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>>(
+				this.walletService.getWalletFixedTransactionWithVariationByInstitution(walletId, endDate),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/{tfId}", method = RequestMethod.DELETE, produces = "application/json")
@@ -94,13 +133,48 @@ public class WalletController {
 	// VARIABLE TRANSACTION
 	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<VariableTransactionModel> createWalletVariableTransaction(
-			@PathVariable("walletId") String walletId, @RequestBody VariableTransactionDto wallet) {
+			@PathVariable("walletId") String walletId, @RequestBody VariableTransactionReqDto wallet) {
 
 		return new ResponseEntity<VariableTransactionModel>(
 				this.walletService.createWalletVariableTransaction(walletId, wallet), HttpStatus.CREATED);
 	}
 
+	@RequestMapping(value = "/{walletId}/tvariable", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<VariableTransactionDto>> listWalletVariableTransaction(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt,
+			@RequestParam("endAt") Optional<String> endAt) {
+
+		return new ResponseEntity<List<VariableTransactionDto>>(
+				this.walletService.getWalletVariableTransaction(walletId, startAt, endAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable/resume", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<VariableTransactionResumeDto> listWalletVariableTransactionResume(
+			@PathVariable("walletId") String walletId, @RequestParam("startAt") Optional<String> startAt,
+			@RequestParam("endAt") Optional<String> endAt) {
+
+		return new ResponseEntity<VariableTransactionResumeDto>(
+				this.walletService.getWalletVariableTransactionResume(walletId, startAt, endAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable/variation", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<VariableTransactionDto>> listWalletVariableTransactionWithVariation(
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
+
+		return new ResponseEntity<List<VariableTransactionDto>>(
+				this.walletService.getWalletVariableTransactionWithVariation(walletId, endAt), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{walletId}/tvariable/resume/variation", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<VariableTransactionResumeDto> listWalletVariableTransactionResumeWithVariation(
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
+
+		return new ResponseEntity<VariableTransactionResumeDto>(
+				this.walletService.getWalletVariableTransactionResumeWithVariation(walletId, endAt), HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/{walletId}/tvariable/{tvId}", method = RequestMethod.DELETE, produces = "application/json")
+
 	public ResponseEntity<Void> deleteWalletVariableTransaction(@PathVariable("walletId") String walletId,
 			@PathVariable("tvId") String tvId) {
 		Optional<VariableTransactionModel> vt = this.walletService.deleteWalletVariableTransaction(walletId, tvId);

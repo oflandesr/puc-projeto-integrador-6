@@ -1,23 +1,41 @@
 package br.com.pucc.projetointegradorvi.models.dto;
 
+import java.time.LocalDate;
+
 public class FixedTransactionDto {
+	private Long id;
+	private String institution;
+	private String type;
+	private Double value;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private String indexName;
+	private Double taxValue;
+	private Integer timeAppliedInDays;
+	private Double currentValue;
 
-    private String institution;
+	public FixedTransactionDto(Long id, String institution, String type, Double value, LocalDate startDate,
+			LocalDate endDate, String indexName, Double taxValue, Integer timeAppliedInDays, Double currentValue) {
+		this.id = id;
+		this.institution = institution;
+		this.type = type;
+		this.value = value;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.indexName = indexName;
+		this.taxValue = taxValue;
+		this.timeAppliedInDays = timeAppliedInDays;
+		this.currentValue = currentValue;
+	}
 
-    private String type;
+	public Long getId() {
+		return id;
+	}
 
-    private String value;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    private String startDate;
-
-    private String endDate;
-
-    private String indexName;
-
-    private String taxValue;
-
-    public FixedTransactionDto() {}
-    
 	public String getInstitution() {
 		return institution;
 	}
@@ -34,27 +52,27 @@ public class FixedTransactionDto {
 		this.type = type;
 	}
 
-	public String getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -66,12 +84,28 @@ public class FixedTransactionDto {
 		this.indexName = indexName;
 	}
 
-	public String getTaxValue() {
+	public Double getTaxValue() {
 		return taxValue;
 	}
 
-	public void setTaxValue(String taxValue) {
+	public void setTaxValue(Double taxValue) {
 		this.taxValue = taxValue;
+	}
+
+	public Integer getTimeAppliedInDays() {
+		return timeAppliedInDays;
+	}
+
+	public void setTimeAppliedInDays(Integer timeAppliedInDays) {
+		this.timeAppliedInDays = timeAppliedInDays;
+	}
+
+	public Double getCurrentValue() {
+		return currentValue;
+	}
+
+	public void setCurrentValue(Double currentValue) {
+		this.currentValue = currentValue;
 	}
 
 }

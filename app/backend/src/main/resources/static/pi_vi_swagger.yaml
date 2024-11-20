@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PUCC - Projeto Integrador VI
   description: API para gerenciamento de investimentos.
-  version: 1.0.3
+  version: 1.0.4
 servers:
   - url: http://localhost:8080/api
     description: Servidor Local
@@ -45,6 +45,42 @@ paths:
         '401':
           description: Credenciais inválidas
   /user:
+    post:
+      tags: 
+        - Usuários
+      summary: Cria usuário
+      description: Adiciona um novo usuário ao sistema
+      requestBody:
+        description: Dados do usuário
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    password:
+                      type: string
+      responses:
+        '201':
+          description: Usuário adicionado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - type: object
+                    properties:
+                      id:
+                        type: integer
+                      roles:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Role'
+                  - $ref: '#/components/schemas/User'
+        '401':
+          description: Credenciais inválidas
     get:
       tags:
         - Usuários
@@ -83,42 +119,6 @@ paths:
                     - $ref: '#/components/schemas/User'
         '401':
           description: Credenciais inválidas
-    post:
-      tags: 
-        - Usuários
-      summary: Cria usuário
-      description: Adiciona um novo usuário ao sistema
-      requestBody:
-        description: Dados do usuário
-        required: true
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/User'
-                - type: object
-                  properties:
-                    password:
-                      type: string
-      responses:
-        '201':
-          description: Usuário adicionado com sucesso
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: integer
-                      roles:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Role'
-                  - $ref: '#/components/schemas/User'
-        '401':
-          description: Credenciais inválidas
   /user/{id}:
     get:
       tags:
@@ -153,52 +153,6 @@ paths:
         '404':
           description: Usuário não encontrado
   /wallet:
-    get:
-      tags:
-        - Carteira
-      summary: Lista carteiras
-      description: Retorna as carteiras do usuário
-      parameters:
-        - name: walletId
-          in: query
-          description: Identificador da carteira
-          required: false
-          schema:
-            type: string
-        - name: userId
-          in: query
-          description: Identificador do usuário
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Carteiras listadas com sucesso
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/Wallet'
-                    - type: object
-                      properties:
-                        id:
-                          type: integer
-                        user:
-                          type: integer
-                        fixedIncomeTransactions:
-                          type: array
-                          items:
-                            allOf:
-                              - $ref: '#/components/schemas/FixedTransaction'
-                        variableIncomeTransactions:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/VariableTransaction'
-                        
-        '401':
-          description: Credenciais inválidas
     post:
       tags: 
         - Carteira
@@ -243,6 +197,52 @@ paths:
                           $ref: '#/components/schemas/VariableTransaction'
         '400':
           description: Dados inválidos
+        '401':
+          description: Credenciais inválidas
+    get:
+      tags:
+        - Carteira
+      summary: Lista carteiras
+      description: Retorna as carteiras do usuário
+      parameters:
+        - name: walletId
+          in: query
+          description: Identificador da carteira
+          required: false
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: Identificador do usuário
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Carteiras listadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Wallet'
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                        user:
+                          type: integer
+                        fixedIncomeTransactions:
+                          type: array
+                          items:
+                            allOf:
+                              - $ref: '#/components/schemas/FixedTransaction'
+                        variableIncomeTransactions:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/VariableTransaction'
+                        
         '401':
           description: Credenciais inválidas
   /wallet/{walletId}:
@@ -292,25 +292,6 @@ paths:
                             - $ref: '#/components/schemas/VariableTransaction'
         '401':
           description: Credenciais inválidas
-    delete:
-      tags:
-        - Carteira
-      summary: Remove carteira
-      description: Remove a carteira do usuário
-      parameters:
-        - name: walletId
-          in: path
-          description: Identificador da carteira
-          required: true
-          schema:
-            type: string
-      responses:
-        '202':
-          description: Carteira removida com sucesso
-        '404':
-          description: Carteira não encontrada
-        '401':
-          description: Credenciais inválidas
     patch:
       tags:
         - Carteira
@@ -346,6 +327,25 @@ paths:
           description: Dados inválidos
         '401':
           description: Credenciais inválidas
+    delete:
+      tags:
+        - Carteira
+      summary: Remove carteira
+      description: Remove a carteira do usuário
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Carteira removida com sucesso
+        '404':
+          description: Carteira não encontrada
+        '401':
+          description: Credenciais inválidas
   /wallet/{walletId}/tfixed:
     post:
       tags:
@@ -371,6 +371,115 @@ paths:
           description: Transação fixa adicionada a carteira com sucesso
         '400':
           description: Dados inválidos
+        '401':
+          description: Credenciais inválidas
+    get:
+      tags:
+        - Carteira
+      summary: Lista transações fixas
+      description: Retorna transações de investimentos em renda fixa da carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: startAt
+          in: query
+          description: Data inicial para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Total em renda fixa retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedInvestimentTransactions'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tfixed/institution:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações fixas por instituição
+      description: Retorna o total em investimentos em renda fixa da carteira por instituição
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Total em renda fixa retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedInvestimentTransactionsByInstitution'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tfixed/variation:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações fixas com variações
+      description: Retorna o total em investimentos em renda fixa da carteira com variações
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: startAt
+          in: query
+          description: Data inicial para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Total em renda fixa retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedInvestimentTransactionsVariation'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tfixed/variation/institution:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações fixas com variações por instituição
+      description: Retorna o total em investimentos em renda fixa da carteira com variações por instituição
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: startAt
+          in: query
+          description: Data inicial para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Total em renda fixa retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedInvestimentTransactionsVariation'
         '401':
           description: Credenciais inválidas
   /wallet/{walletId}/tfixed/{tfId}:
@@ -640,6 +749,67 @@ components:
           type: number
         ipca:
           type: number
+    FixedInvestimentTransactions:
+      type: object
+      required:
+        - id
+        - institution
+        - type
+        - value
+        - startDate
+        - endDate
+        - indexName
+        - taxValue
+        - timeApliedInDays
+        - currentValue
+      properties:
+        id:
+          type: string
+        institution:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+        startDate:
+          type: string
+        endDate:
+          type: string
+        indexName:
+          type: string
+        taxValue:
+          type: number
+        timeApliedInDays:
+          type: string
+        currentValue:
+          type: number
+    FixedInvestimentTransactionsByInstitution:
+        type: object
+        required:
+          - institution
+          - value
+        properties:
+          institution:
+            type: string
+          value:
+            type: number
+    FixedInvestimentTransactionsVariation:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: number
+    FixedInvestimentTransactionsVariationByInstitution:
+        type: object
+        required:
+          - institution
+          - total
+        properties:
+          institution:
+            type: string
+          total:
+            type: number
   requestBodies:
     VariableTransaction:
       description: Payload para criação de uma transação variável
