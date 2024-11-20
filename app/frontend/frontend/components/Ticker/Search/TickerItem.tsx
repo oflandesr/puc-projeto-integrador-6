@@ -26,7 +26,7 @@ export default function TickerItem({ id, ticker }: TickerItemProps) {
     }
 
     return (
-        <Card colspan={12} rowspan={1} className="hover:cursor-pointer hover:shadow-md sm:col-span-6 lg:col-span-3">
+        <Card colspan={12} rowspan={1} className="hover:cursor-pointer hover:shadow-md sm:col-span-6 lg:col-span-3" key={id}>
             <div onClick={handleClick} className="max-w bg-white rounded-lg overflow-hidden">
                 <div className="flex flex-col items-center py-4">
                     {/* Ticker Name in place of the image */}

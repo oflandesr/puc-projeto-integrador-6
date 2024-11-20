@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@/userContext";
 import { useParams, useRouter } from "next/navigation";
 import Card from "@/components/Layout/Card";
-import useGet from "@/hooks/Api/useGet";
+import useGet from "@/hooks/API/useGet";
 import { Ticker } from "@/config/interfaces";
 import LoadingFullPage from "@/components/Layout/LoadingFullPage";
 import CustomDropdown from "@/components/Button/CustomDropdown";
