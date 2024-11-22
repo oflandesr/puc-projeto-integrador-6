@@ -32,7 +32,7 @@ export default function Navbar() {
             { name: "Ações", icon: <BsBarChart />, href: `/dashboard/wallet/${walletId}/tickers` },
             { name: "Invest. Fixos", icon: <HiOutlineCurrencyDollar />, href: `/dashboard/wallet/${walletId}/fixed` },
             { name: "Invest. Variáveis", icon: <IoStatsChartOutline />, href: `/dashboard/wallet/${walletId}/variable` },
-            { name: "Gráficos Fixos", icon: <FiPieChart />, href: `/dashboard/wallet/${walletId}/fixed/charts` },
+            { name: "Inv. Fixos - Gráficos", icon: <FiPieChart />, href: `/dashboard/wallet/${walletId}/fixed/charts` },
             { name: "Voltar", icon: <GrTransaction />, href: "/dashboard", opposite: true },
         ];
     }

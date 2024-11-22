@@ -9,7 +9,7 @@ import CustomInput from "@/components/Layout/CustomInput";
 import CustomButton from "@/components/Button/CustomButton";
 import CustomDropdown from "@/components/Button/CustomDropdown";
 import FixedTransactionsTable from "@/components/Table/FixedTransactions/FixedTransactionsTable";
-import usePost from "@/hooks/Api/usePost";
+import usePost from "@/hooks/API/usePost";
 import { indexesOptions, typesOptions } from "@/config/helpers";
 import Header from "@/components/Layout/Header";
 
