@@ -89,34 +89,34 @@ public class WalletController {
 
 	@RequestMapping(value = "/{walletId}/tfixed", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<FixedTransactionDto>> listWalletFixedTransaction(
-			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
 
 		return new ResponseEntity<List<FixedTransactionDto>>(
-				this.walletService.getWalletFixedTransaction(walletId, endDate), HttpStatus.OK);
+				this.walletService.getWalletFixedTransaction(walletId, endAt), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/institution", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<FixedTransactionByInstitutionDto>> listWalletFixedTransactionByInstitution(
-			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
 
 		return new ResponseEntity<List<FixedTransactionByInstitutionDto>>(
-				this.walletService.getWalletFixedTransactionByInstitution(walletId, endDate), HttpStatus.OK);
+				this.walletService.getWalletFixedTransactionByInstitution(walletId, endAt), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/variation", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<FixedTransactionWithVariationDto> listWalletFixedTransactionWithVariation(
-			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
 
 		return new ResponseEntity<FixedTransactionWithVariationDto>(
-				this.walletService.getWalletFixedTransactionWithVariation(walletId, endDate), HttpStatus.OK);
+				this.walletService.getWalletFixedTransactionWithVariation(walletId, endAt), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{walletId}/tfixed/variation/institution", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>> listWalletFixedTransactionWithVariationByInstitution(
-			@PathVariable("walletId") String walletId, @RequestParam("endDate") Optional<String> endDate) {
+			@PathVariable("walletId") String walletId, @RequestParam("endAt") Optional<String> endAt) {
 
 		return new ResponseEntity<List<FixedTransactionWithVariationByInstitutionDto>>(
-				this.walletService.getWalletFixedTransactionWithVariationByInstitution(walletId, endDate),
+				this.walletService.getWalletFixedTransactionWithVariationByInstitution(walletId, endAt),
 				HttpStatus.OK);
 	}
 

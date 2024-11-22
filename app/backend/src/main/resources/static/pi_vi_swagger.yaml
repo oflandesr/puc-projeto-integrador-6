@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PUCC - Projeto Integrador VI
   description: API para gerenciamento de investimentos.
-  version: 1.0.4
+  version: 1.0.5
 servers:
   - url: http://localhost:8080/api
     description: Servidor Local
@@ -385,9 +385,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: startAt
+        - name: endAt
           in: query
-          description: Data inicial para a busca. Se não informado, data atual é usada
+          description: Data final para a busca. Se não informado, data atual é usada
           required: false
           schema:
             type: string
@@ -415,6 +415,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: endAt
+          in: query
+          description: Data final para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: Total em renda fixa retornado com sucesso
@@ -439,9 +445,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: startAt
+        - name: endAt
           in: query
-          description: Data inicial para a busca. Se não informado, data atual é usada
+          description: Data final para a busca. Se não informado, data atual é usada
           required: false
           schema:
             type: string
@@ -467,9 +473,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: startAt
+        - name: endAt
           in: query
-          description: Data inicial para a busca. Se não informado, data atual é usada
+          description: Data final para a busca. Se não informado, data atual é usada
           required: false
           schema:
             type: string
@@ -479,7 +485,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FixedInvestimentTransactionsVariation'
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedInvestimentTransactionsVariationByInstitution'
         '401':
           description: Credenciais inválidas
   /wallet/{walletId}/tfixed/{tfId}:
@@ -538,6 +546,159 @@ paths:
                     
         '400':
           description: Dados inválidos
+        '401':
+          description: Credenciais inválidas
+    get:
+      tags:
+        - Carteira
+      summary: Lista transações variáveis
+      description: Retorna transações de investimentos em renda variável da carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: startAt
+          in: query
+          description: Data inicial para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+        - name: endAt
+          in: query
+          description: Data final para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Total em renda fixa retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VariableInvestimentTransactions'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tvariable/resume:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações variáveis
+      description: Retorna totais em transações de investimentos em renda variável da carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: startAt
+          in: query
+          description: Data inicial para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+        - name: endAt
+          in: query
+          description: Data final para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Totais em transações de investimentos em renda variável retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableInvestimentTransactionsResume'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tvariable/variation:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações variáveis com variações
+      description: Retorna totais em transações de investimentos em renda variável da carteira com variações
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: endAt
+          in: query
+          description: Data final para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Totais em transações de investimentos em renda variável com variações retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VariableInvestimentTransactionsVariation'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tvariable/resume/variation:
+    get:
+      tags:
+        - Carteira
+      summary: Lista total em transações variáveis com variações
+      description: Retorna totais em transações de investimentos em renda variável com variações da carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: endAt
+          in: query
+          description: Data final para a busca. Se não informado, data atual é usada
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Totais em transações de investimentos em renda variável com variações retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableInvestimentTransactionsResumeVariation'
+        '401':
+          description: Credenciais inválidas
+  /wallet/{walletId}/tvariable/{tvId}:
+    delete:
+      tags:
+        - Carteira
+      summary: Remove transação variável
+      description: Remove uma transação variável de uma carteira
+      parameters:
+        - name: walletId
+          in: path
+          description: Identificador da carteira
+          required: true
+          schema:
+            type: string
+        - name: tvId
+          in: path
+          description: Identificador da transação variável
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Transação variável removida da carteira com sucesso
+        '404':
+          description: Carteira não encontrada
         '401':
           description: Credenciais inválidas
   /ticker:
@@ -808,8 +969,72 @@ components:
         properties:
           institution:
             type: string
-          total:
+          value:
             type: number
+          currentValue:
+            type: number
+          gain:
+            type: number
+          percentageGain:
+            type: number
+    VariableInvestimentTransactions:
+      type: object
+      required:
+        - ticker
+        - amountBuyed
+        - amountSold
+        - averageInvested
+      properties:
+        ticker:
+          type: string
+        amountBuyed:
+          type: number
+        amountSold:
+          type: number
+        averageInvested:
+          type: number
+    VariableInvestimentTransactionsResume:
+      type: object
+      required:
+        - amountBuyed
+        - amountSold
+        - averageInvested
+      properties:
+        amountBuyed:
+          type: number
+        amountSold:
+          type: number
+        averageInvested:
+          type: number
+    VariableInvestimentTransactionsVariation:
+      type: object
+      required:
+        - ticker
+        - amountBuyed
+        - amountSold
+        - averageInvested
+      properties:
+        ticker:
+          type: string
+        amountBuyed:
+          type: number
+        amountSold:
+          type: number
+        averageInvested:
+          type: number
+    VariableInvestimentTransactionsResumeVariation:
+      type: object
+      required:
+        - amountBuyed
+        - amountSold
+        - averageInvested
+      properties:
+        amountBuyed:
+          type: number
+        amountSold:
+          type: number
+        averageInvested:
+          type: number
   requestBodies:
     VariableTransaction:
       description: Payload para criação de uma transação variável

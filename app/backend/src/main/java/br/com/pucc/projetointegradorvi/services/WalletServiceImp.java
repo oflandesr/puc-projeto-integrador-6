@@ -158,7 +158,7 @@ public class WalletServiceImp implements WalletService {
 			WalletModel w = optionalWallet.get();
 			FixedTransactionModel ftm = new FixedTransactionModel(w, ftransaction.getInstitution(),
 					ftransaction.getType(), ftransaction.getValue(), ftransaction.getStartDate(),
-					ftransaction.getEndDate(), ftransaction.getIndexName(), ftransaction.getValue());
+					ftransaction.getEndDate(), ftransaction.getIndexName(), ftransaction.getTaxValue());
 			return this.fixedTransactionRepository.saveAndFlush(ftm);
 		}
 
