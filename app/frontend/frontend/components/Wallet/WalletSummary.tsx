@@ -4,7 +4,6 @@ import { Wallet } from "@/config/interfaces";
 import { useUser } from "@/userContext";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import Card from "../Layout/Card";
 import Circle from "../Charts/Circle/Circle";
 
 const WalletSummary = ({ walletData }: { walletData: Wallet }) => {
@@ -20,12 +19,12 @@ const WalletSummary = ({ walletData }: { walletData: Wallet }) => {
 
     return (
         <Circle
-            title=""
+            title="Objetivo de alocação"
             height={250}
             onclick={() => {
                 router.push(`/dashboard/wallet/${walletId}/edit`);
             }}
-            labels={["Fixed Income", "Stock", "FII"]}
+            labels={["Renda Fixa Obj", "Ações Obj", "FII Obj"]}
             data={series}
             btnText="Editar"
         />

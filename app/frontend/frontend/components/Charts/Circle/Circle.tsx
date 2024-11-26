@@ -102,12 +102,13 @@ export default function Circle({ title, height, onclick , data, labels, btnText 
 
     return (
         <>
-            <div className="flex justify-between items-center w-full text-center">
-                <p className="text-1xl font-semibold">{title}</p>
+            <div className="w-full text-center mb-4">
+                <p className="text-3xl font-semibold">{title}</p>
             </div>
             <div>
                 <Chart options={options} series={options.series} type="donut" height={height} />
             </div>
+            { onclick &&
             <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                 <div className="flex justify-between items-center pt-4">
                     <CustomButton onClick={onclick} className="uppercase text-sm font-semibold">
@@ -118,6 +119,7 @@ export default function Circle({ title, height, onclick , data, labels, btnText 
                     </CustomButton>
                 </div>
             </div>
+            }
         </>
     );
 }

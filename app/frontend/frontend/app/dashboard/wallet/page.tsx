@@ -7,7 +7,7 @@ import CustomButton from "@/components/Button/CustomButton";
 import CustomInput from "@/components/Layout/CustomInput";
 import WalletsTable from "@/components/Table/Wallet/WalletTable";
 import {CreateWallet, Wallet} from "@/config/interfaces";
-import usePost from "@/hooks/Api/usePost";
+import usePost from "@/hooks/API/usePost";
 import ErrorCard from "@/components/Layout/ErrorCard";
 
 

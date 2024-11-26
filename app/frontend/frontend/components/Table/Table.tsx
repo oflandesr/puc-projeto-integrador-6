@@ -20,7 +20,7 @@ export default function Table<T>({ columns, data }: TableProps<T>) {
                 name="searchBar"
                 type="text"
                 // placeholder={`Search by ` + columns.map((col) => col.name).join(', ')}
-                placeholder='Search Columns'
+                placeholder='Procurar'
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />

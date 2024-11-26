@@ -85,7 +85,7 @@ export default function Home() {
                     <div className={"col-span-6"}>
                         <CustomDropdown 
                             label={null}
-                            placeholder={"Type"}
+                            placeholder={"Tipo"}
                             selected={currentWalletData.type}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, type: e.target.value})}
                             options={Object.values(typesOptions)}
@@ -93,7 +93,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-6"}>
                         <CustomInput 
-                            placeholder={"Value"}
+                            placeholder={"Valor"}
                             value={currentWalletData.value}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, value: parseFloat(e.target.value)})}
                             type={'number'} 
@@ -112,7 +112,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-6"}>
                         <CustomInput 
-                            placeholder={"Tax Value"}
+                            placeholder={"%"}
                             value={currentWalletData.taxValue}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, taxValue: parseFloat(e.target.value)})}
                             type={'number'} 
@@ -122,7 +122,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-6"}>
                         <CustomInput 
-                            placeholder={"Start Date"}
+                            placeholder={"Data Inicial"}
                             value={currentWalletData.startDate}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, startDate: new Date(e.target.value).toISOString().split('T')[0]})}
                             type={'date'} 
@@ -132,7 +132,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-6"}>
                         <CustomInput 
-                            placeholder={"End Date"}
+                            placeholder={"Data Final"}
                             value={currentWalletData.endDate}
                             onChange={(e) => setCurrentWalletData({...currentWalletData, endDate: new Date(e.target.value).toISOString().split('T')[0]})}
                             type={'date'} 
@@ -142,7 +142,7 @@ export default function Home() {
                     </div>
                     <div className={"col-span-12"}>
                         <CustomButton type="button" onClick={addFixedIncomeTransaction} loading={postLoading}>
-                            Add New Transaction
+                            Adicionar Transação
                         </CustomButton>
                     </div>
                 </div>

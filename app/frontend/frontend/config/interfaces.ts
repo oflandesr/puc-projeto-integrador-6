@@ -152,6 +152,20 @@ interface extraYAxis {
     extraYAxis: number[];
 }
 
+interface FilterWalletDistribution {
+    totalFixed: string;
+    totalStock: string;
+    totalFII: string;
+}
+
+interface FixedInvestmentInterest {
+    institution: string;
+    value: number;
+    currentValue: number;
+    gain: number;
+    percentageGain: number;
+}
+
 export type { 
     UserData, 
     Wallet, 
@@ -165,5 +179,7 @@ export type {
     AddVariableIncomeTransaction,
     CustomDropdownV2Options,
     Index,
-    extraYAxis
+    extraYAxis,
+    FilterWalletDistribution,
+    FixedInvestmentInterest
 };

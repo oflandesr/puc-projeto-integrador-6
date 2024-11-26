@@ -1,4 +1,4 @@
-import { AddVariableIncomeTransaction, CustomDropdownV2Options, extraYAxis, Index, Ticker } from "./interfaces";
+import { AddVariableIncomeTransaction, CustomDropdownV2Options, extraYAxis, FilterWalletDistribution, Index, Ticker, Wallet } from "./interfaces";
 
 // Utility function to create Basic Auth header
 const createBasicAuthHeader = (username: string, password: string) => {
@@ -28,44 +28,108 @@ function isAddVariableIncomeTransactionValid(params: AddVariableIncomeTransactio
 }
 
 function convertBuyOrSaleNumberToString(buyOrSale: number) {
-    return buyOrSale === 0 ? "Compra" : "Venda";
+    return buyOrSale === 1 ? "Compra" : "Venda";
 }
 
 function convertBuyOrSaleStringToNumber(buyOrSale: string) {
-    return buyOrSale === "Buy" || "Compra" ? 0 : 1;
+    return buyOrSale === "Buy" || "Compra" ? 1 : 0;
 }
 
 const TickerExtendedName = {
-    currency: "Currency",
-    shortName: "Short Name",
-    longName: "Long Name",
-    address2: "Address",
-    city: "City",
-    state: "State",
-    zip: "Zip",
-    country: "Country",
-    phone: "Phone",
-    website: "Website",
-    industry: "Industry",
-    sector: "Sector",
-    numberOfEmployees: "Number of Employees",
-    regularMarketChange: "Regular Market Change",
-    regularMarketPrice: "Regular Market Price",
-    regularMarketDayHigh: "Regular Market Day High",
-    regularMarketDayLow: "Regular Market Day Low",
-    regularMarketVolume: "Regular Market Volume",
-    regularMarketOpen: "Regular Market Open",
-    priceEarnings: "Price Earnings",
-    earningsPerShare: "Earnings Per Share",
+    currency: "Moeda",
+    shortName: "Nome Curto",
+    longName: "Nome Longo",
+    address2: "Endereço",
+    city: "Cidade",
+    state: "Estado",
+    zip: "CEP",
+    country: "País",
+    phone: "Telefone",
+    website: "Site",
+    industry: "Indústria",
+    sector: "Setor",
+    numberOfEmployees: "Número de Funcionários",
+    regularMarketChange: "Mudança no Mercado Regular",
+    regularMarketPrice: "Preço no Mercado Regular",
+    regularMarketDayHigh: "Máximo do Dia no Mercado Regular",
+    regularMarketDayLow: "Mínimo do Dia no Mercado Regular",
+    regularMarketVolume: "Volume no Mercado Regular",
+    regularMarketOpen: "Abertura do Mercado Regular",
+    priceEarnings: "Preço/Lucro",
+    earningsPerShare: "Lucro por Ação",
 } as const;
 
 const indexesOptions = ["CDI", "SELIC", "IPCA"];
 const typesOptions = ["PRE", "POS", "HIBRIDO"];
 
 const isBuyOrSaleOptions : CustomDropdownV2Options[] = [
-    { name : "Buy", value : 0 },
-    { name : "Sell", value : 1 }
+    { name : "Buy", value : 1 },
+    { name : "Sell", value : 0 }
 ];
 
+const filterWalletDistribution = (walletData: Wallet) : FilterWalletDistribution => {
+    let totalFixed, totalStock, totalFII;
 
-export { isAddVariableIncomeTransactionValid, createBasicAuthHeader, formatDate, tickerFilterFunction, convertBuyOrSaleNumberToString, convertBuyOrSaleStringToNumber, TickerExtendedName, indexesOptions, typesOptions, isBuyOrSaleOptions };
+    totalFixed = walletData.fixedIncomeTransactions.map((transaction) => transaction.value).reduce((acc, cur) => acc + cur, 0);
+
+    // stocks do not have the id ending with 11
+    totalStock = walletData.variableIncomeTransactions.map((transaction) => {
+        if (!transaction.ticker.id.endsWith("11")) {
+            return transaction.amount * transaction.price;
+        }
+        return 0;
+    }).reduce((acc, cur) => acc + cur, 0);
+
+    totalFII = walletData.variableIncomeTransactions.map((transaction) => {
+        if (transaction.ticker.id.endsWith("11")) {
+            return transaction.amount * transaction.price;
+        }
+        return 0;
+    }).reduce((acc, cur) => acc + cur, 0);
+
+    // now we need to make it out of 100%, the sum should be 100
+    const total = totalFixed + totalStock + totalFII;
+    totalFixed = (totalFixed / total) * 100;
+    totalStock = (totalStock / total) * 100;
+    totalFII = (totalFII / total) * 100;
+
+    if (isNaN(totalFixed)) totalFixed = 0;
+    if (isNaN(totalStock)) totalStock = 0;
+    if (isNaN(totalFII)) totalFII = 0;
+
+    // make all of them integers
+    totalFixed = Math.round(totalFixed);
+    totalStock = Math.round(totalStock);
+    totalFII = Math.round(totalFII);
+
+    // if the sum is not 100, we need to adjust it
+    const sum = totalFixed + totalStock + totalFII;
+    if (sum !== 100) {
+        const diff = 100 - sum;
+        if (diff > 0) {
+            if (totalFixed > 0) {
+                totalFixed += diff;
+            } else if (totalStock > 0) {
+                totalStock += diff;
+            } else if (totalFII > 0) {
+                totalFII += diff;
+            }
+        } else {
+            if (totalFixed > 0) {
+                totalFixed -= diff;
+            } else if (totalStock > 0) {
+                totalStock -= diff;
+            } else if (totalFII > 0) {
+                totalFII -= diff;
+            }
+        }
+    }
+
+    return { 
+        totalFixed: totalFixed.toString(), 
+        totalStock: totalStock.toString(), 
+        totalFII: totalFII.toString() 
+    };
+}
+
+export { filterWalletDistribution, isAddVariableIncomeTransactionValid, createBasicAuthHeader, formatDate, tickerFilterFunction, convertBuyOrSaleNumberToString, convertBuyOrSaleStringToNumber, TickerExtendedName, indexesOptions, typesOptions, isBuyOrSaleOptions };

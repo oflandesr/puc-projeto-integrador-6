@@ -12,6 +12,8 @@ import FixedTransactionsPreview from "@/components/Wallet/TableSimple/FixedTrans
 import VariableTransactionsPreview from "@/components/Wallet/TableSimple/VariableTransactionsPreview";
 import WalletSummary from "@/components/Wallet/WalletSummary";
 import WalletCurrentDistribution from "@/components/Wallet/WalletCurrentDistribution";
+import Table from "@/components/Table/Table";
+import { tableColsVariableTransactionsInterest } from "@/mock/mock";
 
 export default function Home() {
 
@@ -62,20 +64,15 @@ export default function Home() {
     return (
         <>
             <Card colspan={12} rowspan={1}>
-                <WalletHeader walletData={walletData} />
+                <div className="text-2xl font-semibold">
+                    Investimentos Variáveis - Resumo
+                </div>
             </Card>
-            <Card colspan={6} rowspan={1}>
-                {walletData && <WalletSummary walletData={walletData} />}
-            </Card>
-            <Card colspan={6} rowspan={1}>
-                {walletData && <WalletCurrentDistribution walletData={walletData} />}
-            </Card>
-            <Card colspan={6} rowspan={1}>
-                <FixedTransactionsPreview wallet={walletData} qnt={5} />
-            </Card>
-            <Card colspan={6} rowspan={1}>
-                <VariableTransactionsPreview wallet={walletData} qnt={5} />
-            </Card>
+            {(walletData && walletData.variableIncomeTransactions) && (
+                <Card colspan={12} rowspan={1}>
+                    <Table columns={tableColsVariableTransactionsInterest} data={walletData.variableIncomeTransactions} />
+                </Card>
+            )}
         </>
     );
 }

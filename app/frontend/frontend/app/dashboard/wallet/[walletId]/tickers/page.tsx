@@ -71,7 +71,7 @@ export default function Home() {
                         <CustomInput
                             value={tickerSearch}
                             onChange={(e) => setTickerSearch(e.target.value)}
-                            placeholder="Search for a ticker"
+                            placeholder="Procure por uma ação"
                             type="text"
                             name="ticker"
                             id="ticker"
