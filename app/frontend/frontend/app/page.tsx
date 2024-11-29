@@ -2,7 +2,7 @@
 
 import CustomInput from "@/components/Layout/CustomInput";
 import React, {useEffect, useState} from "react";
-import useLazyGet from "@/hooks/Api/useLazyGet";
+import useLazyGet from "@/hooks/API/useLazyGet";
 import CustomButton from "@/components/Button/CustomButton";
 import {useUser} from "@/userContext";
 import {useRouter} from "next/navigation";
@@ -80,7 +80,7 @@ export default function Home() {
                         className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                                Sign in to your account
+                                Login
                             </h1>
                             <div className="space-y-4 md:space-y-6">
                                 <CustomInput
